@@ -1,0 +1,116 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<script type="text/javascript" th:src="@{/ueditor/third-party/SyntaxHighlighter/shCore.js}"></script>
+<link rel="stylesheet" th:href="@{/ueditor/third-party/SyntaxHighlighter/shCoreDefault.css}">
+<link rel="stylesheet" th:href="@{/css/emoji.css}">
+<link rel="stylesheet" th:href="@{/css/jquery.emoji.css}">
+<link th:href="@{/flavr/css/animate.css}" rel='stylesheet' type='text/css'/>
+<link th:href="@{/flavr/css/flavr.css}" rel='stylesheet' type='text/css'/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
+<div class="data_list">
+    <div class="data_list_title">
+        <img th:src="@{/images/leavemessage.png}"/>
+        留言
+    </div>
+    <div class="publish_comment">
+        <div style="padding-top: 10px;padding-left: 10px;">
+            您的名称:<input type="text" id="userName" name="userName" size="20" placeholder="请填写您的昵称...">
+        </div>
+        <div style="padding-top: 10px;padding-left: 10px;">
+            您的留言:
+            <div id="editor" name="editor" contenteditable="true" data-placeholder="来吐槽两句吧"></div>
+            <button id="btn" class="btn btn-sm btn-default">:)</button>
+        </div>
+        <div class="verCode" th:fragment="verCode">
+            验证码：<input type="text" name="imageCode" id="imageCode" size="10"
+                       onkeydown="if(event.keyCode==13)form1.submit()"/>&nbsp;
+            <canvas width="100" height="40" id="verifyCanvas" name="verifyCanvas"></canvas>
+            <img id="code_img">
+        </div>
+        <div class="publishButton">
+            <button class="btn btn-primary" type="button" onclick="submitData()">发表</button>
+        </div>
+        </form>
+    </div>
+</div>
+<div class="data_list">
+    <div class="data_list_title">
+        <img th:src="@{/images/messages.png}"/>
+        留言板
+    </div>
+    <div class="commentDatas" th:if="${messageList.size()==0}">
+        还没有留言,快来吐槽
+    </div>
+    <div class="commentDatas" th:unless="${messageList.size()==0}">
+        <div class="comment" th:each="message,status:${messageList }">
+            <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${message.userName }]]：</font>
+                [(${message.content })]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(message.leaveMessageDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/jquery.emoji.min.js}"></script>
+<script th:src="@{/js/emoji.list.js}"></script>
+<script type="text/javascript" th:src="@{/flavr/js/flavr.min.js}"></script>
+<script>
+    $("editor").ready(function () {
+        $("#editor").emoji({
+            button: "#btn",
+            showTab: false,
+            animation: 'slide',
+            basePath: 'https://chenjianlink-1258070985.file.myqcloud.com/static/images/emoji',
+            icons: emojiLists   // 注：详见 js/emoji.list.js
+        });
+    });
+
+
+    function submitData() {
+        var userName = $("#userName").val().replace(/(^\s*)|(\s*$)/g, "");
+        var content = $("#editor").html();
+        var imageCode = $("#imageCode").val();
+        if (userName == null || userName == '') {
+            resetCode();
+            $.flavr("请输入您的名称！");
+        } else if (content == null || content == '') {
+            resetCode();
+            $.flavr("请输入留言内容！");
+        } else if (imageCode == null || imageCode == '') {
+            resetCode();
+            $.flavr("请填写验证码！");
+        } else if (str != imageCode) {
+            resetCode();
+            $.flavr('验证码不正确！');
+        } else {
+            $.ajax(
+                {
+                    url: "/message/leave",
+                    type: 'POST',
+                    data: {
+                        'userName': userName,
+                        'content': content
+                    },
+                    success: function () {
+                        resetValue();
+                        resetCode();
+                        $.flavr('留言成功,审核后显示！');
+                    },
+                    error: function () {
+                        resetValue();
+                        resetCode();
+                        $.flavr('留言失败！');
+                    }
+                });
+        }
+    }
+
+    // 重置数据
+    function resetValue() {
+        $("#userName").val("");
+        $("#imageCode").val("");
+        $("#editor").html("");
+    }
+
+</script>
+<script type="text/javascript" th:src="@{/js/vercode.js}"></script>
+</html>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chenjianlink.blogv2.mapper.CommentMapper">
+    <resultMap id="CommentResult" type="cn.chenjianlink.blogv2.pojo.Comment">
+        <result property="id" column="id"/>
+        <result property="userIp" column="userIp"/>
+        <result property="userName" column="userName"/>
+        <result property="content" column="content"/>
+        <result property="commentDate" column="commentDate"/>
+        <result property="state" column="state"/>
+        <association property="blog" column="blogId"
+                     select="cn.chenjianlink.blogv2.mapper.BlogMapper.selectByPrimaryKey"></association>
+    </resultMap>
+    <!--评论列表显示-->
+    <select id="selectList" parameterType="Map" resultMap="CommentResult">
+        SELECT id, INET_NTOA(userIp) AS userIp, userName, content, commentDate, state
+        FROM t_comment
+        <where>
+            <if test="state != null">
+                AND state = #{state}
+            </if>
+            <if test="blogId != null">
+                AND blogId = #{blogId}
+            </if>
+        </where>
+        <choose>
+            <when test="state != null and state == 1">
+                ORDER BY commentDate
+            </when>
+            <otherwise>
+                ORDER BY commentDate DESC
+            </otherwise>
+        </choose>
+    </select>
+    <!--删除评论-->
+    <delete id="delete" parameterType="int[]">
+        DELETE FROM t_comment
+        WHERE id IN
+        <if test="array != null">
+            <foreach collection="array" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
+    <!--根据blogId查询评论总数-->
+    <select id="selectCommentCount" parameterType="int" resultType="int">
+        SELECT COUNT(id)
+        FROM t_comment
+        WHERE blogId = #{blogId}
+          AND state = 1
+    </select>
+    <!--审核通过-->
+    <update id="updateStateAsAdopt" parameterType="int[]">
+        UPDATE t_comment
+        SET state = 1
+        WHERE id IN
+        <if test="array != null">
+            <foreach collection="array" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+    </update>
+    <!--审核不通过-->
+    <update id="updateStateAsFail" parameterType="int[]">
+        UPDATE t_comment
+        SET state = 2
+        WHERE id IN
+        <if test="array != null">
+            <foreach collection="array" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+    </update>
+    <!--插入新评论-->
+    <insert id="insert" parameterType="cn.chenjianlink.blogv2.pojo.Comment">
+        INSERT INTO t_comment (userIp, userName, blogId, content, commentDate, state)
+        VALUES (INET_ATON(#{userIp}), #{userName}, #{blog.id}, #{content}, #{commentDate}, 0)
+    </insert>
+</mapper>

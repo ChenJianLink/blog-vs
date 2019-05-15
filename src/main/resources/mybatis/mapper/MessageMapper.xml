@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chenjianlink.blogv2.mapper.MessageMapper">
+    <resultMap id="MessageResult" type="cn.chenjianlink.blogv2.pojo.Message">
+        <result property="id" column="id"/>
+        <result property="userIp" column="userIp"/>
+        <result property="userName" column="userName"/>
+        <result property="content" column="content"/>
+        <result property="leaveMessageDate" column="leaveMessageDate"/>
+        <result property="state" column="state"/>
+    </resultMap>
+    <!--留言列表显示-->
+    <select id="selectList" parameterType="Map" resultMap="MessageResult">
+        SELECT id, INET_NTOA(userIp) AS userIp, userName, content, leaveMessageDate, state
+        FROM t_message
+        <where>
+            <if test="state != null">
+                state = #{state}
+            </if>
+        </where>
+        ORDER BY leaveMessageDate DESC
+    </select>
+    <!--删除留言-->
+    <delete id="delete" parameterType="int[]">
+        DELETE FROM t_message
+        WHERE id IN
+        <if test="array != null">
+            <foreach collection="array" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
+    <!--审核通过-->
+    <update id="updateStateAsAdopt" parameterType="int[]">
+        UPDATE t_message
+        SET state = 1
+        WHERE id IN
+        <if test="array != null">
+            <foreach collection="array" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+    </update>
+    <!--审核不通过-->
+    <update id="updateStateAsFail" parameterType="int[]">
+        UPDATE t_message
+        SET state = 2
+        WHERE id IN
+        <if test="array != null">
+            <foreach collection="array" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+    </update>
+    <!--插入新留言-->
+    <insert id="insert" parameterType="cn.chenjianlink.blogv2.pojo.Message">
+        INSERT INTO t_message (userIp, userName, content, leaveMessageDate, state)
+        VALUES (INET_ATON(#{userIp}), #{userName}, #{content}, #{leaveMessageDate}, 0)
+    </insert>
+</mapper>

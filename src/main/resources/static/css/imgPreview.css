@@ -1,0 +1,31 @@
+#imgPreview {
+    width: 20%;
+    height: auto;
+    margin: 10px 0px;
+    border: 1px solid black;
+    text-align: center;
+}
+
+#prompt3 {
+    width: 100%;
+    height: 180px;
+    text-align: center;
+    position: relative;
+}
+
+#imgSpan {
+    position: absolute;
+    top: 20%;
+}
+
+.filepath {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+#img3 {
+    height: 100%;
+    width: 100%;
+    display: none;
+}

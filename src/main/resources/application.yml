@@ -1,0 +1,84 @@
+blog:
+  # 索引库存储路径
+  index-path: /home/chenjian/lucene
+  # 前台分页显示每页总数
+  rows: 10
+  # 使用的加密算法
+  algorithmName: md5
+  # 加密迭代次数
+  iterations: 4
+  # shiroSession过期时间(4*60*60*1000)
+  sessionTimeOut: 14400000
+
+spring:
+  # 缓存配置
+  cache:
+    ehcache:
+      config: classpath:cache/ehcache.xml
+
+  # 页面设置
+  thymeleaf:
+    cache: false
+
+  #　数据库配置
+  datasource:
+    druid:
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/blog?characterEncoding=utf-8&allowMultiQueries=true
+      username: chenjian
+      password: 123456
+      # 数据源其他配置
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+      filters: stat,wall,slf4j
+      maxPoolPreparedStatementPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+
+      # druid监控登录
+      loginUsername: admin
+      loginPassword: 123456
+
+  # 设置编码,避免乱码
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+
+  # 设置文件上传大小
+  servlet:
+    multipart:
+      max-file-size: 5MB
+
+# mybatis配置
+mybatis:
+  config-location: classpath:mybatis/mybatisConfig.xml
+  mapper-locations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: cn.chenjianlink.blogv2.pojo
+
+# 服务器配置
+server:
+  port: 8080
+  tomcat:
+    uri-encoding: UTF-8
+
+# 日志配置
+logging:
+  file: /home/chenjian/test/blog.log
+
+# shiro配置
+shiro:
+  loginUrl: /admin/blogger/admin-login
+  unauthorizedUrl: /homepage
+

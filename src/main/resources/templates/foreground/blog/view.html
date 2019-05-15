@@ -1,0 +1,176 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<script type="text/javascript" th:src="@{/ueditor/third-party/SyntaxHighlighter/shCore.js}"></script>
+<link rel="stylesheet" th:href="@{/ueditor/third-party/SyntaxHighlighter/shCoreDefault.css}">
+<link rel="stylesheet" th:href="@{/css/emoji.css}">
+<link rel="stylesheet" th:href="@{/css/jquery.emoji.css}">
+<link th:href="@{/flavr/css/animate.css}" rel='stylesheet' type='text/css'/>
+<link th:href="@{/flavr/css/flavr.css}" rel='stylesheet' type='text/css'/>
+<script type="text/javascript">
+    SyntaxHighlighter.all();
+</script>
+<div class="data_list">
+    <div class="data_list_title">
+        <img th:src="@{/images/blog_show_icon.png}"/>
+        日志信息
+    </div>
+    <div style="padding-left:6%;padding-right:6%">
+        <div class="blog_title"><h3><strong>[[${blog.title }]]</strong></h3></div>
+        <div style="padding: 10px 33% 20px 35%;">
+            <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more"></a><a href="#"
+                                                                                              class="bds_weixin"
+                                                                                              data-cmd="weixin"
+                                                                                              title="分享到微信"></a><a
+                    href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a><a href="#" class="bds_tsina"
+                                                                                       data-cmd="tsina"
+                                                                                       title="分享到新浪微博"></a><a href="#"
+                                                                                                              class="bds_sqq"
+                                                                                                              data-cmd="sqq"
+                                                                                                              title="分享到QQ好友"></a><a
+                    href="#" class="bds_tieba" data-cmd="tieba" title="分享到百度贴吧"></a></div>
+            <script type="text/javascript" th:src="@{/js/share.js}"></script>
+        </div>
+        <div class="blog_info">
+            发布时间：『
+            [[${#dates.format(blog.releaseDate,'yyyy-MM-dd HH:mm')}]]
+            』&nbsp;&nbsp;日志类别：[[${blog.blogType.typeName}]]&nbsp;&nbsp;阅读([[${blog.clickHit}]])
+            评论([[${blog.replyHit}]])
+        </div>
+        <div class="blog_keyWord">
+            <font><strong>关键字：</strong></font>&nbsp;&nbsp;<a th:if="${keyWords}==null">无</a>&nbsp;&nbsp;<a
+                th:unless="${keyWords}==null" th:each="keyWord:${keyWords}" th:href="@{/blog/query(query=${keyWord})}"
+                target="_blank">[[${keyWord }]]&nbsp;&nbsp;</a>
+        </div>
+        <div class="blog_content">
+            [(${blog.content })]
+        </div>
+        <div class="blog_lastAndNextPage" style="font-size: 0.8em">
+            <div>
+                上一篇:
+                <a th:if="${pre} == null">木有了</a>
+                <a th:unless="${pre} == null" th:href="@{/blog/articles/} + ${pre.id}"
+                   target="_blank">[[${pre.title}]]</a>
+            </div>
+            <div>
+                下一篇:
+                <a th:if="${next} == null">木有了</a>
+                <a th:unless="${next} == null" th:href="@{/blog/articles/} + ${next.id}"
+                   target="_blank">[[${next.title}]]</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="data_list">
+    <div class="data_list_title">
+        <img th:src="@{/images/publish_comment_icon.png}"/>
+        发表评论
+    </div>
+    <div class="publish_comment">
+        <div style="padding-top: 10px;padding-left: 10px;">
+            您的名称:<input type="text" id="userName" name="userName" size="20" placeholder="请填写您的昵称...">
+        </div>
+        <div style="padding-top: 10px;padding-left: 10px;">
+            您的评论:
+            <div id="editor" name="editor" contenteditable="true" data-placeholder="来吐槽两句吧"></div>
+            <button id="btn" class="btn btn-sm btn-default">:)</button>
+        </div>
+        <div class="verCode" th:include="foreground/message/messagesboard::verCode">
+
+        </div>
+        <div class="publishButton">
+            <button class="btn btn-primary" type="button" onclick="submitData()">发表评论</button>
+        </div>
+        </form>
+    </div>
+</div>
+<div class="data_list">
+    <div class="data_list_title">
+        <img th:src="@{/images/comment_icon.png}"/>
+        评论信息
+    </div>
+    <div class="commentDatas">
+        <div th:if="${commentList.size()==0}">
+            还没有评论,快来抢沙发
+        </div>
+        <div th:each="comment,status:${commentList}">
+            <div class="comment" th:if="${status.index<10}">
+                <span><font>${status.index+1 }楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[[${comment.content }]]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span>
+            </div>
+            <div class="otherComment" th:if="${commentList.size()>10}">
+                <div class="comment" th:unless="${status.index<10}">
+                    <span><font>${status.index+1 }楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[[${comment.content }]]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span>
+                </div>
+            </div>
+        </div>
+        <div>
+            <a th:if="${commentList.size()}>10" href="javascript:showOtherComment()"
+               style="float: right;padding-right: 40px;">---显示所有评论---</a>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/jquery.emoji.min.js}"></script>
+<script th:src="@{/js/emoji.list.js}"></script>
+
+<script>
+    window.onload = function () {
+        $("#editor").emoji({
+            button: "#btn",
+            showTab: false,
+            animation: 'slide',
+            basePath: 'https://chenjianlink-1258070985.file.myqcloud.com/static/images/emoji',
+            icons: emojiLists   // 注：详见 js/emoji.list.js
+        })
+    }
+
+    function submitData() {
+        var userName = $("#userName").val().replace(/(^\s*)|(\s*$)/g, "");
+        var content = $("#editor").html();
+        var imageCode = $("#imageCode").val();
+        if (userName == null || userName == '') {
+            resetCode();
+            $.flavr("请输入您的名称！");
+        } else if (content == null || content == '') {
+            resetCode();
+            $.flavr("请输入评论内容！");
+        } else if (imageCode == null || imageCode == '') {
+            resetCode();
+            $.flavr("请填写验证码！");
+        } else if (str != imageCode) {
+            resetCode();
+            $.flavr('验证码不正确！');
+        } else {
+            $.ajax(
+                {
+                    url: "/comment/leave",
+                    data: {
+                        'userName': userName,
+                        'content': content,
+                        'blog.id': [[${blog.id}]]
+                    },
+                    success: function () {
+                        resetValue();
+                        resetCode();
+                        $.flavr("评论已提交成功，审核通过后显示！");
+                    },
+                    error: function () {
+                        resetValue();
+                        resetCode();
+                        $.flavr("评论失败!");
+                    }
+                });
+        }
+    }
+
+    // 重置数据
+    function resetValue() {
+        $("#userName").val("");
+        $("#imageCode").val("");
+        $("#editor").html("");
+    }
+
+    function showOtherComment() {
+        $('.otherComment').show();
+    }
+</script>
+<script type="text/javascript" th:src="@{/js/vercode.js}"></script>
+</html>

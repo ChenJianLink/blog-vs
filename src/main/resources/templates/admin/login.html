@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>局外人秘境之后台登录页面</title>
+    <link th:href="@{/images/favicon.ico}" rel="SHORTCUT ICON">
+    <link th:href="@{/css/login.css}" rel='stylesheet' type='text/css'/>
+    <link th:href="@{/flavr/css/animate.css}" rel='stylesheet' type='text/css'/>
+    <link th:href="@{/flavr/css/flavr.css}" rel='stylesheet' type='text/css'/>
+    <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/flavr/js/flavr.min.js}"></script>
+    <script type="text/javascript">
+        function resetValue() {
+            $("#userName").val("");
+            $("#password").val("");
+        }
+
+        function login() {
+            var userName = $("#userName").val();
+            var password = $("#password").val();
+            if (userName == null || userName == "") {
+                $.flavr('用户名不能为空！');
+            } else if (password == null || password == "") {
+                $.flavr('密码不能为空！');
+            } else {
+                $.ajax(
+                    {
+                        url: '/admin/blogger/login',
+                        type: 'POST',
+                        data: $("#login").serialize(),
+                        success: function (result) {
+                            if (result.errorInfo != null) {
+                                $.flavr(result.errorInfo);
+                                resetValue();
+                            } else {
+                                window.location.href = '/admin/blogger/admin-index';
+                            }
+                        },
+                        error: function () {
+                            $.flavr("登录失败");
+                            resetValue();
+                        }
+
+                    });
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>局外人秘境后台</h1>
+<div class="login-form">
+    <h2>Admin Login</h2>
+    <div class="form-info">
+        <form id="login">
+            <input type="text" class="email" id="userName" name="userName" placeholder="UserName"/>
+            <input type="password" class="password" id="password" name="password" placeholder="Password"/>
+            <ul class="login-buttons">
+                <li><input type="button" value="LOGIN" onclick="login()"/></li>
+                <li><a href="javascript:resetValue()" class="hvr-sweep-to-left">REGISTER</a></li>
+                <div class="clear"></div>
+            </ul>
+        </form>
+        <div style="margin: 20px">
+            <a th:href="@{/homepage}" class="homepage">返回局外人秘境</a>
+        </div>
+    </div>
+</div>
+<div class="copyrights">
+    <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802028222"
+       style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img
+            th:src="@{/images/Filing.png}" style="float:left;"/>
+        <p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px; color:white;">京公网安备
+            11010802028222号</p></a>
+    <div align="center"><p style="color:white;">Copyright &copy; 2019 chenjianlink All Rights Reserved.</p></div>
+
+</div>
+</body>
+</html>

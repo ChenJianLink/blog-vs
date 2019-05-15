@@ -1,0 +1,11 @@
+.datagrid-row-over {
+    background-color: gold;
+}
+
+.datagrid-row-selected {
+    background-color: gold;
+}
+
+.datagrid-toolbar, .datagrid-pager, .panel-body {
+    background-color: rgba(250, 250, 250, 0.3);
+}

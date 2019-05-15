@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chenjianlink.blogv2.mapper.LinkMapper">
+    <sql id="Base_List">
+        id, linkName, linkUrl, orderNo
+    </sql>
+    <!--插入字段选择-->
+    <sql id="insert_update_item">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="linkName != null">
+                linkName,
+            </if>
+            <if test="linkUrl != null">
+                linkUrl,
+            </if>
+            <if test="orderNo != null">
+                orderNo,
+            </if>
+        </trim>
+    </sql>
+    <!--插入的值-->
+    <sql id="insert_update_value">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="linkName != null">
+                #{linkName},
+            </if>
+            <if test="linkUrl != null">
+                #{linkUrl},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo}
+            </if>
+        </trim>
+    </sql>
+    <!--查询链接全部信息-->
+    <select id="selectAll" resultType="cn.chenjianlink.blogv2.pojo.Link">
+        SELECT
+        <include refid="Base_List"/>
+        FROM t_link ORDER BY orderNo
+    </select>
+    <!--查询所有链接-->
+    <select id="selectList" resultType="cn.chenjianlink.blogv2.pojo.Link">
+        SELECT linkName, linkUrl
+        FROM t_link
+        ORDER BY orderNo
+    </select>
+    <!--插入新的链接信息-->
+    <insert id="insert" parameterType="cn.chenjianlink.blogv2.pojo.Link">
+        INSERT INTO t_link
+        <include refid="insert_update_item"/>
+        VALUES
+        <include refid="insert_update_value"/>
+    </insert>
+    <!--按id查询链接信息-->
+    <select id="selectByPrimaryKey" parameterType="int" resultType="cn.chenjianlink.blogv2.pojo.Link">
+        SELECT
+        <include refid="Base_List"/>
+        FROM t_link WHERE id = #{id}
+    </select>
+    <!--更新链接信息-->
+    <update id="update" parameterType="cn.chenjianlink.blogv2.pojo.Link">
+        UPDATE t_link
+        <set>
+            <if test="linkName != null and linkName!=''">
+                linkName = #{linkName},
+            </if>
+            <if test="linkUrl != null and linkUrl!=''">
+                linkUrl = #{linkUrl},
+            </if>
+            <if test="orderNo != null">
+                orderNo = #{orderNo}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <delete id="delete" parameterType="int[]">
+        DELETE FROM t_link
+        WHERE id IN
+        <if test="array != null">
+            <foreach collection="array" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
+</mapper>

@@ -1,0 +1,25 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div class="data_list">
+    <div class="data_list_title">
+        <img th:src="@{/images/search_icon.png}"/>
+        搜索&nbsp;<font color="red">[[${query}]]</font>&nbsp;的结果 &nbsp;(总共搜索到&nbsp;[[${page.totalRows}]]&nbsp;条记录)
+    </div>
+    <div class="datas search">
+        <ul>
+            <div align="center" style="padding-top: 20px" th:if="${blogList.size()==0 }">未查询到结果，请换个关键字试试看！</div>
+            <li style="margin-bottom: 20px" th:each="blog:${blogList }">
+                    <span class="title"><a th:href="@{/blog/articles/} + ${blog.id}"
+                                           target="_blank">[(${blog.title })]</a></span>
+                <span class="summary"><b>摘要</b>: [(${blog.content })]...</span>
+                <span class="link"><a th:href="@{/blog/articles/} + ${blog.id}" target="_blank">https://www.chenjianlink.cn/blog/articles/[[${blog.id}]]</a>&nbsp;&nbsp;&nbsp;&nbsp;发布日期：[[${blog.releaseDateStr }]]</span>
+            </li>
+        </ul>
+    </div>
+</div>
+<div>
+    <nav role="navigation">
+        <ul class="cd-pagination" th:include="foreground/blog/list::page">
+        </ul>
+    </nav>
+</div>
+</html>

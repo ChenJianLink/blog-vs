@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.chenjianlink.blogv2.mapper.BlogMapper">
+    <resultMap id="BlogResult" type="cn.chenjianlink.blogv2.pojo.Blog">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="summary" column="summary"/>
+        <result property="releaseDate" column="releaseDate"/>
+        <result property="clickHit" column="clickHit"/>
+        <result property="content" column="content"/>
+        <result property="keyWord" column="keyWord"/>
+        <result property="state" column="state"/>
+        <association property="blogType" column="typeId"
+                     select="cn.chenjianlink.blogv2.mapper.BlogTypeMapper.selectByPrimaryKey"></association>
+        <association property="replyHit" column="id"
+                     select="cn.chenjianlink.blogv2.mapper.CommentMapper.selectCommentCount"></association>
+    </resultMap>
+    <!--查询所有日志的部分信息(可能根据标题查找)-->
+    <select id="selectList" parameterType="java.lang.String" resultMap="BlogResult">
+        SELECT id, title, releaseDate, typeId, state
+        FROM t_blog
+        <where>
+            <if test="_parameter != null and _parameter != ''">
+                AND title LIKE '%${_parameter}%'
+            </if>
+        </where>
+        ORDER BY releaseDate DESC
+    </select>
+    <!--根据id查询日志信息-->
+    <select id="selectByPrimaryKey" parameterType="int" resultMap="BlogResult">
+        SELECT id,
+               title,
+               summary,
+               releaseDate,
+               clickHit,
+               content,
+               typeId,
+               keyWord,
+               state
+        FROM t_blog
+        WHERE id = #{id}
+    </select>
+    <!--删除blog-->
+    <delete id="delete" parameterType="int[]">
+        DELETE FROM t_blog
+        WHERE id IN
+        <if test="array != null">
+            <foreach collection="array" item="id" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+    </delete>
+    <!--更新日志-->
+    <update id="update" parameterType="cn.chenjianlink.blogv2.pojo.Blog">
+        UPDATE t_blog
+        <set>
+            <if test="title != null and title != ''">
+                title = #{title},
+            </if>
+            <if test="summary != null and summary != ''">
+                summary = #{summary},
+            </if>
+            <if test="clickHit != null">
+                clickHit = #{clickHit},
+            </if>
+            <if test="content != null and content != ''">
+                content = #{content},
+            </if>
+            <if test="blogType.id != null">
+                typeId = #{blogType.id},
+            </if>
+            keyWord = #{keyWord},
+            <if test="releaseDate != null">
+                releaseDate = #{releaseDate},
+            </if>
+            <if test="state != null">
+                state = #{state}
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    <!--添加新日志-->
+    <insert id="insert" parameterType="cn.chenjianlink.blogv2.pojo.Blog" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO t_blog (title, summary, releaseDate, clickHit, content, typeId, keyWord, state)
+        VALUES (#{title}, #{summary}, #{releaseDate}, 0, #{content}, #{blogType.id}, #{keyWord}, #{state})
+    </insert>
+    <!--按发布日期查询日志总数-->
+    <select id="selectCountList" resultMap="BlogResult">
+        SELECT DATE_FORMAT(releaseDate, '%Y-%m ') AS releaseDateStr, COUNT(*) AS blogCount
+        FROM t_blog
+        WHERE state = 2
+        GROUP BY DATE_FORMAT(releaseDate, '%Y-%m ')
+        ORDER BY DATE_FORMAT(releaseDate, '%Y-%m ') DESC
+    </select>
+    <!--根据日志日期，日志类别查询日志列表,按日志发布日期排序-->
+    <select id="selectListAll" parameterType="Map" resultMap="BlogResult">
+        SELECT id, title, summary, releaseDate, clickHit, content, typeId, keyWord
+        FROM t_blog
+        <where>
+            <if test="typeId != null">
+                AND typeId = #{typeId}
+            </if>
+            <if test="releaseDateStr != null and releaseDateStr != ''">
+                AND DATE_FORMAT(releaseDate,'%Y-%m ') = #{releaseDateStr}
+            </if>
+            AND state = 2
+        </where>
+        ORDER BY releaseDate DESC
+    </select>
+    <!--查询blog总记录数-->
+    <select id="selectCount" parameterType="Map" resultType="int">
+        SELECT COUNT(id)
+        FROM t_blog
+        <where>
+            <if test="typeId != null">
+                AND typeId = #{typeId}
+            </if>
+            <if test="releaseDateStr != null and releaseDateStr != ''">
+                AND DATE_FORMAT(releaseDate,'%Y-%m ') = #{releaseDateStr}
+            </if>
+            AND state = 2
+        </where>
+    </select>
+    <!--查询上一篇日志-->
+    <select id="selectPre" parameterType="java.util.Date" resultType="cn.chenjianlink.blogv2.pojo.Blog">
+        SELECT id, title
+        FROM t_blog
+        WHERE releaseDate <![CDATA[ > ]]> #{date}
+          AND state = 2
+        LIMIT 1
+    </select>
+    <!--查询下一篇日志-->
+    <select id="selectNext" parameterType="java.util.Date" resultType="cn.chenjianlink.blogv2.pojo.Blog">
+        SELECT id, title
+        FROM t_blog
+        WHERE releaseDate <![CDATA[ < ]]> #{date}
+          AND state = 2
+        ORDER BY releaseDate DESC
+        LIMIT 1
+    </select>
+    <!--用于更新日志索引的查询-->
+    <select id="selectBlogForIndex" resultType="cn.chenjianlink.blogv2.pojo.Blog">
+        SELECT id, title, content, releaseDate
+        FROM t_blog
+        WHERE state = 2
+    </select>
+</mapper>

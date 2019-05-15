@@ -1,0 +1,46 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div class="data_list">
+    <div class="data_list_title">
+        <img th:src="@{/images/list_icon.png}"/>
+        最新日志
+    </div>
+    <div class="datas">
+        <ul th:each="blog:${blogList}">
+            <li style="margin-bottom: 30px">
+                <span class="date"><a th:href="@{/blog/articles/} + ${blog.id}"
+                                      th:text="${#dates.format(blog.releaseDate,'yyyy年MM月dd日')}"></a></span>
+                <span class="title"><a th:href="@{/blog/articles/} + ${blog.id}">[[${blog.title }]]</a></span>
+                <span class="summary"><b>摘要:</b>[[${blog.summary }]]...</span>
+                <span class="img">
+                    <a th:href="@{/blog/articles/} + ${blog.id}" th:each="image:${blog.imagesList }"><img
+                            th:src="${image}" style="height: 90px; width: auto"/></a>&nbsp;&nbsp;
+				</span>
+                <span class="info">发表于 [[${#dates.format(blog.releaseDate,'yyyy-MM-dd HH:mm')}]] 阅读([[${blog.clickHit}]]) 评论([[${blog.replyHit}]]) </span>
+            </li>
+            <hr style="height:5px;border:none;border-top:1px dashed gray;padding-bottom:  10px;"/>
+        </ul>
+    </div>
+</div>
+<div>
+    <nav role="navigation">
+        <ul class="cd-pagination" th:fragment="page">
+            <li><a th:href="${page.url} + '&page=1'">首页</a></li>
+            <li class="button">
+                <a th:if="${page.currentPage <= 1 }" class="disabled">上一页</a>
+                <a th:unless="${page.currentPage <= 1 }" th:href="${page.url} + '&page=' + ${page.currentPage-1}">上一页</a>
+            </li>
+            <li th:if="${page.totalPage > 0}" th:each="pageNo:${#numbers.sequence(page.begin, page.end)}">
+                <a th:if="${pageNo eq page.currentPage}" class="current">[[${pageNo}]]</a>
+                <a th:unless="${pageNo eq page.currentPage}" th:href="${page.url} + '&page=' + ${pageNo}">[[${pageNo}]]</a>
+            </li>
+            <li class="button">
+                <a th:if="${page.currentPage >= page.totalPage }" class="disabled">下一页</a>
+                <a th:unless="${page.currentPage >= page.totalPage }" th:href="${page.url } + '&page=' + ${page.currentPage + 1}">下一页</a>
+            </li>
+            <li>
+                <a th:href="${page.totalPage > 0} ? ${page.url } + '&page=' + ${page.totalPage} : ${page.url } + '&page=1'">尾页</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</html>
