@@ -73,6 +73,9 @@ mybatis:
 server:
   #端口号
   port: 8443
+  servlet:
+    session:
+      timeout: 14400s
   tomcat:
     uri-encoding: UTF-8
   # SSL配置
@@ -80,7 +83,7 @@ server:
     key-store: classpath:ssl/tomcat.keystore
     key-store-password: 123456
     key-store-type: JKS
-    key-alias: tomcat
+    enabled: true
 
 # 日志配置
 logging:
@@ -90,4 +93,7 @@ logging:
 shiro:
   loginUrl: /admin/blogger/admin-login
   unauthorizedUrl: /homepage
+
+file:
+
 
