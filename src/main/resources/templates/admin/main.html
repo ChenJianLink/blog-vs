@@ -46,9 +46,11 @@
                         type: 'PUT',
                         data: $("#fm").serialize(),
                         success: function (result) {
-                            if (result.errorInfo != null) {
+                            if (result.status != 500 && result.errorInfo != null) {
                                 $.messager.alert("系统提示", result.errorInfo);
                                 resetValue();
+                            } else if (result.status == 500){
+                                $.messager.alert("系统提示", "密码修改失败！");
                             } else {
                                 $.messager.alert("系统提示", "密码修改成功，下一次登录生效！");
                                 resetValue();

@@ -4,28 +4,42 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 日志自定义响应结构
  *
  * @author chenjian
  */
+@Getter
+@Setter
 public class BlogResult implements Serializable {
 
 
     /**
      * 异常信息
      */
-    @Getter
-    @Setter
     private String errorInfo;
 
-    public BlogResult() {
+    private Date times;
 
+    /**
+     * 200,4xx,5xx
+     */
+    private Integer status;
+
+    public BlogResult() {
     }
 
-    public BlogResult(String errorInfo) {
+    public BlogResult(Integer status) {
+        this.status = status;
+        this.times = new Date();
+    }
+
+    public BlogResult(Integer status, String errorInfo) {
+        this.status = status;
         this.errorInfo = errorInfo;
+        this.times = new Date();
     }
 
     /**
@@ -34,7 +48,7 @@ public class BlogResult implements Serializable {
      * @return 自定义响应
      */
     public static BlogResult ok() {
-        return new BlogResult();
+        return new BlogResult(200);
     }
 
     /**
@@ -44,7 +58,7 @@ public class BlogResult implements Serializable {
      * @return 封装错误信息的自定义响应
      */
     public static BlogResult showError(String errorInfo) {
-        return new BlogResult(errorInfo);
+        return new BlogResult(200, errorInfo);
     }
 
 }

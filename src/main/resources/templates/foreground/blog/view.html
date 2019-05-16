@@ -110,7 +110,7 @@
 <script th:src="@{/js/jquery.min.js}"></script>
 <script th:src="@{/js/jquery.emoji.min.js}"></script>
 <script th:src="@{/js/emoji.list.js}"></script>
-
+<script type="text/javascript" th:src="@{/flavr/js/flavr.min.js}"></script>
 <script>
     window.onload = function () {
         $("#editor").emoji({
@@ -142,15 +142,22 @@
             $.ajax(
                 {
                     url: "/comment/leave",
+                    type: 'POST',
                     data: {
                         'userName': userName,
                         'content': content,
                         'blog.id': [[${blog.id}]]
                     },
-                    success: function () {
-                        resetValue();
-                        resetCode();
-                        $.flavr("评论已提交成功，审核通过后显示！");
+                    success: function (result) {
+                        if (result != null && result.status == 500) {
+                            resetValue();
+                            resetCode();
+                            $.flavr("评论失败!");
+                        } else {
+                            resetValue();
+                            resetCode();
+                            $.flavr("评论已提交成功，审核通过后显示！");
+                        }
                     },
                     error: function () {
                         resetValue();

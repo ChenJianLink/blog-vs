@@ -28,11 +28,16 @@
                         type: 'POST',
                         data: $("#login").serialize(),
                         success: function (result) {
-                            if (result.errorInfo != null) {
-                                $.flavr(result.errorInfo);
+                            if (result.status == 500){
+                                $.flavr("登录失败");
                                 resetValue();
                             } else {
-                                window.location.href = '/admin/blogger/admin-index';
+                                if (result.errorInfo != null) {
+                                    $.flavr(result.errorInfo);
+                                    resetValue();
+                                } else {
+                                    window.location.href = '/admin/blogger/admin-index';
+                                }
                             }
                         },
                         error: function () {

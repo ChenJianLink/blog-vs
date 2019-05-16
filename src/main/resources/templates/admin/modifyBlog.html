@@ -49,18 +49,28 @@
                             'keyWord': keyWord,
                             'state': state
                         },
-                        success: function () {
-                            if (state == 2) {
-                                $.messager.alert("系统提示", "日志发布成功！");
-                            } else {
-                                $.messager.alert("系统提示", "草稿保存成功！");
+                        success: function (result) {
+                            if (result != null && result.status == 500) {
+                                if (state == 2) {
+                                    $.messager.alert("系统提示", "日志修改失败！");
+                                } else {
+                                    $.messager.alert("系统提示", "草稿修改失败！");
+                                }
+                            }else {
+                                if (state == 2) {
+                                    $.messager.alert("系统提示", "日志修改成功！");
+                                    resetValue();
+                                } else {
+                                    $.messager.alert("系统提示", "草稿修改成功！");
+                                    resetValue();
+                                }
                             }
                         },
                         error: function () {
                             if (state == 2) {
-                                $.messager.alert("系统提示", "日志发布失败！");
+                                $.messager.alert("系统提示", "日志修改失败！");
                             } else {
-                                $.messager.alert("系统提示", "草稿保存失败！");
+                                $.messager.alert("系统提示", "草稿修改失败！");
                             }
                         }
                     });

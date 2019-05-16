@@ -90,10 +90,16 @@
                         'userName': userName,
                         'content': content
                     },
-                    success: function () {
-                        resetValue();
-                        resetCode();
-                        $.flavr('留言成功,审核后显示！');
+                    success: function (result) {
+                        if (result != null && result.status == 500) {
+                            resetValue();
+                            resetCode();
+                            $.flavr("留言失败!");
+                        } else {
+                            resetValue();
+                            resetCode();
+                            $.flavr("留言已提交成功，审核通过后显示！");
+                        }
                     },
                     error: function () {
                         resetValue();

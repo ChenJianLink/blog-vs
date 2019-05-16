@@ -37,12 +37,16 @@
                             url: "/admin/blogTypeManage/blogType/" + ids,
                             type: 'DELETE',
                             success: function (result) {
-                                if (result != null && result.errorInfo) {
-                                    $.messager.alert("系统提示", result.errorInfo);
+                                if (result.status == 500){
+                                    $.messager.alert("系统提示", "日志类别删除失败！");
                                 } else {
-                                    $.messager.alert("系统提示", "日志类别已成功删除！");
+                                    if (result.errorInfo != null) {
+                                        $.messager.alert("系统提示", result.errorInfo);
+                                    } else {
+                                        $.messager.alert("系统提示", "日志类别已成功删除！");
+                                    }
+                                    $("#dg").datagrid("reload");
                                 }
-                                $("#dg").datagrid("reload");
                             },
                             error: function () {
                                 $.messager.alert("系统提示", "日志类别删除失败！");

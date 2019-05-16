@@ -1,6 +1,6 @@
 package cn.chenjianlink.blogv2.controller;
 
-import cn.chenjianlink.blogv2.exception.blog.BlogException;
+import cn.chenjianlink.blogv2.exception.blog.BlogNotFoundException;
 import cn.chenjianlink.blogv2.exception.blog.BlogSearchException;
 import cn.chenjianlink.blogv2.pojo.Blog;
 import cn.chenjianlink.blogv2.pojo.Comment;
@@ -74,16 +74,16 @@ public class BlogController {
      * @param blogId  日志id
      * @param request 请求
      * @return 主页面
-     * @throws BlogException 日志不存在异常
+     * @throws BlogNotFoundException 日志异常
      */
     @GetMapping("/blog/articles/{blogId}")
-    public String showBlogInfo(Model model, @PathVariable(value = "blogId", required = true) Integer blogId, HttpServletRequest request) throws BlogException {
+    public String showBlogInfo(Model model, @PathVariable(value = "blogId", required = true) Integer blogId, HttpServletRequest request) throws BlogNotFoundException {
         Blog blog = blogService.findBlogById(blogId);
         if (blog == null) {
-            throw new BlogException("日志不存在");
+            throw new BlogNotFoundException("日志不存在");
         } else if (blog.getState() != PUBLISH) {
             //判断日志的状态
-            throw new BlogSearchException("不支持的日志查询");
+            throw new BlogNotFoundException("不支持的日志查询");
         }
         //查询上一篇日志
         Blog preBlog = blogService.findPreBlog(blog);

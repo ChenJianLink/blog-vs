@@ -36,9 +36,13 @@
                         {
                             url: "/admin/messageManage/message/" + ids,
                             type: 'DELETE',
-                            success: function () {
-                                $.messager.alert("系统提示", "留言已成功删除！");
-                                $("#dg").datagrid("reload");
+                            success: function (result) {
+                                if (result != null && result.status == 500){
+                                    $.messager.alert("系统提示", "留言删除失败！");
+                                } else {
+                                    $.messager.alert("系统提示", "留言已成功删除！");
+                                    $("#dg").datagrid("reload");
+                                }
                             },
                             error: function () {
                                 $.messager.alert("系统提示", "留言删除失败！");

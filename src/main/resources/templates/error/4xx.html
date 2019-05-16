@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <!-- Head -->
 <head>
@@ -20,11 +20,11 @@
     } </script>
     <!-- //Meta-Tags -->
 
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/font-awesome.min.css" media="all"/>
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}" media="all"/>
 
     <!-- Style -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/css/style.css" type="text/css" media="all">
-    <link href="${pageContext.request.contextPath}/static/images/favicon.ico" rel="SHORTCUT ICON">
+    <link rel="stylesheet" th:href="@{/css/style.css}" type="text/css" media="all">
+    <link th:href="@{/images/favicon.ico}" rel="SHORTCUT ICON">
 </head>
 <!-- //Head -->
 
@@ -37,12 +37,13 @@
     <h3>您寻找的圣物不存在</h3>
     <p>Something went wrong</p>
     <p>Go back to your home page</p>
-    <a href="${pageContext.request.contextPath}/index.html"><i class="fa fa-angle-double-left" aria-hidden="true"></i>Return
-        Home</a>
+    <a th:href="@{/homepage}"><i class="fa fa-angle-double-left" aria-hidden="true"></i>Return Home</a>
 </div>
 
 <div class="w3footeragile">
-
+    <div style="width:300px;margin:0 auto;" align="center">
+        <a target="_blank" href="http://www.beian.gov.cn/portal/registerSystemInfo?recordcode=11010802028222" style="display:inline-block;text-decoration:none;height:20px;line-height:20px;"><img th:src="@{/images/Filing.png}" style="float:left;"/><p style="float:left;height:20px;line-height:20px;margin: 0px 0px 0px 5px;">京公网安备 11010802028222号</p></a>
+    </div>
     <p>Copyright &copy; 2019 chenjianlink All Rights Reserved.</p>
 </div>
 

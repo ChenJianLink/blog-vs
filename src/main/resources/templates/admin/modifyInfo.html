@@ -48,8 +48,10 @@
                         processData: false,
                         contentType: false,
                         success: function (result) {
-                            if (result.errorInfo != null) {
+                            if (result.status != 500 && result.errorInfo != null) {
                                 $.messager.alert("系统提示", result.errorInfo);
+                            } else if (result.status == 500) {
+                                $.messager.alert("系统提示", "站长信息修改失败");
                             } else {
                                 $.messager.alert("系统提示", "站长信息修改成功");
                             }

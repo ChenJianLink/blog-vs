@@ -35,9 +35,13 @@
                             url: "/admin/commentManage/comment/" + ids,
                             type: 'PUT',
                             data: {'state': state},
-                            success: function () {
-                                $.messager.alert("系统提示", "审核提交成功！");
-                                $("#dg").datagrid("reload");
+                            success: function (result) {
+                                if (result != null && result.status == 500) {
+                                    $.messager.alert("系统提示", "审核提交失败！");
+                                } else {
+                                    $.messager.alert("系统提示", "审核提交成功！");
+                                    $("#dg").datagrid("reload");
+                                }
                             },
                             error: function () {
                                 $.messager.alert("系统提示", "审核提交失败！");
