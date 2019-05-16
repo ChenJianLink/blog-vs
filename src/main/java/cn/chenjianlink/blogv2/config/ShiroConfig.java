@@ -60,7 +60,7 @@ public class ShiroConfig {
         Map<String, Filter> filterMap = shiroFilterFactoryBean.getFilters();
         filterMap.put("ssl", new SslFilter());
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        filterChainDefinitionMap.put("/admin/blogger/login", "anon");
+        filterChainDefinitionMap.put("/admin/blogger/login", "anon,ssl");
         filterChainDefinitionMap.put("/admin/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;

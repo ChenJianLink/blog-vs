@@ -71,7 +71,8 @@
         <div style="padding-top: 10px;padding-left: 10px;">
             您的评论:
             <div id="editor" name="editor" contenteditable="true" data-placeholder="来吐槽两句吧"></div>
-            <button id="btn" class="btn btn-sm btn-default">:)</button>
+            <button id="btn" class="btn btn-sm btn-default"
+                    style="width: 30px;height: 30px;background: url('/images/emoji.jpg');background-size: cover"></button>
         </div>
         <div class="verCode" th:include="foreground/message/messagesboard::verCode">
 
@@ -93,17 +94,16 @@
         </div>
         <div th:each="comment,status:${commentList}">
             <div class="comment" th:if="${status.index<10}">
-                <span><font>${status.index+1 }楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[[${comment.content }]]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span>
+                <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[(${comment.content })]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span>
             </div>
             <div class="otherComment" th:if="${commentList.size()>10}">
-                <div class="comment" th:unless="${status.index<10}">
-                    <span><font>${status.index+1 }楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[[${comment.content }]]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span>
+                <div class="comment" th:if="${status.index>=10}">
+                    <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[(${comment.content })]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span>
                 </div>
             </div>
         </div>
-        <div>
-            <a th:if="${commentList.size()}>10" href="javascript:showOtherComment()"
-               style="float: right;padding-right: 40px;">---显示所有评论---</a>
+        <div style="text-align: center" id="showComment">
+            <a th:if="${commentList.size()}>10" href="javascript:showOtherComment()">---显示所有评论---</a>
         </div>
     </div>
 </div>
@@ -177,6 +177,7 @@
 
     function showOtherComment() {
         $('.otherComment').show();
+        $("#showComment").css('display','none');
     }
 </script>
 <script type="text/javascript" th:src="@{/js/vercode.js}"></script>

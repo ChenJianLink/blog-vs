@@ -9,6 +9,8 @@ blog:
   iterations: 4
   # shiroSession过期时间(4*60*60*1000)
   sessionTimeOut: 14400000
+  # http端口号
+  port: 8080
 
 spring:
   # 缓存配置
@@ -69,9 +71,16 @@ mybatis:
 
 # 服务器配置
 server:
-  port: 8080
+  #端口号
+  port: 8443
   tomcat:
     uri-encoding: UTF-8
+  # SSL配置
+  ssl:
+    key-store: classpath:ssl/tomcat.keystore
+    key-store-password: 123456
+    key-store-type: JKS
+    key-alias: tomcat
 
 # 日志配置
 logging:

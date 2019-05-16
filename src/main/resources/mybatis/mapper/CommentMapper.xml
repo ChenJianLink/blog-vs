@@ -15,7 +15,7 @@
     </resultMap>
     <!--评论列表显示-->
     <select id="selectList" parameterType="Map" resultMap="CommentResult">
-        SELECT id, INET_NTOA(userIp) AS userIp, userName, content, commentDate, state
+        SELECT id, INET_NTOA(userIp) AS userIp, userName, content, commentDate, state, blogId
         FROM t_comment
         <where>
             <if test="state != null">

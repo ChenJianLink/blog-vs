@@ -21,6 +21,16 @@
                 return true;
             }
         }
+
+        function showAllType() {
+            $('.othersType').show();
+            $("#showType").css('display','none');
+        }
+
+        function showAllDate() {
+            $('.othersDate').show();
+            $("#showDate").css('display','none');
+        }
     </script>
     <style type="text/css">
         body {
@@ -108,10 +118,19 @@
                         按日志类别
                     </div>
                     <div class="datas">
-                        <ul th:each="blogTypeCount:${blogTypeCountList}">
-                            <li><span><a th:href="@{/homepage(typeId=${blogTypeCount.id})}">[[${blogTypeCount.typeName}]] ([[${blogTypeCount.blogCount}]])</a></span>
+                        <ul th:each="blogTypeCount,status:${blogTypeCountList}">
+                            <li th:if="${status.index} <10">
+                                <span><a th:href="@{/homepage(typeId=${blogTypeCount.id})}">[[${blogTypeCount.typeName}]] ([[${blogTypeCount.blogCount}]])</a></span>
                             </li>
+                            <div th:if="${blogTypeCountList.size()>10}" style="display: none" class="othersType">
+                                <li th:unless="${status.index} <10">
+                                    <span><a th:href="@{/homepage(typeId=${blogTypeCount.id})}">[[${blogTypeCount.typeName}]] ([[${blogTypeCount.blogCount}]])</a></span>
+                                </li>
+                            </div>
                         </ul>
+                        <div style="text-align: center" id="showType">
+                            <a th:if="${blogTypeCountList.size()}>10" href="javascript:showAllType()">---显示所有---</a>
+                        </div>
                     </div>
                 </div>
 
@@ -121,10 +140,19 @@
                         按日志日期
                     </div>
                     <div class="datas">
-                        <ul th:each="blogCount:${blogCountList}">
-                            <li><span><a th:href="@{/homepage(releaseDateStr=${blogCount.releaseDateStr})}">[[${blogCount.releaseDateStr}]] ([[${blogCount.blogCount}]]篇)</a></span>
+                        <ul th:each="blogCount,status:${blogCountList}">
+                            <li th:if="${status.index} < 10">
+                                <span><a th:href="@{/homepage(releaseDateStr=${blogCount.releaseDateStr})}">[[${blogCount.releaseDateStr}]] ([[${blogCount.blogCount}]]篇)</a></span>
                             </li>
+                            <div th:if="${blogCountList.size() > 10}" style="display: none" class="othersDate">
+                                <li th:unless="${status.index} < 10">
+                                    <span><a th:href="@{/homepage(releaseDateStr=${blogCount.releaseDateStr})}">[[${blogCount.releaseDateStr}]] ([[${blogCount.blogCount}]]篇)</a></span>
+                                </li>
+                            </div>
                         </ul>
+                        <div style="text-align: center" id="showDate">
+                            <a th:if="${blogCountList.size()}>10" href="javascript:showAllDate()">---显示所有---</a>
+                        </div>
                     </div>
                 </div>
 
