@@ -6,7 +6,7 @@ import cn.chenjianlink.blogv2.pojo.Blogger;
 import cn.chenjianlink.blogv2.service.BloggerService;
 import cn.chenjianlink.blogv2.utils.BlogResult;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
-import org.springframework.util.ClassUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +32,9 @@ public class BloggerManageController {
     private static final String POINT = ".";
 
     private static final String VERIFICATION_FORMAT = "^.*(jpg|png|jpeg|gif|bmp|ico)$";
+
+    @Value("${blog.userImagesPath}")
+    private String imagePath;
 
     /**
      * 修改用户信息页面对用户信息进行回显
@@ -68,11 +71,10 @@ public class BloggerManageController {
                 if (bufferedImage == null || bufferedImage.getHeight() == 0 || bufferedImage.getWidth() == 0) {
                     return BlogResult.showError("上传文件不是图片");
                 }
-                String path = ClassUtils.getDefaultClassLoader().getResource("").getPath() + "static/userImages/";
                 //设置新文件名
                 String newPictureName = UUID.randomUUID().toString() + pictureName.substring(pictureName.lastIndexOf(POINT));
                 //上传图片
-                File uploadPic = new File(path + newPictureName);
+                File uploadPic = new File(imagePath + newPictureName);
                 if (uploadPic.exists()) {
                     uploadPic.mkdirs();
                 }

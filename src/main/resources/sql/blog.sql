@@ -24,13 +24,13 @@ DROP TABLE IF EXISTS `t_blog`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_blog` (
   `id`          smallint     NOT NULL AUTO_INCREMENT,
-  `title`       varchar(20)  NOT NULL,
+  `title`       varchar(60)  NOT NULL,
   `summary`     varchar(160) NOT NULL,
   `releaseDate` timestamp    NOT NULL,
   `clickHit`    smallint     NOT NULL,
   `content`     mediumtext   NOT NULL,
   `typeId`      tinyint      NOT NULL,
-  `keyWord`     varchar(20)           DEFAULT NULL,
+  `keyWord`     varchar(60)           DEFAULT NULL,
   `state`       tinyint      NOT NULL,
   PRIMARY KEY (`id`),
   KEY `typeId` (`typeId`),

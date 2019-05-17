@@ -11,6 +11,8 @@ blog:
   sessionTimeOut: 14400000
   # http端口号
   port: 8080
+  # 头像上传绝对路径
+  userImagesPath: /home/chenjian/userImages/
 
 spring:
   # 缓存配置
@@ -63,6 +65,10 @@ spring:
     multipart:
       max-file-size: 5MB
 
+  # 配置静态资源访问
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${blog.userImagesPath}
+
 # mybatis配置
 mybatis:
   config-location: classpath:mybatis/mybatisConfig.xml
@@ -94,6 +100,5 @@ shiro:
   loginUrl: /admin/blogger/admin-login
   unauthorizedUrl: /homepage
 
-file:
 
 
