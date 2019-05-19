@@ -8,6 +8,7 @@
     <link rel="stylesheet" th:href="@{/css/blog.css}">
     <link rel="stylesheet" th:href="@{/css/pagestyle.css}">
     <link rel="stylesheet" th:href="@{/css/background.css}">
+    <link rel="stylesheet" th:href="@{/live2d/css/live2d.css}" />
     <link th:href="@{/images/favicon.ico}" rel="SHORTCUT ICON">
     <script th:src="@{/bootstrap3/js/jquery-1.11.2.min.js}"></script>
     <script th:src="@{/bootstrap3/js/bootstrap.min.js}"></script>
@@ -42,6 +43,7 @@
 <body>
 <div class="father">
     <div class="container child">
+        <div th:include="foreground/live2d/live2d::live2d"></div>
         <div class="row">
             <div class="col-md-4" style="height:60px">
                 <img alt="局外人之秘境" th:src="@{/images/logo.png}">
