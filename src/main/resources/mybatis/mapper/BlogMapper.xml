@@ -146,4 +146,10 @@
         FROM t_blog
         WHERE state = 2
     </select>
+    <!--根据id查询日志信息-->
+    <select id="selectTitleByPrimaryKey" parameterType="int" resultType="cn.chenjianlink.blogv2.pojo.Blog">
+        SELECT id, title
+        FROM t_blog
+        WHERE id = #{id}
+    </select>
 </mapper>

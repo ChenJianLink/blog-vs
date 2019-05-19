@@ -97,4 +97,12 @@ public interface BlogMapper {
      */
     List<Blog> selectBlogForIndex();
 
+    /**
+     * 根据id查询日志标题
+     *
+     * @param id 日志id
+     * @return id对应的日志对象
+     */
+    Blog selectTitleByPrimaryKey(int id);
+
 }

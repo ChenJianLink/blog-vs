@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -84,10 +83,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Cacheable(value = "commentCache")
     public List<Comment> findCommentListByBlogId(Integer blogId) {
-        Map<String, Object> commentMap = new HashMap<>(3);
-        commentMap.put("state", 1);
-        commentMap.put("blogId", blogId);
-        List<Comment> commentList = commentMapper.selectList(commentMap);
+        List<Comment> commentList = commentMapper.selectCommentByBlogId(blogId);
         return commentList;
     }
 

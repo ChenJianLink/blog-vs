@@ -23,6 +23,14 @@ public interface CommentMapper {
     List<Comment> selectList(Map<String, Object> commentMap);
 
     /**
+     * 根据日志id返回对应的评论列表
+     *
+     * @param blogId 日志id
+     * @return 评论列表
+     */
+    List<Comment> selectCommentByBlogId(int blogId);
+
+    /**
      * 删除评论
      *
      * @param ids 要删除的id数组

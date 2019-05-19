@@ -11,7 +11,7 @@
         <result property="commentDate" column="commentDate"/>
         <result property="state" column="state"/>
         <association property="blog" column="blogId"
-                     select="cn.chenjianlink.blogv2.mapper.BlogMapper.selectByPrimaryKey"></association>
+                     select="cn.chenjianlink.blogv2.mapper.BlogMapper.selectTitleByPrimaryKey"></association>
     </resultMap>
     <!--评论列表显示-->
     <select id="selectList" parameterType="Map" resultMap="CommentResult">
@@ -20,9 +20,6 @@
         <where>
             <if test="state != null">
                 AND state = #{state}
-            </if>
-            <if test="blogId != null">
-                AND blogId = #{blogId}
             </if>
         </where>
         <choose>
@@ -33,6 +30,14 @@
                 ORDER BY commentDate DESC
             </otherwise>
         </choose>
+    </select>
+    <!--前台评论列表显示-->
+    <select id="selectCommentByBlogId" parameterType="int" resultType="cn.chenjianlink.blogv2.pojo.Comment">
+        SELECT id, userName, content, commentDate
+        FROM t_comment
+        WHERE blogId = #{blogId}
+          AND state = 1
+        ORDER BY commentDate
     </select>
     <!--删除评论-->
     <delete id="delete" parameterType="int[]">
