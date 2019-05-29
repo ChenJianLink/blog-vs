@@ -32,11 +32,11 @@
             var profile = UE.getEditor('profile').getContent();
 
             if (nickName == null || nickName == '') {
-                $.messager.alert("系统提示", "请输入昵称！");
+                $.messager.alert("系统提示", "请输入昵称！", "warning");
             } else if (sign == null || sign == '') {
-                $.messager.alert("系统提示", "请输入个性签名！");
+                $.messager.alert("系统提示", "请输入个性签名！", "warning");
             } else if (profile == null || profile == '') {
-                $.messager.alert("系统提示", "请输入个性简介！");
+                $.messager.alert("系统提示", "请输入个性简介！", "warning");
             } else {
                 $("#pF").val(profile);
                 $.ajax(
@@ -51,14 +51,14 @@
                             if (result.status != 500 && result.errorInfo != null) {
                                 $.messager.alert("系统提示", result.errorInfo);
                             } else if (result.status == 500) {
-                                $.messager.alert("系统提示", "站长信息修改失败");
+                                $.messager.alert("系统提示", "站长信息修改失败", "error");
                             } else {
-                                $.messager.alert("系统提示", "站长信息修改成功");
+                                $.messager.alert("系统提示", "站长信息修改成功", "info");
                             }
                             $("#imageFile").val("");
                         },
                         error: function () {
-                            $.messager.alert("系统提示", "站长信息修改失败");
+                            $.messager.alert("系统提示", "站长信息修改失败", "error");
                             $("#imageFile").val("");
                         }
                     });

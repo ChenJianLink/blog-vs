@@ -21,7 +21,7 @@
         function deleteLink() {
             var selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length == 0) {
-                $.messager.alert("系统提示", "请选择要删除的链接！");
+                $.messager.alert("系统提示", "请选择要删除的链接！", "info");
                 return;
             }
             var strIds = [];
@@ -29,7 +29,7 @@
                 strIds.push(selectedRows[i].id);
             }
             var ids = strIds.join(",");
-            $.messager.confirm("系统提示", "您确定要删除这<font color=red>" + selectedRows.length + "</font>条链接吗？", function (r) {
+            $.messager.confirm("系统提示", "您确定要删除这<font color=red>" + selectedRows.length + "</font>条链接吗？", "info", function (r) {
                 if (r) {
                     $.ajax(
                         {
@@ -37,14 +37,14 @@
                             type: 'DELETE',
                             success: function (result) {
                                 if (result != null && result.status == 500) {
-                                    $.messager.alert("系统提示", "友情链接删除失败！");
+                                    $.messager.alert("系统提示", "友情链接删除失败！", "error");
                                 } else {
-                                    $.messager.alert("系统提示", "友情链接已成功删除！");
+                                    $.messager.alert("系统提示", "友情链接已成功删除！", "info");
                                     $("#dg").datagrid("reload");
                                 }
                             },
                             error: function () {
-                                $.messager.alert("系统提示", "友情链接删除失败！");
+                                $.messager.alert("系统提示", "友情链接删除失败！", "error");
                             }
                     });
                 }
@@ -59,7 +59,7 @@
         function openLinkModifyDialog() {
             var selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length != 1) {
-                $.messager.alert("系统提示", "请选择一条要编辑的链接！");
+                $.messager.alert("系统提示", "请选择一条要编辑的链接！", "info");
                 return;
             }
             var row = selectedRows[0];
@@ -82,17 +82,17 @@
                         type: type,
                         data: $("#fm").serialize(),
                         success: function () {
-                            $.messager.alert("系统提示", "友情链接保存成功！");
+                            $.messager.alert("系统提示", "友情链接保存成功！", "info");
                             resetValue();
                             $("#dlg").dialog("close");
                             $("#dg").datagrid("reload");
                         },
                         error: function () {
-                            $.messager.alert("系统提示", "友情链接保存失败！");
+                            $.messager.alert("系统提示", "友情链接保存失败！", "error");
                         }
                     });
             } else {
-                $.messager.alert("系统提示", "友情链接格式不合法");
+                $.messager.alert("系统提示", "友情链接格式不合法", "warning");
             }
         }
 

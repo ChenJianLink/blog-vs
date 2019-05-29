@@ -22,7 +22,7 @@
         function deleteMessage() {
             var selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length == 0) {
-                $.messager.alert("系统提示", "请选择要删除的留言！");
+                $.messager.alert("系统提示", "请选择要删除的留言！", "info");
                 return;
             }
             var strIds = [];
@@ -30,7 +30,7 @@
                 strIds.push(selectedRows[i].id);
             }
             var ids = strIds.join(",");
-            $.messager.confirm("系统提示", "您确定要删除这<font color=red>" + selectedRows.length + "</font>条留言吗？", function (r) {
+            $.messager.confirm("系统提示", "您确定要删除这<font color=red>" + selectedRows.length + "</font>条留言吗？", "info",function (r) {
                 if (r) {
                     $.ajax(
                         {
@@ -38,14 +38,14 @@
                             type: 'DELETE',
                             success: function (result) {
                                 if (result != null && result.status == 500){
-                                    $.messager.alert("系统提示", "留言删除失败！");
+                                    $.messager.alert("系统提示", "留言删除失败！", "error");
                                 } else {
-                                    $.messager.alert("系统提示", "留言已成功删除！");
+                                    $.messager.alert("系统提示", "留言已成功删除！", "info");
                                     $("#dg").datagrid("reload");
                                 }
                             },
                             error: function () {
-                                $.messager.alert("系统提示", "留言删除失败！");
+                                $.messager.alert("系统提示", "留言删除失败！", "error");
                             }
                         });
                 }

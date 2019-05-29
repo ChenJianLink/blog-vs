@@ -21,7 +21,7 @@
         function messageReview(state) {
             var selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length == 0) {
-                $.messager.alert("系统提示", "请选择要审核的留言！");
+                $.messager.alert("系统提示", "请选择要审核的留言！", "info");
                 return;
             }
             var strIds = [];
@@ -29,7 +29,7 @@
                 strIds.push(selectedRows[i].id);
             }
             var ids = strIds.join(",");
-            $.messager.confirm("系统提示", "您确定要审核这<font color=red>" + selectedRows.length + "</font>条留言吗？", function (r) {
+            $.messager.confirm("系统提示", "您确定要审核这<font color=red>" + selectedRows.length + "</font>条留言吗？", "info",function (r) {
                 if (r) {
                     $.ajax(
                         {
@@ -38,14 +38,14 @@
                             data: {'state': state},
                             success: function (result) {
                                 if (result != null && result.status == 500) {
-                                    $.messager.alert("系统提示", "审核提交失败！");
+                                    $.messager.alert("系统提示", "审核提交失败！", "error");
                                 } else {
-                                    $.messager.alert("系统提示", "审核提交成功！");
+                                    $.messager.alert("系统提示", "审核提交成功！", "info");
                                     $("#dg").datagrid("reload");
                                 }
                             },
                             error: function () {
-                                $.messager.alert("系统提示", "审核提交失败！");
+                                $.messager.alert("系统提示", "审核提交失败！", "error");
                             }
                         });
                 }
@@ -60,7 +60,7 @@
         function openMessageViewDialog() {
             var selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length != 1) {
-                $.messager.alert("系统提示", "请选择一条要查看的留言！");
+                $.messager.alert("系统提示", "请选择一条要查看的留言！", "info");
                 return;
             }
             var row = selectedRows[0];
