@@ -21,7 +21,7 @@
         function deleteComment() {
             var selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length == 0) {
-                $.messager.alert("系统提示", "请选择要删除的评论！","info");
+                $.messager.alert("系统提示", "请选择要删除的评论！","warning");
                 return;
             }
             var strIds = [];
@@ -29,7 +29,7 @@
                 strIds.push(selectedRows[i].id);
             }
             var ids = strIds.join(",");
-            $.messager.confirm("系统提示", "您确定要删除这<font color=red>" + selectedRows.length + "</font>条评论吗？","info", function (r) {
+            $.messager.confirm("系统提示", "您确定要删除这<font color=red>" + selectedRows.length + "</font>条评论吗？", function (r) {
                 if (r) {
                     $.ajax(
                         {

@@ -29,7 +29,7 @@
                 strIds.push(selectedRows[i].id);
             }
             var ids = strIds.join(",");
-            $.messager.confirm("系统提示", "您确定要删除这<font color=red>" + selectedRows.length + "</font>条链接吗？", "info", function (r) {
+            $.messager.confirm("系统提示", "您确定要删除这<font color=red>" + selectedRows.length + "</font>条链接吗？", function (r) {
                 if (r) {
                     $.ajax(
                         {
@@ -59,7 +59,7 @@
         function openLinkModifyDialog() {
             var selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length != 1) {
-                $.messager.alert("系统提示", "请选择一条要编辑的链接！", "info");
+                $.messager.alert("系统提示", "请选择一条要编辑的链接！", "warning");
                 return;
             }
             var row = selectedRows[0];
@@ -92,7 +92,7 @@
                         }
                     });
             } else {
-                $.messager.alert("系统提示", "友情链接格式不合法", "warning");
+                $.messager.alert("系统提示", "友情链接格式不合法", "error");
             }
         }
 

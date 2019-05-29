@@ -28,7 +28,7 @@
                 strIds.push(selectedRows[i].id);
             }
             var ids = strIds.join(",");
-            $.messager.confirm("系统提示", "您确定要审核这<font color=red>" + selectedRows.length + "</font>条评论吗？","info", function (r) {
+            $.messager.confirm("系统提示", "您确定要审核这<font color=red>" + selectedRows.length + "</font>条评论吗？", function (r) {
                 if (r) {
                     $.ajax(
                         {

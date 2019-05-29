@@ -47,18 +47,18 @@
                         data: $("#fm").serialize(),
                         success: function (result) {
                             if (result.status != 500 && result.errorInfo != null) {
-                                $.messager.alert("系统提示", result.errorInfo);
+                                $.messager.alert("系统提示", result.errorInfo, "error");
                                 resetValue();
                             } else if (result.status == 500){
-                                $.messager.alert("系统提示", "密码修改失败！");
+                                $.messager.alert("系统提示", "密码修改失败！","error");
                             } else {
-                                $.messager.alert("系统提示", "密码修改成功，下一次登录生效！");
+                                $.messager.alert("系统提示", "密码修改成功，下一次登录生效！","info");
                                 resetValue();
                                 $("#dlg").dialog("close");
                             }
                         },
                         error: function () {
-                            $.messager.alert("系统提示", "密码修改失败！");
+                            $.messager.alert("系统提示", "密码修改失败！","error");
                         }
                     });
             }
@@ -71,7 +71,7 @@
                 return false;
             }
             if (newPassword != newPassword2) {
-                $.messager.alert("系统提示", "确认密码输入错误！");
+                $.messager.alert("系统提示", "确认密码输入错误！", "error");
                 return false;
             }
             return true;
@@ -102,10 +102,10 @@
                     url: '/admin/blogManage/blog/index',
                     type: 'PUT',
                     success: function () {
-                        $.messager.alert("系统提示", "日志索引更新成功！");
+                        $.messager.alert("系统提示", "日志索引更新成功！","info" );
                     },
                     error: function () {
-                        $.messager.alert("系统提示", "日志索引更新失败！");
+                        $.messager.alert("系统提示", "日志索引更新失败！", "error");
                     }
                 });
         }

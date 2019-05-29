@@ -29,7 +29,7 @@
                 strIds.push(selectedRows[i].id);
             }
             var ids = strIds.join(",");
-            $.messager.confirm("系统提示", "您确定要审核这<font color=red>" + selectedRows.length + "</font>条留言吗？", "info",function (r) {
+            $.messager.confirm("系统提示", "您确定要审核这<font color=red>" + selectedRows.length + "</font>条留言吗？",function (r) {
                 if (r) {
                     $.ajax(
                         {
@@ -60,7 +60,7 @@
         function openMessageViewDialog() {
             var selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length != 1) {
-                $.messager.alert("系统提示", "请选择一条要查看的留言！", "info");
+                $.messager.alert("系统提示", "请选择一条要查看的留言！", "warning");
                 return;
             }
             var row = selectedRows[0];
