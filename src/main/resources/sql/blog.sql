@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `t_blog`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_blog` (
   `id`          smallint(6)         NOT NULL AUTO_INCREMENT,
-  `title`       varchar(60)                  DEFAULT NULL,
+  `title`       varchar(60)         NOT NULL,
   `summary`     varchar(160)        NOT NULL,
   `releaseDate` timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP
   ON UPDATE CURRENT_TIMESTAMP,
