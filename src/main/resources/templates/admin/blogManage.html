@@ -77,14 +77,14 @@
             });
         }
 
-        function openBlogModifyTab(data) {
+        function openBlogModifyTab() {
             var selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length != 1) {
                 $.messager.alert("系统提示", "请选择一个要修改的日志！", "warning");
                 return;
             }
             var row = selectedRows[0];
-            window.parent.openTab('修改日志', 'modifyBlog/' + row.id + '?isUeditor=' + data, 'icon-writeblog');
+            window.parent.openTab('修改日志', 'modifyBlog/' + row.id, 'icon-writeblog');
         }
     </script>
 
@@ -106,8 +106,7 @@
 </table>
 <div id="tb">
     <div>
-        <a href="javascript:openBlogModifyTab(false)" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
-        <a href="javascript:openBlogModifyTab(true)" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改(富文本编辑器)</a>
+        <a href="javascript:openBlogModifyTab()" class="easyui-linkbutton" iconCls="icon-edit" plain="true">修改</a>
         <a href="javascript:deleteBlog()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
     </div>
     <div>

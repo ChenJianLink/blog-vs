@@ -38,12 +38,20 @@ public interface BlogMapper {
     List<Blog> selectList(String title);
 
     /**
-     * 根据id查询日志
+     * 根据id查询日志(前台查询)
      *
      * @param id 要查询的日志的id
      * @return id对应的日志对象
      */
     Blog selectByPrimaryKey(int id);
+
+    /**
+     * 根据id查询日志(后台查询)
+     *
+     * @param id 要查询的日志的id
+     * @return id对应的日志对象
+     */
+    Blog selectForAdminByPrimaryKey(int id);
 
     /**
      * 由id删除日志
@@ -105,4 +113,33 @@ public interface BlogMapper {
      */
     Blog selectTitleByPrimaryKey(int id);
 
+    /**
+     * 查询日志对应的编辑器类型
+     *
+     * @param blogId 日志id
+     * @return 编辑器类型
+     */
+    boolean selectEditorById(Integer blogId);
+
+    /**
+     * 插入md
+     *
+     * @param blog 日志
+     */
+    void insertMarkdown(Blog blog);
+
+    /**
+     * 更新markdown文本
+     *
+     * @param blog 日志对象
+     */
+    void updateMarkdown(Blog blog);
+
+    /**
+     * 根据日志id查询markdown文本
+     *
+     * @param id 日志id
+     * @return markdown源码
+     */
+    String selectMdContentByPrimaryKey(int id);
 }

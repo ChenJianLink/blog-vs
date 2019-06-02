@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.24, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.26, for Linux (x86_64)
 --
 -- Host: localhost    Database: blog
 -- ------------------------------------------------------
--- Server version	5.7.24
+-- Server version	5.7.26-0ubuntu0.18.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT = @@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS = @@CHARACTER_SET_RESULTS */;
@@ -23,21 +23,23 @@ DROP TABLE IF EXISTS `t_blog`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_blog` (
-  `id`          smallint     NOT NULL AUTO_INCREMENT,
-  `title`       varchar(60)  NOT NULL,
-  `summary`     varchar(160) NOT NULL,
-  `releaseDate` timestamp    NOT NULL,
-  `clickHit`    smallint     NOT NULL,
-  `content`     mediumtext   NOT NULL,
-  `typeId`      tinyint      NOT NULL,
-  `keyWord`     varchar(60)           DEFAULT NULL,
-  `state`       tinyint      NOT NULL,
+  `id`          smallint(6)         NOT NULL AUTO_INCREMENT,
+  `title`       varchar(60)                  DEFAULT NULL,
+  `summary`     varchar(160)        NOT NULL,
+  `releaseDate` timestamp           NOT NULL DEFAULT CURRENT_TIMESTAMP
+  ON UPDATE CURRENT_TIMESTAMP,
+  `clickHit`    smallint(6)         NOT NULL,
+  `content`     mediumtext          NOT NULL,
+  `typeId`      tinyint(4) unsigned NOT NULL,
+  `keyWord`     varchar(60)                  DEFAULT NULL,
+  `state`       tinyint(4)          NOT NULL,
+  `isUeditor`   tinyint(1)          NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `typeId` (`typeId`),
   CONSTRAINT `t_blog_ibfk_1` FOREIGN KEY (`typeId`) REFERENCES `t_blogtype` (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 1585
+  AUTO_INCREMENT = 1591
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -53,6 +55,33 @@ LOCK TABLES `t_blog` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `t_blog_md`
+--
+
+DROP TABLE IF EXISTS `t_blog_md`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_blog_md` (
+  `id`        smallint(6) NOT NULL,
+  `mdContent` mediumtext  NOT NULL,
+  PRIMARY KEY (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `t_blog_md`
+--
+
+LOCK TABLES `t_blog_md` WRITE;
+/*!40000 ALTER TABLE `t_blog_md`
+  DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_blog_md`
+  ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `t_blogger`
 --
 
@@ -60,7 +89,7 @@ DROP TABLE IF EXISTS `t_blogger`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_blogger` (
-  `id`        tinyint      NOT NULL AUTO_INCREMENT,
+  `id`        tinyint(4)   NOT NULL AUTO_INCREMENT,
   `userName`  varchar(20)  NOT NULL,
   `password`  char(32)     NOT NULL,
   `salt`      char(32)     NOT NULL,
@@ -94,13 +123,13 @@ DROP TABLE IF EXISTS `t_blogtype`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_blogtype` (
-  `id`       tinyint     NOT NULL AUTO_INCREMENT,
-  `typeName` varchar(20) NOT NULL,
-  `orderNo`  tinyint     NOT NULL,
+  `id`       tinyint(4) unsigned NOT NULL AUTO_INCREMENT,
+  `typeName` varchar(20)         NOT NULL,
+  `orderNo`  tinyint(4)          NOT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 20
+  AUTO_INCREMENT = 21
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -123,13 +152,14 @@ DROP TABLE IF EXISTS `t_comment`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_comment` (
-  `id`          mediumint     NOT NULL AUTO_INCREMENT,
-  `userIp`      INT UNSIGNED  NOT NULL,
-  `userName`    varchar(20)   NOT NULL,
-  `blogId`      mediumint     NOT NULL,
-  `content`     varchar(1000) NOT NULL,
-  `commentDate` timestamp     NOT NULL,
-  `state`       tinyint       NOT NULL,
+  `id`          mediumint(9)     NOT NULL AUTO_INCREMENT,
+  `userIp`      int(10) unsigned NOT NULL,
+  `userName`    varchar(20)      NOT NULL,
+  `blogId`      mediumint(9)     NOT NULL,
+  `content`     varchar(1000)    NOT NULL,
+  `commentDate` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP
+  ON UPDATE CURRENT_TIMESTAMP,
+  `state`       tinyint(4)       NOT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
@@ -156,14 +186,14 @@ DROP TABLE IF EXISTS `t_link`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_link` (
-  `id`       tinyint      NOT NULL AUTO_INCREMENT,
+  `id`       tinyint(4)   NOT NULL AUTO_INCREMENT,
   `linkName` varchar(30)  NOT NULL,
   `linkUrl`  varchar(200) NOT NULL,
-  `orderNo`  tinyint      NOT NULL,
+  `orderNo`  tinyint(4)   NOT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 4
+  AUTO_INCREMENT = 5
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -186,16 +216,17 @@ DROP TABLE IF EXISTS `t_message`;
 /*!40101 SET @saved_cs_client = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_message` (
-  `id`               mediumint     NOT NULL AUTO_INCREMENT,
-  `userIp`           INT UNSIGNED  NOT NULL,
-  `userName`         varchar(20)   NOT NULL,
-  `content`          varchar(1000) NOT NULL,
-  `leaveMessageDate` timestamp     NOT NULL,
-  `state`            tinyint       NOT NULL,
+  `id`               mediumint(9)     NOT NULL AUTO_INCREMENT,
+  `userIp`           int(10) unsigned NOT NULL,
+  `userName`         varchar(20)      NOT NULL,
+  `content`          varchar(1000)    NOT NULL,
+  `leaveMessageDate` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP
+  ON UPDATE CURRENT_TIMESTAMP,
+  `state`            tinyint(4)       NOT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 9
+  AUTO_INCREMENT = 14
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -219,4 +250,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-07 16:44:34
+-- Dump completed on 2019-06-02 19:46:50

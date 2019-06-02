@@ -111,4 +111,20 @@ public interface BlogService {
      * @throws BlogSearchException 重建索引异常
      */
     void updateBlogIndex() throws BlogSearchException;
+
+    /**
+     * 根据id查询日志使用的编辑器
+     *
+     * @param blogId 日志id
+     * @return 编辑器类型(false为md, true为富文本)
+     */
+    Boolean selectEditorByBlogId(Integer blogId);
+
+    /**
+     * 用于后台查询日志
+     *
+     * @param id 日志id
+     * @return 日志对象
+     */
+    Blog findBlogByIdForAdmin(Integer id);
 }

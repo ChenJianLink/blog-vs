@@ -17,6 +17,8 @@
 
     <script type="text/javascript">
 
+        var editorMd;
+
         function submitData(state) {
             var isUeditor = [[${isUeditor}]];
             var title = $("#title").val();
@@ -24,14 +26,17 @@
             var keyWord = $("#keyWord").val().replace(/\s*/g, "");
             var content;
             var searchContent;
+            var mdContent = null;
             var summary;
             if (isUeditor) {
                 content = UE.getEditor('editor').getContent();
                 searchContent = UE.getEditor('editor').getContentTxt();
                 summary = searchContent.substr(0, 150);
             } else {
-                content = $("#editorhtml").val();
-                searchContent = content.replace(/<[^>]+>/g,"");//去掉所有的html标记;
+                content = editorMd.getPreviewedHTML();
+                mdContent = editorMd.getMarkdown();
+                //去掉所有的html标记
+                searchContent = content.replace(/<[^>]+>/g,"");
                 summary = searchContent.substr(0, 150);
             }
             if (title == null || title == '') {
@@ -49,10 +54,12 @@
                             'title': title,
                             'blogType.id': blogTypeId,
                             'content': content,
+                            'mdContent': mdContent,
                             'searchContent': searchContent,
                             'summary': summary,
                             'keyWord': keyWord,
-                            'state': state
+                            'state': state,
+                            'isUeditor': isUeditor
                         },
                         success: function (result) {
                             if (result != null && result.status == 500) {
@@ -91,7 +98,7 @@
     <table cellspacing="20px" width="100%">
         <tr>
             <td width="80px">日志标题：</td>
-            <td><input type="text" id="title" name="title" style="width: 400px;background-color:rgba(250,250,250,0)" th:value="${blog} == null ? '' : ${blog.title}"/>
+            <td><input type="text" id="title" name="title" style="width: 400px;background-color:rgba(250,250,250,0)"/>
             </td>
         </tr>
         <tr>
@@ -110,17 +117,14 @@
             </td>
             <td th:unless="${isUeditor}">
                 <div id="editorMd">
-                    <textarea class="editormd-markdown-textarea" name="editormd-markdown-doc" id="editormd" th:utext="${blog} == null ? '' : ${blog.content}"></textarea>
-                    <!-- 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 -->
-                    <!-- html textarea 需要开启配置项 saveHTMLToTextarea == true -->
-                    <textarea class="editormd-html-textarea" name="editorhtml" id="editorhtml"></textarea>
+                    <textarea class="editormd-markdown-textarea" name="editormd-markdown-doc" id="editormd"></textarea>
                 </div>
             </td>
         </tr>
         <tr>
             <td>关键字：</td>
             <td><input type="text" id="keyWord" name="keyWord"
-                       style="width: 400px;background-color:rgba(250,250,250,0)" th:value="${blog} == null ? '' : ${blog.keyWord}"/>&nbsp;(多个关键字中间用","隔开)
+                       style="width: 400px;background-color:rgba(250,250,250,0)"/>&nbsp;(多个关键字中间用","隔开)
             </td>
         </tr>
         <tr>
@@ -142,7 +146,6 @@
 </script>
 
 <script th:inline="javascript" th:unless="${isUeditor}" th:fragment="editorMd">
-    var editorMd;
 
     $(function() {
         editorMd = editormd("editorMd", {
@@ -153,9 +156,8 @@
             path: "/editor.md/lib/",
             emoji: true,
             theme : "dark",
-            previewTheme : "dark",
             editorTheme : "pastel-on-dark",
-            saveHTMLToTextarea: true,    // 保存 HTML 到 Textarea
+            previewTheme : "dark",
             searchReplace: true,
             taskList: true,
             tocm: true,                  // Using [TOCM]
@@ -163,18 +165,27 @@
             flowChart: true,             // 开启流程图支持，默认关闭
             sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭
             codeFold: true,
-            dialogMaskOpacity: 0.4,     // 设置透明遮罩层的透明度，全局通用，默认值为0.1
-            dialogMaskBgColor: "#000",  // 设置透明遮罩层的背景颜色，全局通用，默认为#fff
+            dialogMaskOpacity: 0.4,      // 设置透明遮罩层的透明度，全局通用，默认值为0.1
+            dialogMaskBgColor: "#000",   // 设置透明遮罩层的背景颜色，全局通用，默认为#fff
             imageUpload: false,
             onload: function () {
-                var blog = [[${blog}]];
-                if (blog != null){
-                    $("#blogTypeId").combobox("setValue", blog.blogType.id);
+                var blogId = [[${blogId}]];
+                if (blogId != null){
+                    $.ajax("/admin/blogManage/blog/" + blogId,
+                        {
+                            method: "GET",
+                            async: false,
+                            success: function (result) {
+                                $("#title").val(result.title);
+                                $("#keyWord").val(result.keyWord);
+                                $("#blogTypeId").combobox("setValue", result.blogType.id);
+                                editorMd.appendMarkdown(result.mdContent);
+                            }
+                        });
                 }
             }
         });
     });
-
 </script>
 </body>
 </html>

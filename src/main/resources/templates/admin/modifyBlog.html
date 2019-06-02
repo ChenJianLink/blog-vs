@@ -19,6 +19,8 @@
 
     <script th:inline="javascript" type="text/javascript">
 
+        var editorMd;
+
         function submitData(state) {
             var isUeditor = [[${isUeditor}]];
             var title = $("#title").val();
@@ -27,14 +29,17 @@
             var blogId = [[${blogId}]];
             var content;
             var searchContent;
+            var mdContent = null;
             var summary;
             if (isUeditor) {
                 content = UE.getEditor('editor').getContent();
                 searchContent = UE.getEditor('editor').getContentTxt();
                 summary = UE.getEditor('editor').getContentTxt().substr(0, 150);
             } else {
-                content = $("#editorhtml").val();
-                searchContent = content.replace(/<[^>]+>/g,"");//去掉所有的html标记;
+                content = editorMd.getPreviewedHTML();
+                mdContent = editorMd.getMarkdown();
+                //去掉所有的html标记
+                searchContent = content.replace(/<[^>]+>/g,"");
                 summary = searchContent.substr(0, 150);
             }
 
@@ -53,10 +58,12 @@
                             'title': title,
                             'blogType.id': blogTypeId,
                             'content': content,
+                            'mdContent': mdContent,
                             'searchContent': searchContent,
                             'summary': summary,
                             'keyWord': keyWord,
-                            'state': state
+                            'state': state,
+                            'isUeditor': isUeditor
                         },
                         success: function (result) {
                             if (result != null && result.status == 500) {

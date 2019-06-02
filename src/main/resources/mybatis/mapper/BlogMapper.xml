@@ -12,10 +12,20 @@
         <result property="content" column="content"/>
         <result property="keyWord" column="keyWord"/>
         <result property="state" column="state"/>
+        <result property="isUeditor" column="isUeditor"/>
         <association property="blogType" column="typeId"
                      select="cn.chenjianlink.blogv2.mapper.BlogTypeMapper.selectByPrimaryKey"></association>
         <association property="replyHit" column="id"
                      select="cn.chenjianlink.blogv2.mapper.CommentMapper.selectCommentCount"></association>
+    </resultMap>
+    <resultMap id="BlogResultAdmin" type="cn.chenjianlink.blogv2.pojo.Blog">
+        <result property="id" column="id"/>
+        <result property="title" column="title"/>
+        <result property="content" column="content"/>
+        <result property="keyWord" column="keyWord"/>
+        <result property="isUeditor" column="isUeditor"/>
+        <association property="blogType" column="typeId"
+                     select="cn.chenjianlink.blogv2.mapper.BlogTypeMapper.selectByPrimaryKey"></association>
     </resultMap>
     <!--查询所有日志的部分信息(可能根据标题查找)-->
     <select id="selectList" parameterType="java.lang.String" resultMap="BlogResult">
@@ -28,7 +38,7 @@
         </where>
         ORDER BY releaseDate DESC
     </select>
-    <!--根据id查询日志信息-->
+    <!--根据id查询日志信息（前台查询）-->
     <select id="selectByPrimaryKey" parameterType="int" resultMap="BlogResult">
         SELECT id,
                title,
@@ -38,14 +48,27 @@
                content,
                typeId,
                keyWord,
-               state
+               state,
+               isUeditor
         FROM t_blog
+        WHERE id = #{id}
+    </select>
+    <!--根据id查询日志(后台查询)-->
+    <select id="selectForAdminByPrimaryKey" parameterType="int" resultMap="BlogResultAdmin">
+        SELECT id, title, content, typeId, keyWord, isUeditor
+        FROM t_blog
+        WHERE id = #{id}
+    </select>
+    <!--根据id查询Markdown源码(后台查询)-->
+    <select id="selectMdContentByPrimaryKey" parameterType="int" resultType="java.lang.String">
+        SELECT mdContent
+        FROM t_blog_md
         WHERE id = #{id}
     </select>
     <!--删除blog-->
     <delete id="delete" parameterType="int[]">
-        DELETE FROM t_blog
-        WHERE id IN
+        DELETE t_blog, t_blog_md FROM t_blog LEFT JOIN t_blog_md ON t_blog.id = t_blog_md.id
+        WHERE t_blog.id IN
         <if test="array != null">
             <foreach collection="array" item="id" open="(" separator="," close=")">
                 #{id}
@@ -81,10 +104,22 @@
         </set>
         WHERE id = #{id}
     </update>
+    <!--更新markdown源文件-->
+    <update id="updateMarkdown" parameterType="cn.chenjianlink.blogv2.pojo.Blog">
+        UPDATE t_blog_md
+        SET id        = #{id},
+            mdContent = #{mdContent}
+        WHERE id = #{id}
+    </update>
     <!--添加新日志-->
     <insert id="insert" parameterType="cn.chenjianlink.blogv2.pojo.Blog" keyProperty="id" useGeneratedKeys="true">
-        INSERT INTO t_blog (title, summary, releaseDate, clickHit, content, typeId, keyWord, state)
-        VALUES (#{title}, #{summary}, #{releaseDate}, 0, #{content}, #{blogType.id}, #{keyWord}, #{state})
+        INSERT INTO t_blog (title, summary, releaseDate, clickHit, content, typeId, keyWord, state, isUeditor)
+        VALUES (#{title}, #{summary}, #{releaseDate}, 0, #{content}, #{blogType.id}, #{keyWord}, #{state}, #{isUeditor})
+    </insert>
+    <!--添加markdown文本-->
+    <insert id="insertMarkdown" parameterType="cn.chenjianlink.blogv2.pojo.Blog">
+        INSERT INTO t_blog_md (id, mdContent)
+        VALUES (#{id}, #{mdContent})
     </insert>
     <!--按发布日期查询日志总数-->
     <select id="selectCountList" resultMap="BlogResult">
@@ -149,6 +184,12 @@
     <!--根据id查询日志信息-->
     <select id="selectTitleByPrimaryKey" parameterType="int" resultType="cn.chenjianlink.blogv2.pojo.Blog">
         SELECT id, title
+        FROM t_blog
+        WHERE id = #{id}
+    </select>
+    <!--查询日志对应的编辑器类型-->
+    <select id="selectEditorById" parameterType="int" resultType="boolean">
+        SELECT isUeditor
         FROM t_blog
         WHERE id = #{id}
     </select>

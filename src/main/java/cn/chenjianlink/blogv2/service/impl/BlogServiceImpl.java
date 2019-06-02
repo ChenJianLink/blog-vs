@@ -91,6 +91,9 @@ public class BlogServiceImpl implements BlogService {
             blog.setKeyWord(null);
         }
         this.blogMapper.update(blog);
+        if (!blog.getIsUeditor()) {
+            this.blogMapper.updateMarkdown(blog);
+        }
         if (blog.getState() == PUBLISH) {
             //更新索引
             blogSearch.updateBlogIndex(blog);
@@ -108,6 +111,9 @@ public class BlogServiceImpl implements BlogService {
         //补全属性
         blog.setReleaseDate(new Date());
         this.blogMapper.insert(blog);
+        if (!blog.getIsUeditor()) {
+            this.blogMapper.insertMarkdown(blog);
+        }
         if (blog.getState() == PUBLISH) {
             //添加索引
             blogSearch.addBlogIndex(blog);
@@ -220,5 +226,29 @@ public class BlogServiceImpl implements BlogService {
         }
         this.blogSearch.rebuildBlogIndex(blogList);
     }
+
+    /**
+     * 根据id查询日志使用的编辑器
+     */
+    @Override
+    public Boolean selectEditorByBlogId(Integer blogId) {
+        Boolean isUeditor = this.blogMapper.selectEditorById(blogId);
+        return isUeditor;
+    }
+
+    /**
+     * 用于后台查询日志
+     */
+    @Override
+    public Blog findBlogByIdForAdmin(Integer id) {
+        Blog blog = blogMapper.selectForAdminByPrimaryKey(id);
+        if (!blog.getIsUeditor()) {
+            blog.setContent(null);
+            String markdown = this.blogMapper.selectMdContentByPrimaryKey(id);
+            blog.setMdContent(markdown);
+        }
+        return blog;
+    }
+
 
 }

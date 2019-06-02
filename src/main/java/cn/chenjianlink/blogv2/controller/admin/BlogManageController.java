@@ -45,7 +45,7 @@ public class BlogManageController {
     @GetMapping(value = "/blog/{blogId}")
     @ResponseBody
     public Blog findBlogInfo(@PathVariable(value = "blogId", required = true) Integer id) {
-        Blog blog = blogService.findBlogById(id);
+        Blog blog = blogService.findBlogByIdForAdmin(id);
         return blog;
     }
 

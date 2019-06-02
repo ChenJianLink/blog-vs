@@ -1,12 +1,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<script type="text/javascript" th:src="@{/ueditor/third-party/SyntaxHighlighter/shCore.js}"></script>
-<link rel="stylesheet" th:href="@{/ueditor/third-party/SyntaxHighlighter/shCoreDefault.css}">
+<script type="text/javascript" th:if="${blog.isUeditor}" th:src="@{/ueditor/third-party/SyntaxHighlighter/shCore.js}"></script>
+<link rel="stylesheet" th:if="${blog.isUeditor}" th:href="@{/ueditor/third-party/SyntaxHighlighter/shCoreDefault.css}">
 <link rel="stylesheet" th:href="@{/css/emoji.css}">
 <link rel="stylesheet" th:href="@{/css/jquery.emoji.css}">
 <link rel="stylesheet" th:href="@{/editor.md/css/editormd.css}">
 <link th:href="@{/flavr/css/animate.css}" rel='stylesheet' type='text/css'/>
 <link th:href="@{/flavr/css/flavr.css}" rel='stylesheet' type='text/css'/>
-<script type="text/javascript">
+<script type="text/javascript" th:if="${blog.isUeditor}">
     SyntaxHighlighter.all();
 </script>
 <div class="data_list">
@@ -41,7 +41,7 @@
                 th:unless="${keyWords}==null" th:each="keyWord:${keyWords}" th:href="@{/blog/query(query=${keyWord})}"
                 target="_blank">[[${keyWord }]]&nbsp;&nbsp;</a>
         </div>
-        <div class="blog_content">
+        <div th:class="${blog.isUeditor} ? 'blog_content' : 'blog_content markdown-body'">
             [(${blog.content })]
         </div>
         <div class="blog_lastAndNextPage" style="font-size: 0.8em">

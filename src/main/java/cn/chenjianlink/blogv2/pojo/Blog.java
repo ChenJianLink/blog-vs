@@ -22,7 +22,6 @@ public class Blog implements Serializable {
      * 日志id
      */
     private Integer id;
-
     /**
      * 标题
      */
@@ -56,6 +55,10 @@ public class Blog implements Serializable {
      */
     private String content;
     /**
+     * markdown文本
+     */
+    private String mdContent;
+    /**
      * 关键字
      */
     private String keyWord;
@@ -75,5 +78,9 @@ public class Blog implements Serializable {
      * 用于查询的日志内容
      */
     private String searchContent;
+    /**
+     * 编辑器判断位
+     */
+    private Boolean isUeditor;
 
 }
