@@ -1,8 +1,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <link rel="stylesheet" th:href="@{/css/emoji.css}">
 <link rel="stylesheet" th:href="@{/css/jquery.emoji.css}">
-<link th:href="@{/flavr/css/animate.css}" rel='stylesheet' type='text/css'/>
-<link th:href="@{/flavr/css/flavr.css}" rel='stylesheet' type='text/css'/>
 <div class="data_list">
     <div class="data_list_title">
         <img th:src="@{/images/leavemessage.png}"/>
@@ -44,10 +42,8 @@
         </div>
     </div>
 </div>
-<script src="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery/jquery.min.js"></script>
 <script th:src="@{/js/jquery.emoji.min.js}"></script>
 <script th:src="@{/js/emoji.list.js}"></script>
-<script type="text/javascript" th:src="@{/flavr/js/flavr.min.js}"></script>
 <script>
     $("editor").ready(function () {
         $("#editor").emoji({

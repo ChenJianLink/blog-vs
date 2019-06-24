@@ -10,18 +10,12 @@
     <link rel="stylesheet" th:href="@{/css/background.css}">
     <link rel="stylesheet" th:href="@{/live2d/css/live2d.css}"/>
     <link th:href="@{/images/favicon.ico}" rel="SHORTCUT ICON">
+    <link th:href="@{/flavr/css/animate.css}" rel='stylesheet' type='text/css'/>
+    <link th:href="@{/flavr/css/flavr.css}" rel='stylesheet' type='text/css'/>
     <script src="https://chenjianlink-1258070985.file.myqcloud.com/static/bootstrap3/js/jquery-1.11.2.min.js"></script>
     <script src="https://chenjianlink-1258070985.file.myqcloud.com/static/bootstrap3/js/bootstrap.min.js"></script>
+    <script src="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery/jquery.min.js"></script>
     <script type="text/javascript">
-        function checkData() {
-            var query = document.getElementById("query").value.trim();
-            if (query == null || query == "") {
-                alert("请输入您要查询的关键字！");
-                return false;
-            } else {
-                return true;
-            }
-        }
 
         function showAllType() {
             $('.othersType').show();
@@ -201,6 +195,17 @@
     <div class="slideshow-image"
          style="background-image: url('https://chenjianlink-1258070985.file.myqcloud.com/static/images/background/background4.jpg')"></div>
 </div>
-
+<script type="text/javascript" th:src="@{/flavr/js/flavr.min.js}"></script>
+<script type="text/javascript">
+    function checkData() {
+        var query = document.getElementById("query").value.trim();
+        if (query == null || query == "") {
+            $.flavr("请输入您要查询的关键字！");
+            return false;
+        } else {
+            return true;
+        }
+    }
+</script>
 </body>
 </html>
