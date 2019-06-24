@@ -42,7 +42,6 @@
     <select id="selectByPrimaryKey" parameterType="int" resultMap="BlogResult">
         SELECT id,
                title,
-               summary,
                releaseDate,
                clickHit,
                content,
