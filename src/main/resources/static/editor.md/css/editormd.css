@@ -4148,7 +4148,7 @@ li.L9 {
 .editormd-preview-container pre.prettyprint, .editormd-html-preview pre.prettyprint {
     padding: 10px;
     border: 1px solid #ddd;
-    white-space: pre-wrap;
+    white-space: pre;
     word-wrap: break-word;
 }
 
