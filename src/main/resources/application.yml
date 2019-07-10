@@ -1,6 +1,6 @@
 blog:
   # 索引库存储路径
-  index-path: /home/chenjian/lucene
+  index-path: /home/chenjianlink/testEnviornment/lucene
   # 前台分页显示每页总数
   rows: 10
   # 使用的加密算法
@@ -12,9 +12,9 @@ blog:
   # http端口号
   port: 8080
   # 静态资源绝对路径
-  staticPath: /home/chenjian/static/
+  staticPath: /home/chenjianlink/testEnviornment/static/
   # 头像上传绝对路径
-  userImagesPath: /home/chenjian/static/userImages/
+  userImagesPath: /home/chenjianlink/testEnviornment/static/userImages/
 
 spring:
   # 缓存配置
@@ -95,7 +95,7 @@ server:
 
 # 日志配置
 logging:
-  file: /home/chenjian/test/blog.log
+  file: /home/chenjianlink/testEnviornment/log/blog.log
 
 # shiro配置
 shiro:

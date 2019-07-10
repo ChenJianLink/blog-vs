@@ -3,7 +3,7 @@
          xsi:noNamespaceSchemaLocation="http://ehcache.org/ehcache.xsd"
          updateCheck="false">
     <!-- 指定一个文件目录，当EhCache把数据写到硬盘上时，将把数据写到这个文件目录下 -->
-    <diskStore path="/home/chenjian/cache"/>
+    <diskStore path="/home/chenjianlink/testEnviornment/cache"/>
 
     <!-- 设定缓存的默认数据过期策略 -->
     <defaultCache
