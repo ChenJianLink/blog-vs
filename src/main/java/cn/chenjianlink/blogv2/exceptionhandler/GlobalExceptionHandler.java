@@ -56,14 +56,15 @@ public class GlobalExceptionHandler {
         log.error(e.getMessage(), e);
         BlogResult result = new BlogResult();
         ModelAndView modelAndView = new ModelAndView();
+        result.setErrorInfo("系统异常");
+        result.setTimes(new Date());
+        modelAndView.addObject(result);
         if (e instanceof BlogNotFoundException) {
             result.setStatus(404);
             modelAndView.setViewName("error/4xx.html");
+            return modelAndView;
         }
-        result.setErrorInfo("系统异常");
-        result.setTimes(new Date());
         result.setStatus(500);
-        modelAndView.addObject(result);
         return modelAndView;
     }
 
