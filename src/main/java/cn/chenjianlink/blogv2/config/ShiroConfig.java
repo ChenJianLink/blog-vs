@@ -44,6 +44,9 @@ public class ShiroConfig {
     @Value("${spring.cache.ehcache.config}")
     public String ehcacheConfig;
 
+    @Value("${shiro.kickoutUrl}")
+    public String kickoutUrl;
+
     /**
      * 自定义Realm
      * @return BlogRealm
@@ -79,7 +82,7 @@ public class ShiroConfig {
         filterMap.put("ssl", new SslFilter());
         filterMap.put("kickout", kickoutSessionControlFilter);
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
-        filterChainDefinitionMap.put("/admin/blogger/login", "anon");
+        filterChainDefinitionMap.put("/admin/blogger/login", "anon,ssl");
         filterChainDefinitionMap.put("/admin/**", "authc,kickout");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
@@ -111,7 +114,7 @@ public class ShiroConfig {
     @Bean
     public KickoutSessionControlFilter kickoutSessionControlFilter(){
         KickoutSessionControlFilter kickoutSessionControlFilter = new KickoutSessionControlFilter();
-        kickoutSessionControlFilter.setKickoutUrl(loginUrl);
+        kickoutSessionControlFilter.setKickoutUrl(kickoutUrl);
         kickoutSessionControlFilter.setSessionManager(sessionManager());
         kickoutSessionControlFilter.setCacheManager(ehCacheManager());
         return kickoutSessionControlFilter;

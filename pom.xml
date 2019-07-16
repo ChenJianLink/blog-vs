@@ -10,14 +10,13 @@
     </parent>
     <groupId>cn.chenjianlink.blogv2</groupId>
     <artifactId>blogv2</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>v2.0</version>
     <name>blog</name>
     <description>blog project for Spring Boot</description>
 
     <properties>
         <java.version>1.8</java.version>
         <lucene.version>7.5.0</lucene.version>
-        <ikAnalyzer.version>6.6.0</ikAnalyzer.version>
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
         <thymeleaf-layout-dialect.version>2.4.1</thymeleaf-layout-dialect.version>
     </properties>
@@ -52,6 +51,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
         <!--druid连接池-->
         <dependency>
@@ -123,9 +126,9 @@
         </dependency>
         <!--ik分词器-->
         <dependency>
-            <groupId>com.lucene</groupId>
-            <artifactId>ikAnalyzer</artifactId>
-            <version>${ikAnalyzer.version}</version>
+            <groupId>org.wltea.ik-analyzer</groupId>
+            <artifactId>ik-analyzer</artifactId>
+            <version>8.1.0</version>
         </dependency>
 
         <!-- Apache工具组件 -->

@@ -195,7 +195,7 @@ public class BlogSearchImpl implements BlogSearch {
     private IndexWriter getIndexWriter() throws BlogSearchException {
         try {
             //创建一个indexwriter对象。
-            Directory directory = FSDirectory.open(Paths.get(indexPath, new String[0]));
+            Directory directory = FSDirectory.open(Paths.get(indexPath));
             //设置分析器为IK分词器
             Analyzer analyzer = new IKAnalyzer();
             IndexWriterConfig config = new IndexWriterConfig(analyzer);
@@ -215,7 +215,7 @@ public class BlogSearchImpl implements BlogSearch {
     private IndexSearcher getIndexSearcher() throws BlogSearchException {
         try {
             //创建索引库存放的位置。
-            Directory directory = FSDirectory.open(Paths.get(indexPath, new String[0]));
+            Directory directory = FSDirectory.open(Paths.get(indexPath));
             //创建一个indexReader对象
             IndexReader indexReader = DirectoryReader.open(directory);
             //创建一个indexsearcher对象
