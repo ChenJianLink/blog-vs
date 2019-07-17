@@ -15,6 +15,8 @@ blog:
   staticPath: /home/chenjianlink/testEnviornment/static/
   # 头像上传绝对路径
   userImagesPath: /home/chenjianlink/testEnviornment/static/userImages/
+  # 接收邮件邮箱
+  email: chenjianlink1998@gmail.com
 
 spring:
   # 缓存配置
@@ -71,6 +73,13 @@ spring:
   resources:
     static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${blog.staticPath}
 
+  # 邮件设置
+  mail:
+    default-encoding: utf-8
+    host: smtp.163.com
+    username: javawebtest2018@163.com
+    password: qazwsx123456
+
 # mybatis配置
 mybatis:
   config-location: classpath:mybatis/mybatisConfig.xml
@@ -102,6 +111,7 @@ shiro:
   loginUrl: /admin/blogger/admin-login
   unauthorizedUrl: /homepage
   kickoutUrl: /admin/blogger/admin-login
+
 
 
 

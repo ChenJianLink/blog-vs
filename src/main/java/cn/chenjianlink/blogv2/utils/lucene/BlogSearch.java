@@ -1,4 +1,4 @@
-package cn.chenjianlink.blogv2.lucene;
+package cn.chenjianlink.blogv2.utils.lucene;
 
 import cn.chenjianlink.blogv2.exception.blog.BlogSearchException;
 import cn.chenjianlink.blogv2.pojo.Blog;

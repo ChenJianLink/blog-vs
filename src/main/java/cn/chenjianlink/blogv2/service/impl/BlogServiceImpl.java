@@ -1,7 +1,7 @@
 package cn.chenjianlink.blogv2.service.impl;
 
 import cn.chenjianlink.blogv2.exception.blog.BlogSearchException;
-import cn.chenjianlink.blogv2.lucene.BlogSearch;
+import cn.chenjianlink.blogv2.utils.lucene.BlogSearch;
 import cn.chenjianlink.blogv2.mapper.BlogMapper;
 import cn.chenjianlink.blogv2.pojo.Blog;
 import cn.chenjianlink.blogv2.pojo.EasyUiResult;
@@ -87,7 +87,7 @@ public class BlogServiceImpl implements BlogService {
     public void editBlog(Blog blog) throws BlogSearchException {
         blog.setReleaseDate(new Date());
         //若关键字为空串，则设置为空
-        if (blog.getKeyWord() == null && blog.getKeyWord().isEmpty()) {
+        if (blog.getKeyWord() == null || blog.getKeyWord().isEmpty()) {
             blog.setKeyWord(null);
         }
         this.blogMapper.update(blog);

@@ -15,6 +15,7 @@ import javax.servlet.ServletResponse;
 import java.io.Serializable;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 登录数量限制拦截器
@@ -44,6 +45,10 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
 
     private Cache<String, Deque<Serializable>> cache;
 
+    private static final String KICKOUT = "kickout";
+
+    private final transient ReentrantLock reentrantLock = new ReentrantLock();
+
     public void setCacheManager(CacheManager cacheManager) {
         this.cache = cacheManager.getCache("shiro-activeSessionCache");
     }
@@ -55,61 +60,63 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
 
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
-
-        Subject subject = getSubject(servletRequest, servletResponse);
-        if (!subject.isAuthenticated() && !subject.isRemembered()) {
-            //如果没有登录，直接进行之后的流程
-            return true;
-        }
-        Session session = subject.getSession();
-        String username = (String) subject.getPrincipal();
-        Serializable sessionId = session.getId();
-
-        //同步控制
-        Deque<Serializable> deque = cache.get(username);
-        if (deque == null) {
-            deque = new LinkedList<Serializable>();
-            cache.put(username, deque);
-        }
-
-        //如果队列里没有此sessionId，且用户没有被踢出；放入队列
-        if (!deque.contains(sessionId) && session.getAttribute("kickout") == null) {
-            deque.push(sessionId);
-        }
-
-        //如果队列里的sessionId数超出最大会话数，开始踢人
-        while (deque.size() > maxSession) {
-            Serializable kickoutSessionId = null;
-            //如果踢出后者
-            if (kickoutAfter) {
-                kickoutSessionId = deque.removeFirst();
-            } else { //否则踢出前者
-                kickoutSessionId = deque.removeLast();
+        ReentrantLock lock = this.reentrantLock;
+        lock.lock();
+        try {
+            Subject subject = getSubject(servletRequest, servletResponse);
+            if (!subject.isAuthenticated() && !subject.isRemembered()) {
+                //如果没有登录，直接进行之后的流程
+                return true;
             }
-            try {
-                Session kickoutSession = sessionManager.getSession(new DefaultSessionKey(kickoutSessionId));
-                if (kickoutSession != null) {
-                    //设置会话的kickout属性表示踢出了
-                    kickoutSession.setAttribute("kickout", true);
+            Session session = subject.getSession();
+            String username = (String) subject.getPrincipal();
+            Serializable sessionId = session.getId();
+
+            //同步控制
+            Deque<Serializable> deque = cache.get(username);
+            if (deque == null) {
+                deque = new LinkedList<Serializable>();
+                cache.put(username, deque);
+            }
+
+            //如果队列里没有此sessionId，且用户没有被踢出；放入队列
+            if (!deque.contains(sessionId) && session.getAttribute(KICKOUT) == null) {
+                deque.push(sessionId);
+            }
+            //如果队列里的sessionId数超出最大会话数，开始踢人
+            while (deque.size() > maxSession) {
+                Serializable kickoutSessionId = null;
+                //如果踢出后者
+                if (kickoutAfter) {
+                    kickoutSessionId = deque.removeFirst();
+                } else { //否则踢出前者
+                    kickoutSessionId = deque.removeLast();
                 }
-            } catch (Exception e) {//ignore exception
+                try {
+                    Session kickoutSession = sessionManager.getSession(new DefaultSessionKey(kickoutSessionId));
+                    if (kickoutSession != null) {
+                        //设置会话的kickout属性表示踢出了
+                        kickoutSession.setAttribute(KICKOUT, true);
+                    }
+                } catch (Exception e) {
+                    //ignore exception
+                }
             }
-        }
-
-        //如果被踢出了，直接退出，重定向到踢出后的地址
-        if (session.getAttribute("kickout") != null) {
-            //会话被踢出了
-            try {
-                subject.logout();
-            } catch (Exception e) {
-                //ignore
+            //如果被踢出了，直接退出，重定向到踢出后的地址
+            if (session.getAttribute(KICKOUT) != null) {
+                //会话被踢出了
+                try {
+                    subject.logout();
+                } catch (Exception e) {
+                    //ignore exception
+                }
+                saveRequest(servletRequest);
+                WebUtils.issueRedirect(servletRequest, servletResponse, kickoutUrl);
+                return false;
             }
-            saveRequest(servletRequest);
-            WebUtils.issueRedirect(servletRequest, servletResponse, kickoutUrl);
-            return false;
+            return true;
+        } finally {
+            lock.unlock();
         }
-
-        return true;
-
     }
 }

@@ -1,4 +1,4 @@
-package cn.chenjianlink.blogv2.lucene;
+package cn.chenjianlink.blogv2.utils.lucene;
 
 import cn.chenjianlink.blogv2.exception.blog.BlogSearchException;
 import cn.chenjianlink.blogv2.pojo.Blog;
@@ -26,6 +26,7 @@ import java.io.StringReader;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * BlogSearch实现
@@ -39,10 +40,17 @@ public class BlogSearchImpl implements BlogSearch {
     private String indexPath;
 
     /**
+     * 读写锁
+     */
+    private final transient ReentrantReadWriteLock readWriteLock = new ReentrantReadWriteLock();
+
+    /**
      * 添加日志索引
      */
     @Override
     public void addBlogIndex(Blog blog) throws BlogSearchException {
+        ReentrantReadWriteLock.WriteLock writeLock = this.readWriteLock.writeLock();
+        writeLock.lock();
         IndexWriter indexWriter = this.getIndexWriter();
         Document document = this.getDocument(blog);
         try {
@@ -53,6 +61,7 @@ public class BlogSearchImpl implements BlogSearch {
             throw new BlogSearchException("添加日志索引失败:" + e.getMessage(), e);
         } finally {
             this.releaseIndexWriter(indexWriter);
+            writeLock.unlock();
         }
     }
 
@@ -61,6 +70,8 @@ public class BlogSearchImpl implements BlogSearch {
      */
     @Override
     public void deleteBlogIndex(Integer... blogIds) throws BlogSearchException {
+        ReentrantReadWriteLock.WriteLock writeLock = this.readWriteLock.writeLock();
+        writeLock.lock();
         IndexWriter indexWriter = this.getIndexWriter();
         try {
             for (Integer blogId : blogIds) {
@@ -73,6 +84,7 @@ public class BlogSearchImpl implements BlogSearch {
             throw new BlogSearchException("日志索引删除失败:" + e.getMessage(), e);
         } finally {
             this.releaseIndexWriter(indexWriter);
+            writeLock.unlock();
         }
     }
 
@@ -81,6 +93,8 @@ public class BlogSearchImpl implements BlogSearch {
      */
     @Override
     public void updateBlogIndex(Blog blog) throws BlogSearchException {
+        ReentrantReadWriteLock.WriteLock writeLock = this.readWriteLock.writeLock();
+        writeLock.lock();
         IndexWriter indexWriter = this.getIndexWriter();
         Document document = this.getDocument(blog);
         try {
@@ -91,6 +105,7 @@ public class BlogSearchImpl implements BlogSearch {
             throw new BlogSearchException("日志索引更新失败:" + e.getMessage(), e);
         } finally {
             this.releaseIndexWriter(indexWriter);
+            writeLock.unlock();
         }
     }
 
@@ -99,6 +114,8 @@ public class BlogSearchImpl implements BlogSearch {
      */
     @Override
     public List<Blog> searchBlogIndex(String query) throws BlogSearchException {
+        ReentrantReadWriteLock.ReadLock readLock = this.readWriteLock.readLock();
+        readLock.lock();
         try {
             IndexSearcher indexSearcher = this.getIndexSearcher();
             //创建ik分词器
@@ -163,6 +180,8 @@ public class BlogSearchImpl implements BlogSearch {
             throw new BlogSearchException("查询域名匹配失败:" + e.getMessage(), e);
         } catch (ParseException e) {
             throw new BlogSearchException("高亮内容匹配失败:" + e.getMessage(), e);
+        } finally {
+            readLock.unlock();
         }
     }
 
@@ -171,6 +190,8 @@ public class BlogSearchImpl implements BlogSearch {
      */
     @Override
     public void rebuildBlogIndex(List<Blog> blogList) throws BlogSearchException {
+        ReentrantReadWriteLock.WriteLock writeLock = this.readWriteLock.writeLock();
+        writeLock.lock();
         IndexWriter indexWriter = this.getIndexWriter();
         try {
             indexWriter.deleteAll();
@@ -183,6 +204,7 @@ public class BlogSearchImpl implements BlogSearch {
             throw new BlogSearchException("重建日志索引失败:" + e.getMessage(), e);
         } finally {
             this.releaseIndexWriter(indexWriter);
+            writeLock.unlock();
         }
     }
 
@@ -203,7 +225,6 @@ public class BlogSearchImpl implements BlogSearch {
         } catch (IOException e) {
             throw new BlogSearchException("IndexWriter创建失败:" + e.getMessage(), e);
         }
-
     }
 
     /**

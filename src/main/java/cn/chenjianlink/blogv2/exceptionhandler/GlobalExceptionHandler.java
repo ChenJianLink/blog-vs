@@ -10,12 +10,17 @@ import cn.chenjianlink.blogv2.exception.link.LinkException;
 import cn.chenjianlink.blogv2.exception.message.MessageException;
 import cn.chenjianlink.blogv2.exception.other.UeditorInitializeException;
 import cn.chenjianlink.blogv2.utils.BlogResult;
+import cn.chenjianlink.blogv2.utils.mail.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
+import javax.annotation.Resource;
+import javax.mail.MessagingException;
 import java.util.Date;
 
 
@@ -28,6 +33,12 @@ import java.util.Date;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
+    @Resource
+    private TemplateEngine templateEngine;
+
+    @Resource
+    private MailService mailService;
+
     /**
      * 处理运行时异常
      *
@@ -38,6 +49,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public BlogResult runtimeExceptionHandler(RuntimeException e) {
         log.error(e.getMessage(), e);
+        this.sendErrorMail(e);
         BlogResult result = new BlogResult();
         result.setErrorInfo("系统异常");
         result.setStatus(500);
@@ -54,6 +66,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BlogException.class)
     public ModelAndView blogExceptionHandler(BlogException e) {
         log.error(e.getMessage(), e);
+        this.sendErrorMail(e);
         BlogResult result = new BlogResult();
         ModelAndView modelAndView = new ModelAndView();
         result.setErrorInfo("系统异常");
@@ -78,10 +91,27 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public BlogResult blogSystemExceptionHandler(BlogSystemException e) {
         log.error(e.getMessage(), e);
+        this.sendErrorMail(e);
         BlogResult result = new BlogResult();
         result.setErrorInfo("系统异常");
         result.setTimes(new Date());
         result.setStatus(500);
         return result;
+    }
+
+    /**
+     * 向站长邮箱发送异常信息
+     *
+     * @param e 异常
+     */
+    private void sendErrorMail(Exception e) {
+        Context context = new Context();
+        context.setVariable("message", e.getMessage());
+        String templateMail = templateEngine.process("error/errorMailTemplate", context);
+        try {
+            mailService.sentHtmlMail("局外人日志系统异常", templateMail);
+        } catch (MessagingException ex) {
+            log.error("异常邮件发送失败:", ex);
+        }
     }
 }

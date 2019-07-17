@@ -2,7 +2,7 @@ package cn.chenjianlink.blogv2.test;
 
 import cn.chenjianlink.blogv2.BlogApplication;
 import cn.chenjianlink.blogv2.exception.blog.BlogSearchException;
-import cn.chenjianlink.blogv2.lucene.BlogSearch;
+import cn.chenjianlink.blogv2.utils.lucene.BlogSearch;
 import cn.chenjianlink.blogv2.pojo.Blog;
 import org.junit.Test;
 import org.junit.runner.RunWith;

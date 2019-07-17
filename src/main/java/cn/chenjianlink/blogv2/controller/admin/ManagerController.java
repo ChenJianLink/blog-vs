@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 
 /**
  * 后台用户登录退出Controller
@@ -23,6 +25,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/admin/blogger")
 public class ManagerController {
+
+    private final transient ReentrantLock reentrantLock = new ReentrantLock();
 
     /**
      * 显示登录页面
@@ -46,14 +50,18 @@ public class ManagerController {
     @PostMapping(value = "/login")
     @ResponseBody
     public BlogResult login(Blogger blogger) {
-        Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(blogger.getUserName(), blogger.getPassword());
+        ReentrantLock lock = this.reentrantLock;
+        lock.lock();
         try {
+            Subject subject = SecurityUtils.getSubject();
+            UsernamePasswordToken token = new UsernamePasswordToken(blogger.getUserName(), blogger.getPassword());
             subject.login(token);
             subject.getSession().setTimeout(sessionTimeOut);
             return BlogResult.ok();
         } catch (AuthenticationException | InvalidSessionException e) {
             return BlogResult.showError("用户名或密码不正确");
+        } finally {
+            lock.unlock();
         }
     }
 

@@ -98,7 +98,7 @@ public class BloggerManageController {
      * @return 成功信息
      */
     @PutMapping("/blogger/modifyPassword")
-    public BlogResult modifyPassword(@RequestParam(value = "oldPassword", required = true) String oldPassword, @RequestParam(value = "newPassword", required = true) String password) {
+    public BlogResult modifyPassword(@RequestParam(value = "oldPassword") String oldPassword, @RequestParam(value = "newPassword") String password) {
         Blogger oldBlogger = bloggerService.findPassword();
         String certificate = oldBlogger.getPassword();
         String encryptPassword = ControllerMethod.encrypt(oldPassword, oldBlogger.getSalt());
