@@ -1,11 +1,11 @@
 package cn.chenjianlink.blogv2.utils.mail;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -29,7 +29,7 @@ public class MailServiceImpl implements MailService {
     /**
      * 邮件发送对象
      */
-    @Resource
+    @Autowired
     private JavaMailSender mailSender;
 
     @Override
