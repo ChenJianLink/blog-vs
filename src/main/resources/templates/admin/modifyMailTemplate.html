@@ -3,9 +3,94 @@
 <head>
     <meta charset="UTF-8">
     <title>修改密码</title>
-    <link th:href="@{/images/favicon.ico}" rel="SHORTCUT ICON">
+    <link th:href="@{https://www.chenjianlink.cn/images/favicon.ico}" rel="SHORTCUT ICON">
+    <link th:href="@{https://www.chenjianlink.cn/css/template.css}" rel='stylesheet' type='text/css'/>
+    <link th:if="${flag}" th:href="@{https://www.chenjianlink.cn/flavr/css/animate.css}" rel='stylesheet' type='text/css'/>
+    <link th:if="${flag}" th:href="@{https://www.chenjianlink.cn/flavr/css/flavr.css}" rel='stylesheet' type='text/css'/>
+    <script th:if="${flag}" type="text/javascript"
+            th:src="@{https://chenjianlink-1258070985.file.myqcloud.com/static/jquery/jquery.min.js}"></script>
+    <script th:if="${flag}" type="text/javascript" th:src="@{https://www.chenjianlink.cn/flavr/js/flavr.min.js}"></script>
+    <script type="text/javascript" th:inline="javascript" th:if="${flag}">
+
+        function submit() {
+            var newPassword = $("#newPassword").val();
+            var confirmPassword = $("#confirmPassword").val();
+            if (newPassword == null || newPassword == "") {
+                $.flavr('密码不能为空！');
+            } else if (confirmPassword == null || confirmPassword == "") {
+                $.flavr('确认密码不能为空！');
+            } else if (confirmPassword != newPassword) {
+                $.flavr('两次输入的密码不一致！');
+            } else {
+                $.ajax(
+                    {
+                        url: '/blogger/admin/modifyPassword',
+                        type: 'PUT',
+                        data: {'newPassword' : newPassword},
+                        success: function (result) {
+                            if (result.status == 500){
+                                $.flavr("密码修改失败");
+                                resetValue();
+                            } else {
+                                if (result.errorInfo != null) {
+                                    $.flavr(result.errorInfo);
+                                    resetValue();
+                                } else {
+                                    $.flavr({
+                                        content: '密码修改成功，请重新登录',
+                                        buttons : {
+                                            primary: {
+                                                text: '返回登录页面',
+                                                style: 'primary',
+                                                action: function () {
+                                                    window.location.href = '/admin/blogger/admin-login';
+                                                    return false;
+                                                }
+                                            },
+                                            success: {
+                                                text: '返回首页',
+                                                style: 'sucess',
+                                                action: function () {
+                                                    window.location.href = '/homepage';
+                                                    return false;
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        },
+                        error: function () {
+                            $.flavr("密码修改失败");
+                            resetValue();
+                        }
+
+                    });
+            }
+        }
+        function resetValue() {
+            $("#newPassword").val("");
+            $("#confirmPassword").val("");
+        }
+    </script>
 </head>
 <body>
-
+<div class="login-form">
+    <div class="logo" th:unless="${flag}">
+        <h1><a th:href="@{https://www.chenjianlink.cn/blogger/admin/} + ${url}">点此修改密码</a></h1>
+    </div>
+    <form th:if="${flag}" id="form">
+        <div class="logo">
+            <h1>修改密码</h1>
+        </div>
+        <input type="password" placeholder="新密码" id="newPassword" name="newPassword">
+        <input type="password" placeholder="确认密码" id="confirmPassword" name="confirmPassword">
+    </form>
+    <div class="submit" style="margin: auto 200px">
+        <a>
+            <input type="button" value="确认修改" class="large red button style-1" onclick="submit()"/>
+        </a>
+    </div>
+</div>
 </body>
 </html>

@@ -8,6 +8,7 @@ import cn.chenjianlink.blogv2.utils.mail.MailService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -56,6 +57,10 @@ public class PasswordController {
     @PostMapping("/forgetPassword")
     @ResponseBody
     public BlogResult sendModifyPasswordEmail(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("modifyPasswordKey") != null) {
+            return BlogResult.showError("瞎玩什么呢");
+        }
         ReentrantLock lock = this.reentrantLock;
         lock.lock();
         try {
@@ -63,11 +68,11 @@ public class PasswordController {
             String sessionKey = UUID.randomUUID().toString();
             //修改页面url（随机生成）
             String url = UUID.randomUUID().toString();
-            HttpSession session = request.getSession();
             session.setAttribute("modifyPasswordKey", sessionKey);
             session.setMaxInactiveInterval(10 * 60);
             Context context = new Context();
             context.setVariable(URL, url);
+            context.setVariable("flag", false);
             String templateMail = templateEngine.process("admin/modifyMailTemplate", context);
             mailService.sentHtmlMail("修改局外人的密码", templateMail);
             CHECKMAP.put(URL, url);
@@ -86,8 +91,8 @@ public class PasswordController {
      *
      * @return 成功信息
      */
-    @PostMapping("/{url}")
-    public String showModifyPasswordPage(@PathVariable(value = "url") String url, HttpServletRequest request) {
+    @GetMapping("/{url}")
+    public String showModifyPasswordPage(@PathVariable(value = "url") String url, HttpServletRequest request, Model model) {
         ReentrantLock lock = this.reentrantLock;
         lock.lock();
         try {
@@ -95,7 +100,8 @@ public class PasswordController {
             String sessionKey = (String) session.getAttribute(SESSIONKEY);
             //判断url和sessionKey是否合法
             if (url.equals(CHECKMAP.get(URL)) && sessionKey != null && sessionKey.equals(CHECKMAP.get(SESSIONKEY))) {
-                return "admin/modifyPasswoedPage";
+                model.addAttribute("flag", true);
+                return "admin/modifyMailTemplate";
             }
             return "error/4xx";
         } finally {
@@ -121,7 +127,7 @@ public class PasswordController {
             if (sessionKey == null && !sessionKey.equals(CHECKMAP.get(SESSIONKEY))) {
                 CHECKMAP.clear();
                 session.removeAttribute(SESSIONKEY);
-                return BlogResult.showError("修改超时，请重新操作");
+                return BlogResult.showError("一顿操作猛如虎，一看战绩0-5");
             }
             //及时移除url和sessionKey
             CHECKMAP.clear();

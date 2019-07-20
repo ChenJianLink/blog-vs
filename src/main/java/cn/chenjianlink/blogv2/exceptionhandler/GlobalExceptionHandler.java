@@ -106,7 +106,7 @@ public class GlobalExceptionHandler {
      */
     private void sendErrorMail(Exception e) {
         Context context = new Context();
-        context.setVariable("message", e.getMessage());
+        context.setVariable("message", e.toString());
         String templateMail = templateEngine.process("error/errorMailTemplate", context);
         try {
             mailService.sentHtmlMail("局外人日志系统异常", templateMail);

@@ -48,6 +48,32 @@
                     });
             }
         }
+
+        function forgetPassword() {
+            $.ajax(
+                {
+                    url: '/blogger/admin/forgetPassword',
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.status == 500){
+                            $.flavr("申请修改密码失败");
+                            resetValue();
+                        } else {
+                            if (result.errorInfo != null) {
+                                $.flavr(result.errorInfo);
+                                resetValue();
+                            } else {
+                                $.flavr("请到邮箱接收修改密码的邮件");
+                            }
+                        }
+                    },
+                    error: function () {
+                        $.flavr("申请修改密码失败");
+                        resetValue();
+                    }
+
+                });
+        }
     </script>
 </head>
 <body>
@@ -66,6 +92,7 @@
         </form>
         <div style="margin: 20px">
             <a th:href="@{/homepage}" class="homepage">返回局外人秘境</a>
+            <a onclick="forgetPassword()">忘记密码</a>
         </div>
     </div>
 </div>

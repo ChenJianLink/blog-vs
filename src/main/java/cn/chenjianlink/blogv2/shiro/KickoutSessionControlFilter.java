@@ -60,14 +60,14 @@ public class KickoutSessionControlFilter extends AccessControlFilter {
 
     @Override
     protected boolean onAccessDenied(ServletRequest servletRequest, ServletResponse servletResponse) throws Exception {
+        Subject subject = getSubject(servletRequest, servletResponse);
+        if (!subject.isAuthenticated() && !subject.isRemembered()) {
+            //如果没有登录，直接进行之后的流程
+            return true;
+        }
         ReentrantLock lock = this.reentrantLock;
         lock.lock();
         try {
-            Subject subject = getSubject(servletRequest, servletResponse);
-            if (!subject.isAuthenticated() && !subject.isRemembered()) {
-                //如果没有登录，直接进行之后的流程
-                return true;
-            }
             Session session = subject.getSession();
             String username = (String) subject.getPrincipal();
             Serializable sessionId = session.getId();
