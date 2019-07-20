@@ -86,7 +86,7 @@
         <input type="password" placeholder="新密码" id="newPassword" name="newPassword">
         <input type="password" placeholder="确认密码" id="confirmPassword" name="confirmPassword">
     </form>
-    <div class="submit" style="margin: auto 200px">
+    <div class="submit" style="margin: auto 200px" th:if="${flag}">
         <a>
             <input type="button" value="确认修改" class="large red button style-1" onclick="submit()"/>
         </a>
