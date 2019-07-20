@@ -77,8 +77,8 @@ spring:
   mail:
     default-encoding: utf-8
     host: smtp.163.com
-    username: javawebtest2018@163.com
-    password: qazwsx123456
+    username:
+    password:
 
 # mybatis配置
 mybatis:
