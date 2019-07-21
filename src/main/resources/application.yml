@@ -79,6 +79,17 @@ spring:
     host: smtp.163.com
     username:
     password:
+    port: 465
+    properties:
+      mail:
+        debug: false
+        smtp:
+          auth: true  # 需要验证登录名和密码
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+        starttls:
+          enable: true  # 需要TLS认证 保证发送邮件安全验证
+          required: true
 
 # mybatis配置
 mybatis:
