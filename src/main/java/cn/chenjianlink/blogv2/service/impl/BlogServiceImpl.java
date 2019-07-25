@@ -208,7 +208,7 @@ public class BlogServiceImpl implements BlogService {
      */
     @Override
     public Blog findPreBlog(Blog blog) {
-        Blog pre = this.blogMapper.selectPre(blog.getReleaseDate());
+        Blog pre = this.blogMapper.selectPre(blog.getUpdateDate());
         return pre;
     }
 
@@ -217,7 +217,7 @@ public class BlogServiceImpl implements BlogService {
      */
     @Override
     public Blog findNextBlog(Blog blog) {
-        Blog next = this.blogMapper.selectNext(blog.getReleaseDate());
+        Blog next = this.blogMapper.selectNext(blog.getUpdateDate());
         return next;
     }
 

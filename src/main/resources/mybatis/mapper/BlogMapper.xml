@@ -45,6 +45,7 @@
         SELECT id,
                title,
                releaseDate,
+               updateDate,
                clickHit,
                content,
                typeId,
@@ -56,7 +57,7 @@
     </select>
     <!--根据id查询日志(后台查询)-->
     <select id="selectForAdminByPrimaryKey" parameterType="int" resultMap="BlogResultAdmin">
-        SELECT id, title, content, releaseDate, typeId, keyWord, isUeditor
+        SELECT id, title, content, typeId, keyWord, isUeditor
         FROM t_blog
         WHERE id = #{id}
     </select>
@@ -176,6 +177,7 @@
         FROM t_blog
         WHERE updateDate <![CDATA[ < ]]> #{date}
           AND state = 2
+        ORDER BY updateDate DESC
         LIMIT 1
     </select>
     <!--用于更新日志索引的查询-->
