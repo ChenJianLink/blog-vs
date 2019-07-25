@@ -35,6 +35,10 @@ public class Blog implements Serializable {
      */
     private Date releaseDate;
     /**
+     * 修改日期
+     */
+    private Date updateDate;
+    /**
      * 按发表日期分类的日期
      */
     private String releaseDateStr;

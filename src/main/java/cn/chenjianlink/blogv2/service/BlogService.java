@@ -43,10 +43,11 @@ public interface BlogService {
     /**
      * 修改日志内容
      *
-     * @param blog 要修改的日志对象
+     * @param blog           要修改的日志对象
+     * @param isFirstPublish 是否是第一次发布日志
      * @throws BlogSearchException 更新日志索引异常
      */
-    void editBlog(Blog blog) throws BlogSearchException;
+    void editBlog(Blog blog, Boolean isFirstPublish) throws BlogSearchException;
 
     /**
      * 添加新日志
@@ -118,7 +119,7 @@ public interface BlogService {
      * @param blogId 日志id
      * @return 编辑器类型(false为md, true为富文本)
      */
-    Boolean selectEditorByBlogId(Integer blogId);
+    Blog selectEditorByBlogId(Integer blogId);
 
     /**
      * 用于后台查询日志

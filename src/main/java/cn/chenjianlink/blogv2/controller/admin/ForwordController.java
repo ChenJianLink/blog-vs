@@ -1,5 +1,6 @@
 package cn.chenjianlink.blogv2.controller.admin;
 
+import cn.chenjianlink.blogv2.pojo.Blog;
 import cn.chenjianlink.blogv2.pojo.BlogType;
 import cn.chenjianlink.blogv2.service.BlogService;
 import cn.chenjianlink.blogv2.service.BlogTypeService;
@@ -47,6 +48,7 @@ public class ForwordController {
         if (isUeditor != null) {
             model.addAttribute("isUeditor", isUeditor);
         }
+        model.addAttribute("state", 1);
         return "admin/" + page;
     }
 
@@ -61,9 +63,10 @@ public class ForwordController {
     public String forwordModifyBlogPage(@PathVariable(value = "blogId") Integer blogId, Model model) {
         List<BlogType> blogTypeCountList = this.blogTypeService.getBlogTypeCountList();
         model.addAttribute("blogTypeCountList", blogTypeCountList);
-        Boolean isUeditor = this.blogService.selectEditorByBlogId(blogId);
+        Blog blog = this.blogService.selectEditorByBlogId(blogId);
         model.addAttribute("blogId", blogId);
-        model.addAttribute("isUeditor", isUeditor);
+        model.addAttribute("isUeditor", blog.getIsUeditor());
+        model.addAttribute("state", blog.getState());
         return "admin/modifyBlog";
     }
 

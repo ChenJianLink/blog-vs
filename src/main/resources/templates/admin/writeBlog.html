@@ -130,7 +130,7 @@
         <tr>
             <td></td>
             <td>
-                <a href="javascript:submitData(1)" class="easyui-linkbutton"
+                <a th:if="${state != 2}" href="javascript:submitData(1)" class="easyui-linkbutton"
                    data-options="iconCls:'icon-submit'">保存草稿</a>&nbsp;&nbsp;&nbsp;&nbsp;
                 <a href="javascript:submitData(2)" class="easyui-linkbutton"
                    data-options="iconCls:'icon-submit'">发布日志</a>

@@ -67,9 +67,9 @@ public class BlogManageController {
      * @throws BlogSearchException 日志索引修改异常
      */
     @PutMapping(value = "/blog/{id}")
-    public void editBlogInfo(@PathVariable(value = "id", required = true) Integer id, Blog blog) throws BlogSearchException {
+    public void editBlogInfo(@PathVariable(value = "id", required = true) Integer id, Blog blog, Boolean isFirstPublish) throws BlogSearchException {
         blog.setId(id);
-        blogService.editBlog(blog);
+        blogService.editBlog(blog,isFirstPublish);
     }
 
     /**

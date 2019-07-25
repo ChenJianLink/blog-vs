@@ -84,8 +84,14 @@ public class BlogServiceImpl implements BlogService {
      */
     @Override
     @CacheEvict(value = {"blogCache", "blogTypeCache"}, allEntries = true)
-    public void editBlog(Blog blog) throws BlogSearchException {
-        blog.setReleaseDate(new Date());
+    public void editBlog(Blog blog, Boolean isFirstPublish) throws BlogSearchException {
+        if (isFirstPublish || blog.getState() != PUBLISH) {
+            blog.setReleaseDate(new Date());
+        } else {
+            Date releaseDate = this.blogMapper.selectReleaseDate(blog.getId());
+            blog.setReleaseDate(releaseDate);
+        }
+        blog.setUpdateDate(new Date());
         //若关键字为空串，则设置为空
         if (blog.getKeyWord() == null || blog.getKeyWord().isEmpty()) {
             blog.setKeyWord(null);
@@ -110,6 +116,7 @@ public class BlogServiceImpl implements BlogService {
     public void addBlog(Blog blog) throws BlogSearchException {
         //补全属性
         blog.setReleaseDate(new Date());
+        blog.setUpdateDate(new Date());
         this.blogMapper.insert(blog);
         if (!blog.getIsUeditor()) {
             this.blogMapper.insertMarkdown(blog);
@@ -231,9 +238,9 @@ public class BlogServiceImpl implements BlogService {
      * 根据id查询日志使用的编辑器
      */
     @Override
-    public Boolean selectEditorByBlogId(Integer blogId) {
-        Boolean isUeditor = this.blogMapper.selectEditorById(blogId);
-        return isUeditor;
+    public Blog selectEditorByBlogId(Integer blogId) {
+        Blog blog = this.blogMapper.selectEditorById(blogId);
+        return blog;
     }
 
     /**

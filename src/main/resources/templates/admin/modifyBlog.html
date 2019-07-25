@@ -14,7 +14,6 @@
     <script type="text/javascript" charset="UTF-8" th:if="${isUeditor}" th:src="@{/ueditor/ueditor.all.min.js}"></script>
     <script type="text/javascript" charset="UTF-8" th:if="${isUeditor}" th:src="@{/ueditor/lang/zh-cn/zh-cn.js}"></script>
     <script type="text/javascript" th:unless="${isUeditor}" th:src="@{/editor.md/js/editormd.min.js}"></script>
-
     <script th:inline="javascript" type="text/javascript">
 
         var editorMd;
@@ -29,6 +28,13 @@
             var searchContent;
             var mdContent = null;
             var summary;
+            var oldstate = [[${state}]];
+            var isFirstPublish;
+            if (oldstate == state){
+                isFirstPublish = false;
+            }else {
+                isFirstPublish = true;
+            }
             if (isUeditor) {
                 content = UE.getEditor('editor').getContent();
                 searchContent = UE.getEditor('editor').getContentTxt();
@@ -61,7 +67,8 @@
                             'summary': summary,
                             'keyWord': keyWord,
                             'state': state,
-                            'isUeditor': isUeditor
+                            'isUeditor': isUeditor,
+                            'isFirstPublish': isFirstPublish
                         },
                         success: function (result) {
                             if (result != null && result.status == 500) {
@@ -72,9 +79,13 @@
                                 }
                             } else {
                                 if (state == 2) {
-                                    $.messager.alert("系统提示", "日志修改成功！","info");
+                                    $.messager.alert("系统提示", "日志修改成功！","info", function () {
+                                        location.reload();
+                                    });
                                 } else {
-                                    $.messager.alert("系统提示", "草稿修改成功！","info");
+                                    $.messager.alert("系统提示", "草稿修改成功！","info", function () {
+                                        location.reload();
+                                    });
                                 }
                             }
                         },

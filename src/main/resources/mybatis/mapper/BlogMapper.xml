@@ -8,6 +8,7 @@
         <result property="title" column="title"/>
         <result property="summary" column="summary"/>
         <result property="releaseDate" column="releaseDate"/>
+        <result property="updateDate" column="updateDate"/>
         <result property="clickHit" column="clickHit"/>
         <result property="content" column="content"/>
         <result property="keyWord" column="keyWord"/>
@@ -22,6 +23,7 @@
         <result property="id" column="id"/>
         <result property="title" column="title"/>
         <result property="content" column="content"/>
+        <result property="releaseDate" column="releaseDate"/>
         <result property="keyWord" column="keyWord"/>
         <result property="isUeditor" column="isUeditor"/>
         <association property="blogType" column="typeId"
@@ -29,14 +31,14 @@
     </resultMap>
     <!--查询所有日志的部分信息(可能根据标题查找)-->
     <select id="selectList" parameterType="java.lang.String" resultMap="BlogResult">
-        SELECT id, title, releaseDate, typeId, state
+        SELECT id, title, releaseDate, updateDate, typeId, state
         FROM t_blog
         <where>
             <if test="_parameter != null and _parameter != ''">
                 AND title LIKE '%${_parameter}%'
             </if>
         </where>
-        ORDER BY releaseDate DESC
+        ORDER BY updateDate DESC
     </select>
     <!--根据id查询日志信息（前台查询）-->
     <select id="selectByPrimaryKey" parameterType="int" resultMap="BlogResult">
@@ -54,7 +56,7 @@
     </select>
     <!--根据id查询日志(后台查询)-->
     <select id="selectForAdminByPrimaryKey" parameterType="int" resultMap="BlogResultAdmin">
-        SELECT id, title, content, typeId, keyWord, isUeditor
+        SELECT id, title, content, releaseDate, typeId, keyWord, isUeditor
         FROM t_blog
         WHERE id = #{id}
     </select>
@@ -97,6 +99,9 @@
             <if test="releaseDate != null">
                 releaseDate = #{releaseDate},
             </if>
+            <if test="updateDate != null">
+                updateDate = #{updateDate},
+            </if>
             <if test="state != null">
                 state = #{state}
             </if>
@@ -112,8 +117,8 @@
     </update>
     <!--添加新日志-->
     <insert id="insert" parameterType="cn.chenjianlink.blogv2.pojo.Blog" keyProperty="id" useGeneratedKeys="true">
-        INSERT INTO t_blog (title, summary, releaseDate, clickHit, content, typeId, keyWord, state, isUeditor)
-        VALUES (#{title}, #{summary}, #{releaseDate}, 0, #{content}, #{blogType.id}, #{keyWord}, #{state}, #{isUeditor})
+        INSERT INTO t_blog (title, summary, releaseDate, updateDate, clickHit, content, typeId, keyWord, state, isUeditor)
+        VALUES (#{title}, #{summary}, #{releaseDate}, #{updateDate}, 0, #{content}, #{blogType.id}, #{keyWord}, #{state}, #{isUeditor})
     </insert>
     <!--添加markdown文本-->
     <insert id="insertMarkdown" parameterType="cn.chenjianlink.blogv2.pojo.Blog">
@@ -130,7 +135,7 @@
     </select>
     <!--根据日志日期，日志类别查询日志列表,按日志发布日期排序-->
     <select id="selectListAll" parameterType="Map" resultMap="BlogResult">
-        SELECT id, title, summary, releaseDate, clickHit, content, typeId, keyWord
+        SELECT id, title, summary, releaseDate, updateDate, clickHit, content, typeId, keyWord
         FROM t_blog
         <where>
             <if test="typeId != null">
@@ -141,7 +146,7 @@
             </if>
             AND state = 2
         </where>
-        ORDER BY releaseDate DESC
+        ORDER BY updateDate DESC
     </select>
     <!--查询blog总记录数-->
     <select id="selectCount" parameterType="Map" resultType="int">
@@ -161,7 +166,7 @@
     <select id="selectPre" parameterType="java.util.Date" resultType="cn.chenjianlink.blogv2.pojo.Blog">
         SELECT id, title
         FROM t_blog
-        WHERE releaseDate <![CDATA[ > ]]> #{date}
+        WHERE updateDate <![CDATA[ > ]]> #{date}
           AND state = 2
         LIMIT 1
     </select>
@@ -169,9 +174,8 @@
     <select id="selectNext" parameterType="java.util.Date" resultType="cn.chenjianlink.blogv2.pojo.Blog">
         SELECT id, title
         FROM t_blog
-        WHERE releaseDate <![CDATA[ < ]]> #{date}
+        WHERE updateDate <![CDATA[ < ]]> #{date}
           AND state = 2
-        ORDER BY releaseDate DESC
         LIMIT 1
     </select>
     <!--用于更新日志索引的查询-->
@@ -187,9 +191,13 @@
         WHERE id = #{id}
     </select>
     <!--查询日志对应的编辑器类型-->
-    <select id="selectEditorById" parameterType="int" resultType="boolean">
-        SELECT isUeditor
+    <select id="selectEditorById" parameterType="int" resultType="cn.chenjianlink.blogv2.pojo.Blog">
+        SELECT isUeditor, state
         FROM t_blog
         WHERE id = #{id}
+    </select>
+    <!--查询日志id对应的发布日期-->
+    <select id="selectReleaseDate" parameterType="int" resultType="java.util.Date">
+        SELECT releaseDate FROM t_blog WHERE id = #{id}
     </select>
 </mapper>

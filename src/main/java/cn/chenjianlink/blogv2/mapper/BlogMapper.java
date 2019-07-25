@@ -114,12 +114,12 @@ public interface BlogMapper {
     Blog selectTitleByPrimaryKey(int id);
 
     /**
-     * 查询日志对应的编辑器类型
+     * 查询日志对应的编辑器类型以及日志状态
      *
      * @param blogId 日志id
      * @return 编辑器类型
      */
-    boolean selectEditorById(Integer blogId);
+    Blog selectEditorById(Integer blogId);
 
     /**
      * 插入md
@@ -142,4 +142,11 @@ public interface BlogMapper {
      * @return markdown源码
      */
     String selectMdContentByPrimaryKey(int id);
+
+    /**
+     * 根据日志id查询发布日期
+     * @param blogId 日志id
+     * @return 日期
+     */
+    Date selectReleaseDate(int blogId);
 }
