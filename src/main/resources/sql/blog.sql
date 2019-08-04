@@ -37,7 +37,7 @@ CREATE TABLE `t_blog`
     `clickHit`    smallint(6)         NOT NULL,
     PRIMARY KEY (`id`),
     KEY `typeId` (`typeId`),
-    KEY `t_blog_releasedate_index` (`state`, `releaseDate`, `typeId`),
+    KEY `t_blog_releasedate_index` (`state`, `releaseDate`),
     CONSTRAINT `t_blog_ibfk_1` FOREIGN KEY (`typeId`) REFERENCES `t_blogtype` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -151,13 +151,14 @@ DROP TABLE IF EXISTS `t_comment`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `t_comment`
 (
-    `id`          mediumint(9)     NOT NULL AUTO_INCREMENT,
-    `userIp`      int(10) unsigned NOT NULL,
-    `userName`    varchar(20)      NOT NULL,
-    `blogId`      mediumint(9)     NOT NULL,
-    `content`     varchar(1000)    NOT NULL,
-    `commentDate` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    `state`       tinyint(4)       NOT NULL,
+    `id`            mediumint(9)     NOT NULL AUTO_INCREMENT,
+    `userIp`        int(10) unsigned NOT NULL,
+    `ipAddressInfo` varchar(30)      NOT NULL,
+    `blogId`        mediumint(9)     NOT NULL,
+    `content`       varchar(2000)    NOT NULL,
+    `commentDate`   timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `state`         tinyint(4)       NOT NULL,
+    `userName`      varchar(20)      NOT NULL,
     PRIMARY KEY (`id`),
     KEY `t_comment_blog_index` (`state`, `blogId`)
 ) ENGINE = InnoDB
@@ -215,10 +216,11 @@ CREATE TABLE `t_message`
 (
     `id`               mediumint(9)     NOT NULL AUTO_INCREMENT,
     `userIp`           int(10) unsigned NOT NULL,
-    `userName`         varchar(20)      NOT NULL,
-    `content`          varchar(1000)    NOT NULL,
+    `ipAddressInfo`    varchar(30)      NOT NULL,
+    `content`          varchar(2000)    NOT NULL,
     `leaveMessageDate` timestamp        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `state`            tinyint(4)       NOT NULL,
+    `userName`         varchar(20)      NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -244,4 +246,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-29 19:59:32
+-- Dump completed on 2019-08-04 19:34:36
