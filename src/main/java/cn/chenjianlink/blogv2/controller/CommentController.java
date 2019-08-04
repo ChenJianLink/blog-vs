@@ -21,6 +21,9 @@ public class CommentController {
     @Resource
     private CommentService commentService;
 
+    @Resource
+    private AddressUtils addressUtils;
+
     /**
      * 发表评论
      *
@@ -30,7 +33,6 @@ public class CommentController {
     @PostMapping(value = "/comment/leave")
     public void comment(Comment comment, HttpServletRequest request) throws IpAddressQueryException {
         String userIp = request.getRemoteAddr();
-        AddressUtils addressUtils = new AddressUtils();
         String addressInfo = addressUtils.getAddresses(userIp);
         comment.setUserIp(userIp);
         comment.setIpAddressInfo(addressInfo);

@@ -5,6 +5,7 @@ import cn.chenjianlink.blogv2.pojo.ipInfo.IpAddressInfo;
 import cn.chenjianlink.blogv2.pojo.ipInfo.Result;
 import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -16,6 +17,7 @@ import java.util.List;
  *
  * @author chenjian
  */
+@Service
 public class AddressUtils {
 
     /**
@@ -48,7 +50,7 @@ public class AddressUtils {
         // 解析JSON,果然还是阿里巴巴厉害
         List<IpAddressInfo> ipAddressInfos = JSON.parseArray(returnStr, IpAddressInfo.class);
         IpAddressInfo ipAddressInfo = ipAddressInfos.get(0);
-        if (ipAddressInfo.getResultCode() != errorCode1 && ipAddressInfo.getResultCode() != errorCode2) {
+        if (ipAddressInfo.getResultCode() == errorCode1 && ipAddressInfo.getResultCode() == errorCode2) {
             return ipAddressInfo.getReason();
         }
         if (ipAddressInfo.getErrorCode() != 0) {

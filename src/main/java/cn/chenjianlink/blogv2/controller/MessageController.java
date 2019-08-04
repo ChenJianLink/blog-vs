@@ -26,6 +26,9 @@ public class MessageController {
     @Resource
     private MessageService messageService;
 
+    @Resource
+    private AddressUtils addressUtils;
+
     /**
      * 留言板展示
      *
@@ -54,7 +57,6 @@ public class MessageController {
     @ResponseBody
     public void leaveMessage(Message message, HttpServletRequest request) throws IpAddressQueryException {
         String userIp = request.getRemoteAddr();
-        AddressUtils addressUtils = new AddressUtils();
         String addressInfo = addressUtils.getAddresses(userIp);
         message.setUserIp(userIp);
         message.setIpAddressInfo(addressInfo);

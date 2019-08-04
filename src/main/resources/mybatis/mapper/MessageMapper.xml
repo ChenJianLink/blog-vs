@@ -57,7 +57,7 @@
     </update>
     <!--插入新留言-->
     <insert id="insert" parameterType="cn.chenjianlink.blogv2.pojo.Message">
-        INSERT INTO t_message (userIp, userName, content, leaveMessageDate, state)
-        VALUES (INET_ATON(#{userIp}), #{userName}, #{content}, #{leaveMessageDate}, 0)
+        INSERT INTO t_message (userIp, ipAddressInfo, userName, content, leaveMessageDate, state)
+        VALUES (INET_ATON(#{userIp}), #{ipAddressInfo}, #{userName}, #{content}, #{leaveMessageDate}, 0)
     </insert>
 </mapper>
