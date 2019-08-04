@@ -1,7 +1,9 @@
 package cn.chenjianlink.blogv2.controller;
 
+import cn.chenjianlink.blogv2.exception.other.IpAddressQueryException;
 import cn.chenjianlink.blogv2.pojo.Message;
 import cn.chenjianlink.blogv2.service.MessageService;
+import cn.chenjianlink.blogv2.utils.AddressUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,9 +52,12 @@ public class MessageController {
      */
     @PostMapping("/message/leave")
     @ResponseBody
-    public void leaveMessage(Message message, HttpServletRequest request) {
+    public void leaveMessage(Message message, HttpServletRequest request) throws IpAddressQueryException {
         String userIp = request.getRemoteAddr();
+        AddressUtils addressUtils = new AddressUtils();
+        String addressInfo = addressUtils.getAddresses(userIp);
         message.setUserIp(userIp);
+        message.setIpAddressInfo(addressInfo);
         messageService.addMessage(message);
     }
 }

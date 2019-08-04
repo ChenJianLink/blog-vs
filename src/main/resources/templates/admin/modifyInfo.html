@@ -45,7 +45,9 @@
                             } else if (result.status == 500) {
                                 $.messager.alert("系统提示", "站长信息修改失败", "error");
                             } else {
-                                $.messager.alert("系统提示", "站长信息修改成功", "info");
+                                $.messager.alert("系统提示", "站长信息修改成功", "info", function () {
+                                    location.reload();
+                                });
                             }
                             $("#imageFile").val("");
                         },

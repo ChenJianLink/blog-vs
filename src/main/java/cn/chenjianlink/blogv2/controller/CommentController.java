@@ -1,7 +1,9 @@
 package cn.chenjianlink.blogv2.controller;
 
+import cn.chenjianlink.blogv2.exception.other.IpAddressQueryException;
 import cn.chenjianlink.blogv2.pojo.Comment;
 import cn.chenjianlink.blogv2.service.CommentService;
+import cn.chenjianlink.blogv2.utils.AddressUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,9 +28,12 @@ public class CommentController {
      * @param request 请求
      */
     @PostMapping(value = "/comment/leave")
-    public void comment(Comment comment, HttpServletRequest request) {
+    public void comment(Comment comment, HttpServletRequest request) throws IpAddressQueryException {
         String userIp = request.getRemoteAddr();
+        AddressUtils addressUtils = new AddressUtils();
+        String addressInfo = addressUtils.getAddresses(userIp);
         comment.setUserIp(userIp);
+        comment.setIpAddressInfo(addressInfo);
         commentService.addComment(comment);
     }
 }

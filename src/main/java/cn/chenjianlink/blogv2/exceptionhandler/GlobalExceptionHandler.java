@@ -8,6 +8,7 @@ import cn.chenjianlink.blogv2.exception.blogtype.BlogTypeException;
 import cn.chenjianlink.blogv2.exception.comment.CommentException;
 import cn.chenjianlink.blogv2.exception.link.LinkException;
 import cn.chenjianlink.blogv2.exception.message.MessageException;
+import cn.chenjianlink.blogv2.exception.other.IpAddressQueryException;
 import cn.chenjianlink.blogv2.exception.other.UeditorInitializeException;
 import cn.chenjianlink.blogv2.utils.BlogResult;
 import cn.chenjianlink.blogv2.utils.mail.MailService;
@@ -87,7 +88,7 @@ public class GlobalExceptionHandler {
      * @param e 系统异常
      * @return 异常信息
      */
-    @ExceptionHandler({MessageException.class, BloggerException.class, UeditorInitializeException.class, LinkException.class, BlogTypeException.class, CommentException.class})
+    @ExceptionHandler({MessageException.class, BloggerException.class, UeditorInitializeException.class, LinkException.class, BlogTypeException.class, CommentException.class, IpAddressQueryException.class})
     @ResponseBody
     public BlogResult blogSystemExceptionHandler(BlogSystemException e) {
         log.error(e.getMessage(), e);

@@ -6,6 +6,7 @@
     <resultMap id="MessageResult" type="cn.chenjianlink.blogv2.pojo.Message">
         <result property="id" column="id"/>
         <result property="userIp" column="userIp"/>
+        <result property="ipAddressInfo" column="ipAddressInfo"/>
         <result property="userName" column="userName"/>
         <result property="content" column="content"/>
         <result property="leaveMessageDate" column="leaveMessageDate"/>
@@ -13,7 +14,7 @@
     </resultMap>
     <!--留言列表显示-->
     <select id="selectList" parameterType="Map" resultMap="MessageResult">
-        SELECT id, INET_NTOA(userIp) AS userIp, userName, content, leaveMessageDate, state
+        SELECT id, INET_NTOA(userIp) AS userIp, ipAddressInfo, userName, content, leaveMessageDate, state
         FROM t_message
         <where>
             <if test="state != null">

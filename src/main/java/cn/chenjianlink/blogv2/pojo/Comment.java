@@ -23,6 +23,10 @@ public class Comment implements Serializable {
      */
     private String userIp;
     /**
+     * ip信息
+     */
+    private String ipAddressInfo;
+    /**
      * 评论者名称
      */
     private String userName;
@@ -43,5 +47,10 @@ public class Comment implements Serializable {
      * 0:待审核，1：审核通过，2：审核不通过
      */
     private Integer state;
+
+    /**
+     * 站长评论回复
+     */
+    private String reply;
 
 }

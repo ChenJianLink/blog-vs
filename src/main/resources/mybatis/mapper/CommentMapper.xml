@@ -6,6 +6,7 @@
     <resultMap id="CommentResult" type="cn.chenjianlink.blogv2.pojo.Comment">
         <result property="id" column="id"/>
         <result property="userIp" column="userIp"/>
+        <result property="ipAddressInfo" column="ipAddressInfo"/>
         <result property="userName" column="userName"/>
         <result property="content" column="content"/>
         <result property="commentDate" column="commentDate"/>
@@ -15,7 +16,7 @@
     </resultMap>
     <!--评论列表显示-->
     <select id="selectList" parameterType="Map" resultMap="CommentResult">
-        SELECT id, INET_NTOA(userIp) AS userIp, userName, content, commentDate, state, blogId
+        SELECT id, INET_NTOA(userIp) AS userIp, ipAddressInfo, userName, content, commentDate, state, blogId
         FROM t_comment
         <where>
             <if test="state != null">
@@ -80,7 +81,7 @@
     </update>
     <!--插入新评论-->
     <insert id="insert" parameterType="cn.chenjianlink.blogv2.pojo.Comment">
-        INSERT INTO t_comment (userIp, userName, blogId, content, commentDate, state)
-        VALUES (INET_ATON(#{userIp}), #{userName}, #{blog.id}, #{content}, #{commentDate}, 0)
+        INSERT INTO t_comment (userIp, ipAddressInfo, userName, blogId, content, commentDate, state)
+        VALUES (INET_ATON(#{userIp}), #{ipAddressInfo}, #{userName}, #{blog.id}, #{content}, #{commentDate}, 0)
     </insert>
 </mapper>

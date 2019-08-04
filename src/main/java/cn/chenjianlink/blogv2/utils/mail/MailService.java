@@ -11,7 +11,6 @@ public interface MailService {
     /**
      * 发送HTML邮件
      *
-     * @param to      目的邮箱地址
      * @param subject 主题
      * @param content 邮件内容
      * @throws MessagingException

@@ -17,7 +17,8 @@ blog:
   userImagesPath: /home/chenjianlink/testEnviornment/static/userImages/
   # 接收邮件邮箱
   email: chenjianlink1998@gmail.com
-
+  # 聚合数据的IP认证key
+  ipKey:
 spring:
   # 缓存配置
   cache:
@@ -51,7 +52,9 @@ spring:
       filters: stat,wall,slf4j
       maxPoolPreparedStatementPerConnectionSize: 20
       useGlobalDataSourceStat: true
-      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=500
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+      aop-patterns: cn.chenjianlink.blogv2.controller.*,cn.chenjianlink.blogv2.mapper.*,cn.chenjianlink.blogv2.service.*,cn.chenjianlink.blogv2.exceptionhandler.*
 
       # druid监控登录
       loginUsername: admin
@@ -106,6 +109,14 @@ server:
       timeout: 14400s
   tomcat:
     uri-encoding: UTF-8
+    #最大并发数
+    max-threads: 100
+    #接受和处理的最大连接数
+    max-connections: 500
+    #初始化时创建的线程数
+    min-SpareThreads: 30
+    #可以放到处理队列中的请求数
+    acceptCount: 200
   # SSL配置
   ssl:
     key-store: classpath:ssl/tomcat.keystore

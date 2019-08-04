@@ -11,7 +11,6 @@
     <script type="text/javascript" src="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" th:src="@{/js/common.js}"></script>
     <script type="text/javascript">
-
         function commentReview(state) {
             var selectedRows = $("#dg").datagrid("getSelections");
             if (selectedRows.length == 0) {
@@ -33,6 +32,7 @@
                             success: function (result) {
                                 if (result != null && result.status == 500) {
                                     $.messager.alert("系统提示", "审核提交失败！","error");
+                                    $("#dg").datagrid("reload");
                                 } else {
                                     $.messager.alert("系统提示", "审核提交成功！","info");
                                     $("#dg").datagrid("reload");
@@ -40,6 +40,7 @@
                             },
                             error: function () {
                                 $.messager.alert("系统提示", "审核提交失败！","error");
+                                $("#dg").datagrid("reload");
                             }
                         });
                 }
@@ -82,6 +83,7 @@
         <th field="id" width="20" align="center">编号</th>
         <th field="blog" width="100" align="center" formatter="formatBlogTitle">日志标题</th>
         <th field="userIp" width="100" align="center">用户IP</th>
+        <th field="ipAddressInfo" width="100" align="center">IP信息</th>
         <th field="userName" width="50" align="center">评论者名称</th>
         <th field="content" width="220" align="center">评论内容</th>
         <th field="commentDate" width="80" align="center" formatter="BLOG.formatDateTime">评论日期</th>

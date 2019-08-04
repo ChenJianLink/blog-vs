@@ -36,13 +36,10 @@ public class DruidConfig {
     public ServletRegistrationBean statViewServlet() {
         ServletRegistrationBean bean = new ServletRegistrationBean(new StatViewServlet(), "/druid/*");
         Map<String, String> initParams = new HashMap<>(5);
-
         initParams.put("loginUsername", userName);
         initParams.put("loginPassword", password);
-
         //默认就是允许所有访问
         initParams.put("allow", "");
-
         bean.setInitParameters(initParams);
         return bean;
     }
@@ -57,14 +54,10 @@ public class DruidConfig {
     public FilterRegistrationBean webStatFilter() {
         FilterRegistrationBean bean = new FilterRegistrationBean();
         bean.setFilter(new WebStatFilter());
-
         Map<String, String> initParams = new HashMap<>(2);
         initParams.put("exclusions", "*.js,*gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*");
-
         bean.setInitParameters(initParams);
-
         bean.setUrlPatterns(Arrays.asList("/*"));
-
         return bean;
     }
 }
