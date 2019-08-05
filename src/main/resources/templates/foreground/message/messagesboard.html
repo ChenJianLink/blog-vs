@@ -37,8 +37,9 @@
     </div>
     <div class="commentDatas" th:unless="${messageList.size()==0}">
         <div class="comment" th:each="message,status:${messageList }">
-            <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${message.userName }]]：</font>
-                [(${message.content })]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(message.leaveMessageDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span>
+            <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${message.userName }]]：</font>[(${message.content})]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(message.leaveMessageDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span>
+            <span th:if="${message.reply!=null}">————————————————————</span><br>
+            <span th:if="${message.reply!=null}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;站长回复：[(${message.reply})]</span>
         </div>
     </div>
 </div>
