@@ -28,6 +28,8 @@ public class BloggerManageController {
 
     @Resource
     private BloggerService bloggerService;
+    @Resource
+    private ControllerMethod controllerMethod;
 
     private static final String POINT = ".";
 
@@ -101,14 +103,14 @@ public class BloggerManageController {
     public BlogResult modifyPassword(@RequestParam(value = "oldPassword") String oldPassword, @RequestParam(value = "newPassword") String password) {
         Blogger oldBlogger = bloggerService.findPassword();
         String certificate = oldBlogger.getPassword();
-        String encryptPassword = ControllerMethod.encrypt(oldPassword, oldBlogger.getSalt());
+        String encryptPassword = controllerMethod.encrypt(oldPassword, oldBlogger.getSalt());
         //对原密码进行对比判断
         if (!certificate.equals(encryptPassword)) {
             return BlogResult.showError("密码修改失败,原密码不正确");
         }
         //加密新密码,设置新颜值
         String salt = new SecureRandomNumberGenerator().nextBytes().toHex();
-        String newPassword = ControllerMethod.encrypt(password, salt);
+        String newPassword = controllerMethod.encrypt(password, salt);
         oldBlogger.setPassword(newPassword);
         oldBlogger.setSalt(salt);
         this.bloggerService.updatePassword(oldBlogger);

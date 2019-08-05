@@ -23,6 +23,8 @@ public class IdexController {
 
     @Resource
     private BlogService blogService;
+    @Resource
+    private ControllerMethod controllerMethod;
 
     /**
      * 首页展示
@@ -47,9 +49,9 @@ public class IdexController {
         //查询
         PageResult pageResult = blogService.findBlogList(page, blogMap);
         //获取请求的url，将URL截取并封装到结果中
-        String url = ControllerMethod.getUrl(request);
+        String url = controllerMethod.getUrl(request);
         pageResult.setUrl(url);
-        ControllerMethod.showMainTemp(model);
+        controllerMethod.showMainTemp(model);
         model.addAttribute("blogList", pageResult.getPageList());
         model.addAttribute("page", pageResult);
         model.addAttribute("pageTitle", "局外人之秘境");

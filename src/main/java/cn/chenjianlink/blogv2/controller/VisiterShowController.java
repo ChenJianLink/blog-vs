@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.annotation.Resource;
+
 /**
  * 访问可视化Controller
  *
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class VisiterShowController {
 
+    @Resource
+    private ControllerMethod controllerMethod;
     /**
      * 展示可视化页面
      *
@@ -20,7 +24,7 @@ public class VisiterShowController {
      */
     @GetMapping("/show/visiterShow")
     public String visiterShow(Model model) {
-        ControllerMethod.showMainTemp(model);
+        controllerMethod.showMainTemp(model);
         model.addAttribute("mainPage", "foreground/visitershow/show.html");
         model.addAttribute("pageTitle", "访客记录-局外人之秘境");
         return "mainTemp";

@@ -38,6 +38,9 @@ public class PasswordController {
     private MailService mailService;
 
     @Resource
+    private ControllerMethod controllerMethod;
+
+    @Resource
     private TemplateEngine templateEngine;
 
     private static final transient ConcurrentHashMap<String, String> CHECKMAP = new ConcurrentHashMap<>(4);
@@ -135,7 +138,7 @@ public class PasswordController {
             //修改密码
             Blogger blogger = new Blogger();
             String salt = new SecureRandomNumberGenerator().nextBytes().toHex();
-            String newPassword = ControllerMethod.encrypt(password, salt);
+            String newPassword = controllerMethod.encrypt(password, salt);
             blogger.setPassword(newPassword);
             blogger.setSalt(salt);
             this.bloggerService.updatePassword(blogger);

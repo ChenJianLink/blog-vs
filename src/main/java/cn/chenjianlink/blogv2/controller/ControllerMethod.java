@@ -10,7 +10,7 @@ import cn.chenjianlink.blogv2.service.BloggerService;
 import cn.chenjianlink.blogv2.service.LinkService;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import javax.annotation.Resource;
@@ -22,59 +22,35 @@ import java.util.List;
  *
  * @author chenjian
  */
-@Component
+@Controller
 public class ControllerMethod {
 
-    private static LinkService linkService;
-
-    private static BloggerService bloggerService;
-
-    private static BlogTypeService blogTypeService;
-
-    private static BlogService blogService;
-
-    private static String ALGORITHMNAME;
-
-    private static Integer ITERATIONS;
-
-    private static final String PAGE = "&page=";
+    @Resource
+    private LinkService linkService;
 
     @Resource
-    public void setLinkService(LinkService linkService) {
-        ControllerMethod.linkService = linkService;
-    }
+    private BloggerService bloggerService;
 
     @Resource
-    public void setBloggerService(BloggerService bloggerService) {
-        ControllerMethod.bloggerService = bloggerService;
-    }
+    private BlogTypeService blogTypeService;
 
     @Resource
-    public void setBlogTypeService(BlogTypeService blogTypeService) {
-        ControllerMethod.blogTypeService = blogTypeService;
-    }
-
-    @Resource
-    public void setBlogService(BlogService blogService) {
-        ControllerMethod.blogService = blogService;
-    }
+    private BlogService blogService;
 
     @Value("${blog.algorithmName}")
-    public void setALGORITHMNAME(String algorithmName) {
-        ControllerMethod.ALGORITHMNAME = algorithmName;
-    }
+    private String ALGORITHMNAME;
 
     @Value("${blog.iterations}")
-    public void setITERATIONS(Integer iterations) {
-        ControllerMethod.ITERATIONS = iterations;
-    }
+    private Integer ITERATIONS;
+
+    private static final String PAGE = "&page=";
 
     /**
      * 显示主页的友情链接，Master信息，日志分类的代码
      *
      * @param model 页面视图模型
      */
-    public static void showMainTemp(Model model) {
+    public void showMainTemp(Model model) {
         //Master信息查询
         Blogger blogger = bloggerService.findBlogger();
         model.addAttribute("blogger", blogger);
@@ -95,7 +71,7 @@ public class ControllerMethod {
      * @param request 请求
      * @return 请求url
      */
-    public static String getUrl(HttpServletRequest request) {
+    public String getUrl(HttpServletRequest request) {
         //获取项目名
         String contextPath = request.getContextPath();
         //获取servlet
@@ -124,7 +100,7 @@ public class ControllerMethod {
      * @param salt     颜值
      * @return 加密后的密码
      */
-    public static String encrypt(String password, String salt) {
+    public String encrypt(String password, String salt) {
         String newPassword = new SimpleHash(ALGORITHMNAME, password, salt, ITERATIONS).toHex();
         return newPassword;
     }

@@ -4,6 +4,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.annotation.Resource;
+
 /**
  * 查看Master信息Controller
  *
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class BloggerController {
+
+    @Resource
+    private ControllerMethod controllerMethod;
 
     /**
      * "关于Master"页面展示
@@ -20,7 +25,7 @@ public class BloggerController {
      */
     @GetMapping("/blogger/aboutMe")
     public String aboutMe(Model model) {
-        ControllerMethod.showMainTemp(model);
+        controllerMethod.showMainTemp(model);
         model.addAttribute("mainPage", "foreground/blogger/info.html");
         model.addAttribute("pageTitle", "关于Master-局外人之秘境");
         return "mainTemp";

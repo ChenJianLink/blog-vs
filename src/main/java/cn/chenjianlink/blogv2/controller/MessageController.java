@@ -28,6 +28,8 @@ public class MessageController {
 
     @Resource
     private AddressUtils addressUtils;
+    @Resource
+    private ControllerMethod controllerMethod;
 
     /**
      * 留言板展示
@@ -43,7 +45,7 @@ public class MessageController {
         model.addAttribute("messageList", messageList);
         model.addAttribute("mainPage", "foreground/message/messagesboard.html");
         model.addAttribute("pageTitle", "游客留言-局外人之秘境");
-        ControllerMethod.showMainTemp(model);
+        controllerMethod.showMainTemp(model);
         return "mainTemp";
     }
 

@@ -30,8 +30,10 @@ public class BlogController {
     private BlogService blogService;
     @Resource
     private CommentService commentService;
+    @Resource
+    private ControllerMethod controllerMethod;
 
-    public static final int PUBLISH = 2;
+    private static final int PUBLISH = 2;
 
     /**
      * 搜索日志
@@ -45,7 +47,7 @@ public class BlogController {
      */
     @GetMapping("/blog/query")
     public String searchBlog(Model model, @RequestParam(value = "query", required = true) String query, @RequestParam(value = "page", required = false) Integer page, HttpServletRequest request) throws BlogSearchException {
-        String url = ControllerMethod.getUrl(request);
+        String url = controllerMethod.getUrl(request);
         /*
          * 若page为空，则设置page为1，同时处理分页跳转参数问题
          */
@@ -58,7 +60,7 @@ public class BlogController {
         }
         PageResult pageResult = blogService.searchBlogByQuery(page, query.trim());
         pageResult.setUrl(url);
-        ControllerMethod.showMainTemp(model);
+        controllerMethod.showMainTemp(model);
         model.addAttribute("page", pageResult);
         model.addAttribute("query", query);
         model.addAttribute("blogList", pageResult.getPageList());
@@ -109,7 +111,7 @@ public class BlogController {
         if (blog.getKeyWord() != null && !blog.getKeyWord().isEmpty()) {
             keyWords = blog.getKeyWord().trim().split(",");
         }
-        ControllerMethod.showMainTemp(model);
+        controllerMethod.showMainTemp(model);
         model.addAttribute("commentList", commentList);
         model.addAttribute("pre", preBlog);
         model.addAttribute("next", nextBlog);
