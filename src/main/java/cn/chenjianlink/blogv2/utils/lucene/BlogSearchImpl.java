@@ -2,6 +2,7 @@ package cn.chenjianlink.blogv2.utils.lucene;
 
 import cn.chenjianlink.blogv2.exception.blog.BlogSearchException;
 import cn.chenjianlink.blogv2.pojo.Blog;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.lucene.analysis.Analyzer;
@@ -33,6 +34,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * @author chenjian
  */
+@Slf4j
 @Service
 public class BlogSearchImpl implements BlogSearch {
 
@@ -51,16 +53,20 @@ public class BlogSearchImpl implements BlogSearch {
     public void addBlogIndex(Blog blog) throws BlogSearchException {
         ReentrantReadWriteLock.WriteLock writeLock = this.readWriteLock.writeLock();
         writeLock.lock();
-        IndexWriter indexWriter = this.getIndexWriter();
-        Document document = this.getDocument(blog);
         try {
-            //添加文档到索引库
-            indexWriter.addDocument(document);
-            indexWriter.commit();
-        } catch (IOException e) {
-            throw new BlogSearchException("添加日志索引失败:" + e.getMessage(), e);
+            IndexWriter indexWriter = null;
+            try {
+                indexWriter = this.getIndexWriter();
+                //添加文档到索引库
+                Document document = this.getDocument(blog);
+                indexWriter.addDocument(document);
+                indexWriter.commit();
+            } catch (IOException e) {
+                throw new BlogSearchException("添加日志索引失败:" + e.getMessage(), e);
+            } finally {
+                this.releaseIndexWriter(indexWriter);
+            }
         } finally {
-            this.releaseIndexWriter(indexWriter);
             writeLock.unlock();
         }
     }
@@ -72,18 +78,22 @@ public class BlogSearchImpl implements BlogSearch {
     public void deleteBlogIndex(Integer... blogIds) throws BlogSearchException {
         ReentrantReadWriteLock.WriteLock writeLock = this.readWriteLock.writeLock();
         writeLock.lock();
-        IndexWriter indexWriter = this.getIndexWriter();
         try {
-            for (Integer blogId : blogIds) {
-                Term term = new Term("id", blogId.toString());
-                indexWriter.deleteDocuments(term);
-                indexWriter.forceMergeDeletes();
+            IndexWriter indexWriter = null;
+            try {
+                indexWriter = this.getIndexWriter();
+                for (Integer blogId : blogIds) {
+                    Term term = new Term("id", blogId.toString());
+                    indexWriter.deleteDocuments(term);
+                    indexWriter.forceMergeDeletes();
+                }
+                indexWriter.commit();
+            } catch (IOException e) {
+                throw new BlogSearchException("日志索引删除失败:" + e.getMessage(), e);
+            } finally {
+                this.releaseIndexWriter(indexWriter);
             }
-            indexWriter.commit();
-        } catch (IOException e) {
-            throw new BlogSearchException("日志索引删除失败:" + e.getMessage(), e);
         } finally {
-            this.releaseIndexWriter(indexWriter);
             writeLock.unlock();
         }
     }
@@ -95,16 +105,20 @@ public class BlogSearchImpl implements BlogSearch {
     public void updateBlogIndex(Blog blog) throws BlogSearchException {
         ReentrantReadWriteLock.WriteLock writeLock = this.readWriteLock.writeLock();
         writeLock.lock();
-        IndexWriter indexWriter = this.getIndexWriter();
-        Document document = this.getDocument(blog);
         try {
-            //更新
-            indexWriter.updateDocument(new Term("id", blog.getId().toString()), document);
-            indexWriter.commit();
-        } catch (IOException e) {
-            throw new BlogSearchException("日志索引更新失败:" + e.getMessage(), e);
+            IndexWriter indexWriter = null;
+            try {
+                indexWriter = this.getIndexWriter();
+                Document document = this.getDocument(blog);
+                //更新
+                indexWriter.updateDocument(new Term("id", blog.getId().toString()), document);
+                indexWriter.commit();
+            } catch (IOException e) {
+                throw new BlogSearchException("日志索引更新失败:" + e.getMessage(), e);
+            } finally {
+                this.releaseIndexWriter(indexWriter);
+            }
         } finally {
-            this.releaseIndexWriter(indexWriter);
             writeLock.unlock();
         }
     }
@@ -192,18 +206,22 @@ public class BlogSearchImpl implements BlogSearch {
     public void rebuildBlogIndex(List<Blog> blogList) throws BlogSearchException {
         ReentrantReadWriteLock.WriteLock writeLock = this.readWriteLock.writeLock();
         writeLock.lock();
-        IndexWriter indexWriter = this.getIndexWriter();
         try {
-            indexWriter.deleteAll();
-            for (Blog blog : blogList) {
-                Document document = this.getDocument(blog);
-                indexWriter.addDocument(document);
+            IndexWriter indexWriter = null;
+            try {
+                indexWriter = this.getIndexWriter();
+                indexWriter.deleteAll();
+                for (Blog blog : blogList) {
+                    Document document = this.getDocument(blog);
+                    indexWriter.addDocument(document);
+                }
+                indexWriter.commit();
+            } catch (IOException e) {
+                throw new BlogSearchException("重建日志索引失败:" + e.getMessage(), e);
+            } finally {
+                this.releaseIndexWriter(indexWriter);
             }
-            indexWriter.commit();
-        } catch (IOException e) {
-            throw new BlogSearchException("重建日志索引失败:" + e.getMessage(), e);
         } finally {
-            this.releaseIndexWriter(indexWriter);
             writeLock.unlock();
         }
     }
