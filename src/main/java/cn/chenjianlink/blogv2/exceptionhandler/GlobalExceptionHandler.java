@@ -67,7 +67,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BlogException.class)
     public ModelAndView blogExceptionHandler(BlogException e) {
         log.error(e.getMessage(), e);
-        this.sendErrorMail(e);
         BlogResult result = new BlogResult();
         ModelAndView modelAndView = new ModelAndView();
         result.setErrorInfo("系统异常");
@@ -79,6 +78,7 @@ public class GlobalExceptionHandler {
             return modelAndView;
         }
         result.setStatus(500);
+        this.sendErrorMail(e);
         return modelAndView;
     }
 
