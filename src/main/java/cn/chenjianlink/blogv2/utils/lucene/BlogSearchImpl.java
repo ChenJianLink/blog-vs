@@ -2,7 +2,6 @@ package cn.chenjianlink.blogv2.utils.lucene;
 
 import cn.chenjianlink.blogv2.exception.blog.BlogSearchException;
 import cn.chenjianlink.blogv2.pojo.Blog;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.lucene.analysis.Analyzer;
@@ -34,7 +33,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * @author chenjian
  */
-@Slf4j
 @Service
 public class BlogSearchImpl implements BlogSearch {
 
