@@ -21,7 +21,7 @@
         </ul>
     </div>
 </div>
-<div>
+<div th:if="${page.totalRows > page.rows}">
     <nav role="navigation">
         <ul class="cd-pagination" th:fragment="page">
             <li><a th:href="${page.url} + '&page=1'">首页</a></li>

@@ -5,9 +5,10 @@ import cn.chenjianlink.blogv2.mapper.MessageMapper;
 import cn.chenjianlink.blogv2.pojo.EasyUiResult;
 import cn.chenjianlink.blogv2.pojo.Message;
 import cn.chenjianlink.blogv2.service.MessageService;
-import cn.chenjianlink.blogv2.utils.BlogResult;
+import cn.chenjianlink.blogv2.utils.PageResult;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -28,9 +29,12 @@ public class MessageServiceImpl implements MessageService {
 
     @Resource
     private MessageMapper messageMapper;
+    @Value("${blog.rows}")
+    private Integer rows;
 
-    public static final int FAIL = 2;
-    public static final int ADOPT = 1;
+    private static final int FAIL = 2;
+
+    private static final int ADOPT = 1;
 
     /**
      * 留言列表显示
@@ -87,11 +91,19 @@ public class MessageServiceImpl implements MessageService {
      */
     @Override
     @Cacheable(value = "messageCache")
-    public List<Message> findMessageList() {
+    public PageResult findMessageList(Integer page) {
+        //对过大的page处理
+        int totalRows = this.messageMapper.selectAdoptCount();
+        int totalPage = totalRows / rows;
+        totalPage = totalRows % rows == 0 ? totalPage : totalPage + 1;
+        page = page <= totalPage ? page : totalPage;
+        //设置分页信息
+        PageHelper.startPage(page, 2 * rows);
         Map<String, Integer> messageMap = new HashMap<>(2);
         messageMap.put("state", ADOPT);
         List<Message> messageList = messageMapper.selectList(messageMap);
-        return messageList;
+        PageResult result = new PageResult(page, totalRows, 2 * rows, messageList);
+        return result;
     }
 
     /**

@@ -3,9 +3,7 @@ package cn.chenjianlink.blogv2.service;
 import cn.chenjianlink.blogv2.exception.message.MessageException;
 import cn.chenjianlink.blogv2.pojo.EasyUiResult;
 import cn.chenjianlink.blogv2.pojo.Message;
-import cn.chenjianlink.blogv2.utils.BlogResult;
-
-import java.util.List;
+import cn.chenjianlink.blogv2.utils.PageResult;
 
 /**
  * 留言service
@@ -35,15 +33,17 @@ public interface MessageService {
      *
      * @param ids   批量审核留言的留言id数组
      * @param state 审核状态
+     * @throws MessageException 留言异常
      */
     void updateMessageState(Integer[] ids, Integer state) throws MessageException;
 
     /**
      * 显示留言
      *
+     * @param page 留言页面页码
      * @return 留言列表(前台使用)
      */
-    List<Message> findMessageList();
+    PageResult findMessageList(Integer page);
 
     /**
      * 增加新留言

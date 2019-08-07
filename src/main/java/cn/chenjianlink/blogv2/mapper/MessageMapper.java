@@ -48,4 +48,11 @@ public interface MessageMapper {
      * @param message 要插入的留言对象
      */
     void insert(Message message);
+
+    /**
+     * 统计通过审核的留言总数
+     *
+     * @return 总数
+     */
+    int selectAdoptCount();
 }
