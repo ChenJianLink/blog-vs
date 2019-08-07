@@ -94,8 +94,8 @@ public class MessageServiceImpl implements MessageService {
     public PageResult findMessageList(Integer page) {
         //对过大的page处理
         int totalRows = this.messageMapper.selectAdoptCount();
-        int totalPage = totalRows / rows;
-        totalPage = totalRows % rows == 0 ? totalPage : totalPage + 1;
+        int totalPage = totalRows / (2 * rows);
+        totalPage = totalRows % (2 * rows) == 0 ? totalPage : totalPage + 1;
         page = page <= totalPage ? page : totalPage;
         //设置分页信息
         PageHelper.startPage(page, 2 * rows);

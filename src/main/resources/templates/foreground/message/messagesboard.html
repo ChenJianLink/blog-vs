@@ -33,10 +33,10 @@
         <img th:src="@{/images/messages.png}"/>
         留言板
     </div>
-    <div class="commentDatas" th:if="${messageList.size()==0}">
+    <div class="commentDatas" th:if="${page.totalRows <= 0}">
         还没有留言,快来吐槽
     </div>
-    <div class="commentDatas" th:unless="${messageList.size()==0}">
+    <div class="commentDatas" th:unless="${page.totalRows <= 0}">
         <div class="comment" th:each="message,status:${messageList }">
             <span><font>[[${page.rows * (page.currentPage - 1) + status.index + 1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${message.userName }]]：</font>[(${message.content})]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(message.leaveMessageDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span><br>
             <span th:if="${message.reply!=null}">————————————————————</span><br>
