@@ -27,7 +27,7 @@ public class CommentServiceImpl implements CommentService {
     @Resource
     private CommentMapper commentMapper;
 
-    public static final int FAIL = 2;
+    private static final int FAIL = 2;
 
     /**
      * 评论审核查询待审核评论

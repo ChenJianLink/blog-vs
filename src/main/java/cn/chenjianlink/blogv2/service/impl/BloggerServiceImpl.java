@@ -1,10 +1,8 @@
 package cn.chenjianlink.blogv2.service.impl;
 
-
 import cn.chenjianlink.blogv2.mapper.BloggerMapper;
 import cn.chenjianlink.blogv2.pojo.Blogger;
 import cn.chenjianlink.blogv2.service.BloggerService;
-import cn.chenjianlink.blogv2.utils.BlogResult;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;

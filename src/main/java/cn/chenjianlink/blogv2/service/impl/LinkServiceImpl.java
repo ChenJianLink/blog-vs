@@ -6,7 +6,6 @@ import cn.chenjianlink.blogv2.mapper.LinkMapper;
 import cn.chenjianlink.blogv2.pojo.EasyUiResult;
 import cn.chenjianlink.blogv2.pojo.Link;
 import cn.chenjianlink.blogv2.service.LinkService;
-import cn.chenjianlink.blogv2.utils.BlogResult;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.cache.annotation.CacheEvict;

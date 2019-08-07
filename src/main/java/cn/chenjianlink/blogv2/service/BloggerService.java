@@ -1,7 +1,6 @@
 package cn.chenjianlink.blogv2.service;
 
 import cn.chenjianlink.blogv2.pojo.Blogger;
-import cn.chenjianlink.blogv2.utils.BlogResult;
 
 /**
  * 站长service
