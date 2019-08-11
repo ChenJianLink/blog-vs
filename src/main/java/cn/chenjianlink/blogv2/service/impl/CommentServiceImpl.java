@@ -96,4 +96,41 @@ public class CommentServiceImpl implements CommentService {
         comment.setCommentDate(new Date());
         commentMapper.insert(comment);
     }
+
+    /**
+     * 单条评论查询
+     */
+    @Override
+    @Cacheable(value = "commentCache")
+    public Comment findCommentById(Integer id) {
+        Comment comment = commentMapper.selectByPrimaryKey(id);
+        return comment;
+    }
+
+    /**
+     * 添加回复
+     */
+    @Override
+    @CacheEvict(value = "commentCache", allEntries = true)
+    public void addReply(Comment comment) {
+        if (comment.getReply() == null || comment.getReply().trim().isEmpty()) {
+            return;
+        }
+        commentMapper.insertReply(comment);
+    }
+
+    /**
+     * 更新回复
+     *
+     * @param comment 回复
+     */
+    @Override
+    @CacheEvict(value = "commentCache", allEntries = true)
+    public void updateReply(Comment comment) {
+        if (comment.getReply() == null) {
+            commentMapper.deleteReply(comment.getId());
+        } else {
+            commentMapper.updateReply(comment);
+        }
+    }
 }

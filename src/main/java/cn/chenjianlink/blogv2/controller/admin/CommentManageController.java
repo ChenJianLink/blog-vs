@@ -1,6 +1,7 @@
 package cn.chenjianlink.blogv2.controller.admin;
 
 import cn.chenjianlink.blogv2.exception.comment.CommentException;
+import cn.chenjianlink.blogv2.pojo.Comment;
 import cn.chenjianlink.blogv2.pojo.EasyUiResult;
 import cn.chenjianlink.blogv2.service.CommentService;
 import org.springframework.web.bind.annotation.*;
@@ -58,5 +59,32 @@ public class CommentManageController {
     @PutMapping("/comment/{ids}")
     public void reviewComment(@PathVariable(value = "ids", required = true) Integer[] ids, @RequestParam(value = "state", required = true) Integer state) throws CommentException {
         commentService.updateCommentState(ids, state);
+    }
+
+    /**
+     * 单条留言查询
+     *
+     * @param id 留言id
+     * @return 留言
+     */
+    @GetMapping(value = "/comment/{id}")
+    public Comment previewComment(@PathVariable(value = "id") Integer id) {
+        Comment comment = commentService.findCommentById(id);
+        return comment;
+    }
+
+    /**
+     * 添加/更新回复内容
+     *
+     * @param comment 封装的回复
+     */
+    @PostMapping(value = "/comment/reply")
+    public void reply(Comment comment) {
+        Comment oldComment = commentService.findCommentById(comment.getId());
+        if (oldComment.getReply() != null) {
+            commentService.updateReply(comment);
+        } else {
+            commentService.addReply(comment);
+        }
     }
 }

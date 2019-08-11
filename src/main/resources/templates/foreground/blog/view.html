@@ -94,14 +94,14 @@
         </div>
         <div th:each="comment,status:${commentList}">
             <div class="comment" th:if="${status.index<10}">
-                <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[(${comment.content })]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span><br>
-                <span th:if="${comment.reply!=null}">————————————————————</span><br>
+                <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[(${comment.content })]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span><br th:if="${comment.reply!=null}">
+                <span th:if="${comment.reply!=null}">————————————————————</span><br th:if="${comment.reply!=null}">
                 <span th:if="${comment.reply!=null}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;站长回复：[(${comment.reply})]</span>
             </div>
             <div class="otherComment" th:if="${commentList.size()>10}">
                 <div class="comment" th:if="${status.index>=10}">
-                    <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[(${comment.content })]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span><br>
-                    <span th:if="${comment.reply!=null}">————————————————————</span><br>
+                    <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[(${comment.content })]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span><br th:if="${comment.reply!=null}">
+                    <span th:if="${comment.reply!=null}">————————————————————</span><br th:if="${comment.reply!=null}">
                     <span th:if="${comment.reply!=null}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;站长回复：[(${comment.reply})]</span>
                 </div>
             </div>

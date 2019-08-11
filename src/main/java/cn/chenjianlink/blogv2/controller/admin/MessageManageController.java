@@ -75,8 +75,8 @@ public class MessageManageController {
      */
     @PostMapping(value = "/message/reply")
     public void reply(Message message) {
-        Message oldmessage = messageService.findMessageById(message.getId());
-        if (oldmessage.getReply() != null) {
+        Message oldMessage = messageService.findMessageById(message.getId());
+        if (oldMessage.getReply() != null) {
             messageService.updateReply(message);
         } else {
             messageService.addReply(message);

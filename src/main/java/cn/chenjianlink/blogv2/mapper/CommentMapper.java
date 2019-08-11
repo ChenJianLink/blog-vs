@@ -64,4 +64,33 @@ public interface CommentMapper {
      * @param comment 评论对象
      */
     void insert(Comment comment);
+
+    /**
+     * 根据评论id查询评论
+     *
+     * @param id 评论id
+     * @return 评论
+     */
+    Comment selectByPrimaryKey(int id);
+
+    /**
+     * 插入新评论回复
+     *
+     * @param comment 评论回复
+     */
+    void insertReply(Comment comment);
+
+    /**
+     * 更新评论回复
+     *
+     * @param comment 评论回复
+     */
+    void updateReply(Comment comment);
+
+    /**
+     * 删除评论回复
+     *
+     * @param id 评论id
+     */
+    void deleteReply(Integer id);
 }

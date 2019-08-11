@@ -66,6 +66,65 @@
             }
         }
 
+        function openCommentViewDialog() {
+            var selectedRows = $("#dg").datagrid("getSelections");
+            if (selectedRows.length != 1) {
+                $.messager.alert("系统提示", "请选择一条要查看的评论！", "warning");
+                return;
+            }
+            var row = selectedRows[0];
+            $("#dlg").dialog("open").dialog("setTitle", "查看评论");
+            $.ajax({
+                url: "/admin/commentManage/comment/" + row.id,
+                type: 'GET',
+                success: function (result) {
+                    $("#commentId").val(row.id);
+                    $("#userNamePre").val(result.userName);
+                    $("#contentPre").append(result.content);
+                    if(result.reply != null){
+                        $("#reply").append(result.reply);
+                    }
+                }
+            });
+        }
+
+        function closeCommentDialog() {
+            $("#contentPre").empty();
+            $("#reply").html("");
+            $("#dlg").dialog("close");
+        }
+
+        function reply() {
+            $.messager.confirm("系统提示", "您确定要回复这条评论吗", function (r) {
+                if (r) {
+                    var commentId = $("#commentId").val();
+                    var reply = $("#reply").html();
+                    $.ajax(
+                        {
+                            url: "/admin/commentManage/comment/reply",
+                            type: 'POST',
+                            data: {
+                                'reply': reply,
+                                'id': commentId
+                            },
+                            success: function (result) {
+                                if (result != null && result.status == 500) {
+                                    $.messager.alert("系统提示", "评论回复失败！", "error");
+                                    $("#dlg").dialog("close");
+                                } else {
+                                    $.messager.alert("系统提示", "评论回复成功！", "info");
+                                    $("#dlg").dialog("close");
+                                }
+                            },
+                            error: function () {
+                                $.messager.alert("系统提示", "评论回复失败！", "error");
+                                $("#dlg").dialog("close");
+                            }
+                        });
+                }
+            });
+        }
+
     </script>
 </head>
 <body style="margin: 1px;background-image: url('https://chenjianlink-1258070985.file.myqcloud.com/static/images/background/commentManageBackground.jpg');background-size:cover;">
@@ -88,10 +147,37 @@
 </table>
 <div id="tb">
     <div>
+        <a href="javascript:openCommentViewDialog()" class="easyui-linkbutton" iconCls="icon-search" plain="true">查看评论（回复）</a>
         <a href="javascript:deleteComment()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
     </div>
 </div>
-
+<div id="dlg" class="easyui-dialog" style="width:500px;padding: 10px 20px" closed="true" buttons="#dlg-buttons">
+    <form id="fm">
+        <input type="hidden" id="commentId" name="commentId" readonly="readonly"/>
+        <table cellspacing="8px" style="width: 100%">
+            <tr>
+                <td>评论者名称：</td>
+                <td><input type="text" id="userNamePre" name="userName" class="easyui-validatebox" readonly="readonly"/></td>
+            </tr>
+            <tr>
+                <td>评论内容：</td>
+                <td>
+                    <div style="width: 100%;height: 91px;background-color: #fff;border: 1px solid #00fffe;overflow-y:scroll;" id="contentPre" name="content" class="easyui-validatebox"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>回复：</td>
+                <td>
+                    <div style="width: 100%;height: 91px;background-color: #fff;border: 1px solid #00fffe;overflow-y:scroll;" id="reply" name="reply" class="easyui-validatebox" contenteditable="true"></div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="javascript:reply()" class="easyui-linkbutton" iconCls="icon-ok">评论回复</a>
+    <a href="javascript:closeCommentDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+</div>
 
 </body>
 </html>

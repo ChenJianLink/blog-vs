@@ -53,4 +53,26 @@ public interface CommentService {
      * @param comment 新增的评论对象
      */
     void addComment(Comment comment);
+
+    /**
+     * 单条评论查询
+     *
+     * @param id 评论id
+     * @return 评论
+     */
+    Comment findCommentById(Integer id);
+
+    /**
+     * 添加评论回复
+     *
+     * @param comment 回复
+     */
+    void addReply(Comment comment);
+
+    /**
+     * 更新评论回复
+     *
+     * @param comment 回复
+     */
+    void updateReply(Comment comment);
 }
