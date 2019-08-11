@@ -51,4 +51,27 @@ public interface MessageService {
      * @param message 新增的留言对象
      */
     void addMessage(Message message);
+
+    /**
+     * 单条留言查询
+     *
+     * @param id 留言id
+     * @return 留言
+     */
+    Message findMessageById(Integer id);
+
+    /**
+     * 添加留言回复
+     *
+     * @param message 回复
+     */
+    void addReply(Message message);
+
+    /**
+     * 更新留言回复
+     *
+     * @param message 回复
+     */
+    void updateReply(Message message);
+
 }

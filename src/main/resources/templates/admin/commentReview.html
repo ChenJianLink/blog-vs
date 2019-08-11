@@ -57,6 +57,7 @@
         }
 
         function closeCommentDialog() {
+            $("#contentPre").empty();
             $("#dlg").dialog("close");
         }
 
@@ -68,7 +69,14 @@
             }
             var row = selectedRows[0];
             $("#dlg").dialog("open").dialog("setTitle", "查看评论");
-            $("#fm").form("load", row);
+            $.ajax({
+                url: "/admin/commentManage/comment/" + row.id,
+                type: 'GET',
+                success: function (result) {
+                    $("#userNamePre").val(result.userName);
+                    $("#contentPre").append(result.content);
+                }
+            });
         }
 
     </script>
@@ -99,21 +107,19 @@
     </div>
 </div>
 
-<div id="dlg" class="easyui-dialog" style="width:450px;height:260px;padding: 10px 20px"
+<div id="dlg" class="easyui-dialog" style="width:500px;padding: 10px 20px"
      closed="true" buttons="#dlg-buttons">
 
     <form id="fm">
         <table cellspacing="8px">
             <tr>
                 <td>评论者名称：</td>
-                <td><input type="text" id="userName" name="userName" class="easyui-validatebox"
+                <td><input type="text" id="userNamePre" name="userName" class="easyui-validatebox"
                            readonly="readonly"/></td>
             </tr>
             <tr>
                 <td>评论内容：</td>
-                <td><textarea style="width: 100%;resize: none;" rows="5" id="content" name="content"
-                              class="easyui-validatebox"
-                              readonly="readonly"></textarea></td>
+                <td><div style="width: 100%;height: 91px;background-color: #fff;border: 1px solid #00fffe;overflow-y:scroll;" id="contentPre" name="content" class="easyui-validatebox" readonly="readonly"></div></td>
             </tr>
         </table>
     </form>

@@ -60,9 +60,22 @@
         }
 
         function checkPassword() {
-            var newPassword = $("#newPassword").val();
-            var newPassword2 = $("#newPassword2").val();
+            var newPassword = $("#newPassword").val().replace(/\s+/g,"");;
+            var newPassword2 = $("#newPassword2").val().replace(/\s+/g,"");;
+            var oldPassword = $("#oldPassword2").val().replace(/\s+/g,"");;
             if (!$(this).form("validate")) {
+                return false;
+            }
+            if (oldPassword == null || oldPassword == ""){
+                $.messager.alert("系统提示", "请输入旧密码！", "error");
+                return false;
+            }
+            if (newPassword == null || newPassword == ""){
+                $.messager.alert("系统提示", "请输入新密码！", "error");
+                return false;
+            }
+            if (newPassword2 == null || newPassword2 == ""){
+                $.messager.alert("系统提示", "请输入确认密码！", "error");
                 return false;
             }
             if (newPassword != newPassword2) {
@@ -104,7 +117,6 @@
                     }
                 });
         }
-
     </script>
 </head>
 <body class="easyui-layout">

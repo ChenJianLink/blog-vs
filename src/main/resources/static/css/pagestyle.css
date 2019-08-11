@@ -31,7 +31,7 @@ nav[role="navigation"] {
 .cd-pagination a {
     border: 1px solid #e6e6e6;
     border-radius: 0.25em;
-    background-color: rgba(230, 230, 250, 0.7);
+    background-color: rgba(242, 235, 217, 0.9);
 }
 
 .no-touch .cd-pagination a:hover {

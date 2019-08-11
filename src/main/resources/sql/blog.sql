@@ -40,6 +40,7 @@ CREATE TABLE `t_blog`
     KEY `t_blog_releasedate_index` (`state`, `releaseDate`),
     CONSTRAINT `t_blog_ibfk_1` FOREIGN KEY (`typeId`) REFERENCES `t_blogtype` (`id`)
 ) ENGINE = InnoDB
+  AUTO_INCREMENT = 1608
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -100,6 +101,7 @@ CREATE TABLE `t_blogger`
     `imageName` varchar(100) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
+  AUTO_INCREMENT = 2
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -128,6 +130,7 @@ CREATE TABLE `t_blogtype`
     `orderNo`  tinyint(4)          NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
+  AUTO_INCREMENT = 22
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -162,6 +165,7 @@ CREATE TABLE `t_comment`
     PRIMARY KEY (`id`),
     KEY `t_comment_blog_index` (`state`, `blogId`)
 ) ENGINE = InnoDB
+  AUTO_INCREMENT = 11
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -173,6 +177,33 @@ LOCK TABLES `t_comment` WRITE;
 /*!40000 ALTER TABLE `t_comment`
     DISABLE KEYS */;
 /*!40000 ALTER TABLE `t_comment`
+    ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `t_comment_reply`
+--
+
+DROP TABLE IF EXISTS `t_comment_reply`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_comment_reply`
+(
+    `id`    mediumint(9)  NOT NULL,
+    `reply` varchar(2000) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `t_comment_reply`
+--
+
+LOCK TABLES `t_comment_reply` WRITE;
+/*!40000 ALTER TABLE `t_comment_reply`
+    DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_comment_reply`
     ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,6 +222,7 @@ CREATE TABLE `t_link`
     `orderNo`  tinyint(4)   NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
+  AUTO_INCREMENT = 6
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -223,6 +255,7 @@ CREATE TABLE `t_message`
     `userName`         varchar(20)      NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
+  AUTO_INCREMENT = 20
   DEFAULT CHARSET = utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -236,6 +269,33 @@ LOCK TABLES `t_message` WRITE;
 /*!40000 ALTER TABLE `t_message`
     ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `t_message_reply`
+--
+
+DROP TABLE IF EXISTS `t_message_reply`;
+/*!40101 SET @saved_cs_client = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_message_reply`
+(
+    `id`    mediumint(9)  NOT NULL,
+    `reply` varchar(2000) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `t_message_reply`
+--
+
+LOCK TABLES `t_message_reply` WRITE;
+/*!40000 ALTER TABLE `t_message_reply`
+    DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_message_reply`
+    ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE = @OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE = @OLD_SQL_MODE */;
@@ -246,4 +306,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION = @OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES = @OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-04 19:34:36
+-- Dump completed on 2019-08-11 18:09:39

@@ -99,9 +99,7 @@ public class MessageServiceImpl implements MessageService {
         page = page <= totalPage ? page : totalPage;
         //设置分页信息
         PageHelper.startPage(page, 2 * rows);
-        Map<String, Integer> messageMap = new HashMap<>(2);
-        messageMap.put("state", ADOPT);
-        List<Message> messageList = messageMapper.selectList(messageMap);
+        List<Message> messageList = messageMapper.selectSomeList();
         PageResult result = new PageResult(page, totalRows, 2 * rows, messageList);
         return result;
     }
@@ -114,5 +112,42 @@ public class MessageServiceImpl implements MessageService {
     public void addMessage(Message message) {
         message.setLeaveMessageDate(new Date());
         messageMapper.insert(message);
+    }
+
+    /**
+     * 单条留言查询
+     */
+    @Override
+    @Cacheable(value = "messageCache")
+    public Message findMessageById(Integer id) {
+        Message message = messageMapper.selectByPrimaryKey(id);
+        return message;
+    }
+
+    /**
+     * 添加回复
+     */
+    @Override
+    @CacheEvict(value = "messageCache", allEntries = true)
+    public void addReply(Message message) {
+        if (message.getReply() == null || message.getReply().trim().isEmpty()) {
+            return;
+        }
+        messageMapper.insertReply(message);
+    }
+
+    /**
+     * 更新回复
+     *
+     * @param message 回复
+     */
+    @Override
+    @CacheEvict(value = "messageCache", allEntries = true)
+    public void updateReply(Message message) {
+        if (message.getReply() == null) {
+            messageMapper.deleteReply(message.getId());
+        } else {
+            messageMapper.updateReply(message);
+        }
     }
 }

@@ -2,6 +2,7 @@ package cn.chenjianlink.blogv2.controller.admin;
 
 import cn.chenjianlink.blogv2.exception.message.MessageException;
 import cn.chenjianlink.blogv2.pojo.EasyUiResult;
+import cn.chenjianlink.blogv2.pojo.Message;
 import cn.chenjianlink.blogv2.service.MessageService;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/admin/messageManage")
 public class MessageManageController {
+
     @Resource
     private MessageService messageService;
 
@@ -38,7 +40,7 @@ public class MessageManageController {
      * @param ids 要删除的留言id数组
      */
     @DeleteMapping("/message/{ids}")
-    public void deleteMessageById(@PathVariable(value = "ids", required = true) Integer[] ids) {
+    public void deleteMessageById(@PathVariable(value = "ids") Integer[] ids) {
         messageService.deleteMessageById(ids);
     }
 
@@ -50,7 +52,34 @@ public class MessageManageController {
      * @throws MessageException 留言异常
      */
     @PutMapping(value = "/message/{ids}")
-    public void reviewComment(@PathVariable(value = "ids", required = true) Integer[] ids, @RequestParam(value = "state", required = true) Integer state) throws MessageException {
+    public void reviewComment(@PathVariable(value = "ids") Integer[] ids, @RequestParam(value = "state") Integer state) throws MessageException {
         messageService.updateMessageState(ids, state);
+    }
+
+    /**
+     * 单条留言查询
+     *
+     * @param id 留言id
+     * @return 留言
+     */
+    @GetMapping(value = "/message/{id}")
+    public Message previewMessage(@PathVariable(value = "id") Integer id) {
+        Message message = messageService.findMessageById(id);
+        return message;
+    }
+
+    /**
+     * 添加/更新回复内容
+     *
+     * @param message 封装的回复
+     */
+    @PostMapping(value = "/message/reply")
+    public void reply(Message message) {
+        Message oldmessage = messageService.findMessageById(message.getId());
+        if (oldmessage.getReply() != null) {
+            messageService.updateReply(message);
+        } else {
+            messageService.addReply(message);
+        }
     }
 }

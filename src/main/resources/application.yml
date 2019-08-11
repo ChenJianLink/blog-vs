@@ -127,6 +127,8 @@ server:
 # 日志配置
 logging:
   file: /home/chenjianlink/testEnviornment/log/blog.log
+  level:
+    root: debug
 
 # shiro配置
 shiro:

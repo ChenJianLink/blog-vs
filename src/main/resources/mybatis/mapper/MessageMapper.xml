@@ -11,8 +11,9 @@
         <result property="content" column="content"/>
         <result property="leaveMessageDate" column="leaveMessageDate"/>
         <result property="state" column="state"/>
+        <result property="reply" column="reply"/>
     </resultMap>
-    <!--留言列表显示-->
+    <!--后台留言列表显示-->
     <select id="selectList" parameterType="Map" resultMap="MessageResult">
         SELECT id, INET_NTOA(userIp) AS userIp, ipAddressInfo, userName, content, leaveMessageDate, state
         FROM t_message
@@ -23,10 +24,17 @@
         </where>
         ORDER BY leaveMessageDate DESC
     </select>
+    <!--前台留言列表显示-->
+    <select id="selectSomeList" resultMap="MessageResult">
+        SELECT message.id, message.userName, message.content, message.leaveMessageDate, reply.reply
+        FROM t_message message LEFT JOIN t_message_reply reply ON message.id = reply.id
+        WHERE message.state = 1
+        ORDER BY message.leaveMessageDate DESC
+    </select>
     <!--删除留言-->
     <delete id="delete" parameterType="int[]">
-        DELETE FROM t_message
-        WHERE id IN
+        DELETE t_message, t_message_reply FROM t_message LEFT JOIN t_message_reply ON t_message.id = t_message_reply.id
+        WHERE t_message.id IN
         <if test="array != null">
             <foreach collection="array" item="id" open="(" separator="," close=")">
                 #{id}
@@ -64,4 +72,22 @@
     <select id="selectAdoptCount" resultType="int">
         SELECT COUNT(id) FROM t_message WHERE state = 1
     </select>
+    <!--根据留言id查询留言-->
+    <select id="selectByPrimaryKey" parameterType="int" resultType="cn.chenjianlink.blogv2.pojo.Message">
+        SELECT message.id, message.userName, message.content, reply.reply
+        FROM t_message message LEFT JOIN t_message_reply reply ON message.id = reply.id
+        WHERE message.id = #{id}
+    </select>
+    <!--插入新留言回复-->
+    <insert id="insertReply" parameterType="cn.chenjianlink.blogv2.pojo.Message">
+        INSERT INTO t_message_reply (id, reply) VALUES (#{id}, #{reply})
+    </insert>
+    <!--更新留言回复-->
+    <update id="updateReply" parameterType="cn.chenjianlink.blogv2.pojo.Message">
+        UPDATE t_message_reply SET reply = #{reply} WHERE id = #{id}
+    </update>
+    <!--删除留言回复-->
+    <delete id="deleteReply" parameterType="int">
+        DELETE FROM t_message_reply WHERE id = #{id}
+    </delete>
 </mapper>

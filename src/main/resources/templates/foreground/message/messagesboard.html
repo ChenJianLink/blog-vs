@@ -38,9 +38,9 @@
     </div>
     <div class="commentDatas" th:unless="${page.totalRows <= 0}">
         <div class="comment" th:each="message,status:${messageList }">
-            <span><font>[[${page.rows * (page.currentPage - 1) + status.index + 1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${message.userName }]]：</font>[(${message.content})]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(message.leaveMessageDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span><br>
-            <span th:if="${message.reply!=null}">————————————————————</span><br>
-            <span th:if="${message.reply!=null}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;站长回复：[(${message.reply})]</span>
+            <span><font>[[${page.rows * (page.currentPage - 1) + status.index + 1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${message.userName }]]：</font>[(${message.content})]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(message.leaveMessageDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span><br th:if="${message.reply!=null}">
+            <span th:if="${message.reply!=null}">————————————————————</span><br th:if="${message.reply!=null}">
+            <span th:if="${message.reply!=null}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>站长回复：</b>[(${message.reply})]</span>
         </div>
     </div>
 </div>

@@ -3,12 +3,17 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>留言管理页面</title>
-    <link rel="stylesheet" type="text/css" href="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery-easyui/themes/default/easyui.css">
-    <link rel="stylesheet" type="text/css" href="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery-easyui/themes/icon.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery-easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery-easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" th:href="@{/css/eazyui-style.css}">
-    <script type="text/javascript" src="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery-easyui/jquery.min.js"></script>
-    <script type="text/javascript" src="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery-easyui/jquery.easyui.min.js"></script>
-    <script type="text/javascript" src="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript"
+            src="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript"
+            src="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery-easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript"
+            src="https://chenjianlink-1258070985.file.myqcloud.com/static/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" th:src="@{/js/common.js}"></script>
     <script type="text/javascript">
 
@@ -24,14 +29,14 @@
                 strIds.push(selectedRows[i].id);
             }
             var ids = strIds.join(",");
-            $.messager.confirm("系统提示", "您确定要删除这<font color=red>" + selectedRows.length + "</font>条留言吗？",function (r) {
+            $.messager.confirm("系统提示", "您确定要删除这<font color=red>" + selectedRows.length + "</font>条留言吗？", function (r) {
                 if (r) {
                     $.ajax(
                         {
                             url: "/admin/messageManage/message/" + ids,
                             type: 'DELETE',
                             success: function (result) {
-                                if (result != null && result.status == 500){
+                                if (result != null && result.status == 500) {
                                     $.messager.alert("系统提示", "留言删除失败！", "error");
                                     $("#dg").datagrid("reload");
                                 } else {
@@ -58,6 +63,65 @@
             }
         }
 
+        function openMessageViewDialog() {
+            var selectedRows = $("#dg").datagrid("getSelections");
+            if (selectedRows.length != 1) {
+                $.messager.alert("系统提示", "请选择一条要查看的留言！", "warning");
+                return;
+            }
+            var row = selectedRows[0];
+            $("#dlg").dialog("open").dialog("setTitle", "查看留言");
+            $.ajax({
+                url: "/admin/messageManage/message/" + row.id,
+                type: 'GET',
+                success: function (result) {
+                    $("#messageId").val(row.id);
+                    $("#userNamePre").val(result.userName);
+                    $("#contentPre").append(result.content);
+                    if(result.reply != null){
+                        $("#reply").append(result.reply);
+                    }
+                }
+            });
+        }
+
+        function closeMessageDialog() {
+            $("#contentPre").empty();
+            $("#reply").html("");
+            $("#dlg").dialog("close");
+        }
+
+        function reply() {
+            $.messager.confirm("系统提示", "您确定要回复这条留言吗", function (r) {
+                if (r) {
+                    var messageId = $("#messageId").val();
+                    var reply = $("#reply").html();
+                    $.ajax(
+                        {
+                            url: "/admin/messageManage/message/reply",
+                            type: 'POST',
+                            data: {
+                                'reply': reply,
+                                'id': messageId
+                            },
+                            success: function (result) {
+                                if (result != null && result.status == 500) {
+                                    $.messager.alert("系统提示", "留言回复失败！", "error");
+                                    $("#dlg").dialog("close");
+                                } else {
+                                    $.messager.alert("系统提示", "留言回复成功！", "info");
+                                    $("#dlg").dialog("close");
+                                }
+                            },
+                            error: function () {
+                                $.messager.alert("系统提示", "留言回复失败！", "error");
+                                $("#dlg").dialog("close");
+                            }
+                        });
+                }
+            });
+        }
+
     </script>
 </head>
 <body style="margin: 1px;background-image: url('https://chenjianlink-1258070985.file.myqcloud.com/static/images/background/messageManageBackground.jpg');background-size:cover;">
@@ -79,10 +143,42 @@
 </table>
 <div id="tb">
     <div>
+        <a href="javascript:openMessageViewDialog()" class="easyui-linkbutton" iconCls="icon-search"
+           plain="true">查看留言</a>
         <a href="javascript:deleteMessage()" class="easyui-linkbutton" iconCls="icon-remove" plain="true">删除</a>
     </div>
 </div>
 
+<div id="dlg" class="easyui-dialog" style="width:500px;padding: 10px 20px" closed="true" buttons="#dlg-buttons">
+    <form id="fm">
+        <input type="hidden" id="messageId" name="messageId" readonly="readonly"/>
+        <table cellspacing="8px" style="width: 100%">
+            <tr>
+                <td>留言者名称：</td>
+                <td><input type="text" id="userNamePre" name="userName" class="easyui-validatebox"
+                           readonly="readonly"/></td>
+            </tr>
+            <tr>
+                <td>留言内容：</td>
+                <td>
+                    <div style="width: 100%;height: 91px;background-color: #fff;border: 1px solid #00fffe;overflow-y:scroll;"
+                         id="contentPre" name="content" class="easyui-validatebox"></div>
+                </td>
+            </tr>
+            <tr>
+                <td>回复：</td>
+                <td>
+                    <div style="width: 100%;height: 91px;background-color: #fff;border: 1px solid #00fffe;overflow-y:scroll;"
+                         id="reply" name="reply" class="easyui-validatebox" contenteditable="true"></div>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="javascript:reply()" class="easyui-linkbutton" iconCls="icon-ok">留言回复</a>
+    <a href="javascript:closeMessageDialog()" class="easyui-linkbutton" iconCls="icon-cancel">关闭</a>
+</div>
 
 </body>
 </html>
