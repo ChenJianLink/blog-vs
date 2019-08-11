@@ -1,5 +1,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<script type="text/javascript" th:if="${blog.isUeditor}" th:src="@{/ueditor/third-party/SyntaxHighlighter/shCore.js}"></script>
+<script type="text/javascript" th:if="${blog.isUeditor}"
+        th:src="@{/ueditor/third-party/SyntaxHighlighter/shCore.js}"></script>
 <link rel="stylesheet" th:if="${blog.isUeditor}" th:href="@{/ueditor/third-party/SyntaxHighlighter/shCoreDefault.css}"/>
 <link rel="stylesheet" th:href="@{/css/emoji.css}"/>
 <link rel="stylesheet" th:href="@{/css/jquery.emoji.css}"/>
@@ -93,11 +94,15 @@
         </div>
         <div th:each="comment,status:${commentList}">
             <div class="comment" th:if="${status.index<10}">
-                <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[(${comment.content })]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span>
+                <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[(${comment.content })]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span><br>
+                <span th:if="${comment.reply!=null}">————————————————————</span><br>
+                <span th:if="${comment.reply!=null}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;站长回复：[(${comment.reply})]</span>
             </div>
             <div class="otherComment" th:if="${commentList.size()>10}">
                 <div class="comment" th:if="${status.index>=10}">
-                    <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[(${comment.content })]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span>
+                    <span><font>[[${status.index+1 }]]楼&nbsp;&nbsp;&nbsp;&nbsp;[[${comment.userName }]]：</font>[(${comment.content })]&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;[[${#dates.format(comment.commentDate,'yyyy-MM-dd HH:mm')}]]&nbsp;]</span><br>
+                    <span th:if="${comment.reply!=null}">————————————————————</span><br>
+                    <span th:if="${comment.reply!=null}">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;站长回复：[(${comment.reply})]</span>
                 </div>
             </div>
         </div>
@@ -174,7 +179,7 @@
 
     function showOtherComment() {
         $('.otherComment').show();
-        $("#showComment").css('display','none');
+        $("#showComment").css('display', 'none');
     }
 </script>
 <script type="text/javascript" th:src="@{/js/vercode.js}"></script>

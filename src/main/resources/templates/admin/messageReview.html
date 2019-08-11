@@ -50,6 +50,7 @@
 
 
         function closeMessageDialog() {
+            $("#contentPre").empty();
             $("#dlg").dialog("close");
         }
 
@@ -61,7 +62,14 @@
             }
             var row = selectedRows[0];
             $("#dlg").dialog("open").dialog("setTitle", "查看留言");
-            $("#fm").form("load", row);
+            $.ajax({
+                url: "/admin/messageManage/message/" + row.id,
+                type: 'GET',
+                success: function (result) {
+                    $("#userNamePre").val(result.userName);
+                    $("#contentPre").append(result.content);
+                }
+            });
         }
 
     </script>
@@ -84,28 +92,23 @@
 </table>
 <div id="tb">
     <div>
-        <a href="javascript:openMessageViewDialog()" class="easyui-linkbutton" iconCls="icon-search"
-           plain="true">查看留言</a>
+        <a href="javascript:openMessageViewDialog()" class="easyui-linkbutton" iconCls="icon-search" plain="true">查看留言</a>
         <a href="javascript:messageReview(1)" class="easyui-linkbutton" iconCls="icon-ok" plain="true">审核通过</a>
         <a href="javascript:messageReview(2)" class="easyui-linkbutton" iconCls="icon-no" plain="true">审核不通过</a>
     </div>
 </div>
 
-<div id="dlg" class="easyui-dialog" style="width:450px;height:260px;padding: 10px 20px"
-     closed="true" buttons="#dlg-buttons">
-
+<div id="dlg" class="easyui-dialog" style="width:500px;padding: 10px 20px" closed="true" buttons="#dlg-buttons">
     <form id="fm">
-        <table cellspacing="8px">
+        <table cellspacing="8px" style="width: 100%">
             <tr>
                 <td>留言者名称：</td>
-                <td><input type="text" id="userName" name="userName" class="easyui-validatebox"
+                <td><input type="text" id="userNamePre" name="userName" class="easyui-validatebox"
                            readonly="readonly"/></td>
             </tr>
             <tr>
                 <td>留言内容：</td>
-                <td><textarea style="width: 100%;resize: none;" rows="5" id="content" name="content"
-                              class="easyui-validatebox"
-                              readonly="readonly"></textarea></td>
+                <td><div style="width: 100%;height: 91px;background-color: #fff;border: 1px solid #00fffe;overflow-y:scroll;" id="contentPre" name="content" class="easyui-validatebox" readonly="readonly"></div></td>
             </tr>
         </table>
     </form>
