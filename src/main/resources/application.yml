@@ -134,7 +134,6 @@ logging:
 shiro:
   loginUrl: /admin/blogger/admin-login
   unauthorizedUrl: /homepage
-  kickoutUrl: /admin/blogger/admin-login
 
 
 
