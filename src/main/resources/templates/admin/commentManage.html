@@ -114,15 +114,15 @@
                             success: function (result) {
                                 if (result != null && result.status == 500) {
                                     $.messager.alert("系统提示", "评论回复失败！", "error");
-                                    $("#dlg").dialog("close");
+                                    closeCommentDialog();
                                 } else {
                                     $.messager.alert("系统提示", "评论回复成功！", "info");
-                                    $("#dlg").dialog("close");
+                                    closeCommentDialog();
                                 }
                             },
                             error: function () {
                                 $.messager.alert("系统提示", "评论回复失败！", "error");
-                                $("#dlg").dialog("close");
+                                closeCommentDialog();
                             }
                         });
                 }

@@ -112,15 +112,15 @@
                             success: function (result) {
                                 if (result != null && result.status == 500) {
                                     $.messager.alert("系统提示", "留言回复失败！", "error");
-                                    $("#dlg").dialog("close");
+                                    closeMessageDialog();
                                 } else {
                                     $.messager.alert("系统提示", "留言回复成功！", "info");
-                                    $("#dlg").dialog("close");
+                                    closeMessageDialog();
                                 }
                             },
                             error: function () {
                                 $.messager.alert("系统提示", "留言回复失败！", "error");
-                                $("#dlg").dialog("close");
+                                closeMessageDialog();
                             }
                         });
                 }
