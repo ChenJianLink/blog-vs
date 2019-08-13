@@ -74,7 +74,7 @@
     </select>
     <!--根据留言id查询留言-->
     <select id="selectByPrimaryKey" parameterType="int" resultType="cn.chenjianlink.blogv2.pojo.Message">
-        SELECT message.id, message.userName, message.content, reply.reply
+        SELECT message.id, message.userName, message.content, reply.reply, message.state
         FROM t_message message LEFT JOIN t_message_reply reply ON message.id = reply.id
         WHERE message.id = #{id}
     </select>

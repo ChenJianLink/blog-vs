@@ -86,7 +86,7 @@
     </insert>
     <!--根据评论id查询评论-->
     <select id="selectByPrimaryKey" parameterType="int" resultType="cn.chenjianlink.blogv2.pojo.Comment">
-        SELECT comment.id, comment.userName, comment.content, reply.reply
+        SELECT comment.id, comment.userName, comment.content, reply.reply, comment.state
         FROM t_comment comment LEFT JOIN t_comment_reply reply ON comment.id = reply.id
         WHERE comment.id = #{id}
     </select>

@@ -78,9 +78,14 @@
                     $("#messageId").val(row.id);
                     $("#userNamePre").val(result.userName);
                     $("#contentPre").append(result.content);
-                    if(result.reply != null){
-                        $("#reply").append(result.reply);
+                    if (result.state == 1){
+                        if(result.reply != null){
+                            $("#reply").append(result.reply);
+                        }
+                    } else {
+                        $("#replyLine").css('display','none');
                     }
+
                 }
             });
         }
@@ -164,7 +169,7 @@
                          id="contentPre" name="content" class="easyui-validatebox"></div>
                 </td>
             </tr>
-            <tr>
+            <tr id="replyLine">
                 <td>回复：</td>
                 <td>
                     <div style="width: 100%;height: 91px;background-color: #fff;border: 1px solid #00fffe;overflow-y:scroll;"
