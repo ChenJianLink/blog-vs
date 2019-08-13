@@ -86,9 +86,9 @@
     </insert>
     <!--根据评论id查询评论-->
     <select id="selectByPrimaryKey" parameterType="int" resultType="cn.chenjianlink.blogv2.pojo.Comment">
-        SELECT comment.id, comment.userName, comment.content, reply.reply, comment.state
-        FROM t_comment comment LEFT JOIN t_comment_reply reply ON comment.id = reply.id
-        WHERE comment.id = #{id}
+        SELECT t_comment.id, t_comment.userName, t_comment.content, t_comment_reply.reply, t_comment.state
+        FROM t_comment LEFT JOIN t_comment_reply ON t_comment.id = t_comment_reply.id
+        WHERE t_comment.id = #{id}
     </select>
     <!--插入新评论回复-->
     <insert id="insertReply" parameterType="cn.chenjianlink.blogv2.pojo.Comment">
