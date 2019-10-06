@@ -33,7 +33,7 @@ spring:
   datasource:
     druid:
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/blog?characterEncoding=utf-8&allowMultiQueries=true
+      url: jdbc:mysql://localhost:3306/blog?characterEncoding=utf-8&allowMultiQueries=true&serverTimezone=GMT
       username: chenjian
       password: 123456
       # 数据源其他配置
@@ -107,16 +107,11 @@ server:
   servlet:
     session:
       timeout: 14400s
-  tomcat:
-    uri-encoding: UTF-8
-    #最大并发数
-    max-threads: 100
-    #接受和处理的最大连接数
-    max-connections: 500
-    #初始化时创建的线程数
-    min-SpareThreads: 30
-    #可以放到处理队列中的请求数
-    acceptCount: 200
+
+  # 支持http2
+  http2:
+    enabled: true
+
   # SSL配置
   ssl:
     key-store: classpath:ssl/tomcat.keystore
@@ -124,11 +119,16 @@ server:
     key-store-type: JKS
     enabled: true
 
+  # undertow配置
+  undertow:
+    direct-buffers: true
+    io-threads: 4
+    worker-threads: 20
+    buffer-size: 1024
+
 # 日志配置
 logging:
   file: /home/chenjianlink/testEnviornment/log/blog.log
-  level:
-    root: debug
 
 # shiro配置
 shiro:

@@ -1,12 +1,14 @@
 package cn.chenjianlink.blogv2.config;
 
-import org.apache.catalina.Context;
-import org.apache.catalina.connector.Connector;
-import org.apache.tomcat.util.descriptor.web.SecurityCollection;
-import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
+import io.undertow.Undertow;
+import io.undertow.UndertowOptions;
+import io.undertow.servlet.api.SecurityConstraint;
+import io.undertow.servlet.api.SecurityInfo;
+import io.undertow.servlet.api.TransportGuaranteeType;
+import io.undertow.servlet.api.WebResourceCollection;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.servlet.server.ServletWebServerFactory;
+import org.springframework.boot.web.embedded.undertow.UndertowBuilderCustomizer;
+import org.springframework.boot.web.embedded.undertow.UndertowServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -25,30 +27,26 @@ public class SslConfig {
     private Integer httpsPort;
 
     @Bean
-    public ServletWebServerFactory servletContainer() {
-        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory() {
+    public UndertowServletWebServerFactory embeddedServletContainerFactory() {
+        UndertowServletWebServerFactory factory = new UndertowServletWebServerFactory();
+        // 转换为http2
+        factory.addBuilderCustomizers(builder -> builder.setServerOption(UndertowOptions.ENABLE_HTTP2, true));
+        // 增加http重定向
+        factory.addBuilderCustomizers(new UndertowBuilderCustomizer() {
             @Override
-            protected void postProcessContext(Context context) {
-                SecurityConstraint securityConstraint = new SecurityConstraint();
-                securityConstraint.setUserConstraint("CONFIDENTIAL");
-                SecurityCollection securityCollection = new SecurityCollection();
-                securityCollection.addPattern("/*");
-                securityConstraint.addCollection(securityCollection);
-                context.addConstraint(securityConstraint);
+            public void customize(Undertow.Builder builder) {
+                builder.addHttpListener(httpPort, "0.0.0.0");
             }
-        };
-        tomcat.addAdditionalTomcatConnectors(createHTTPConnector());
-        return tomcat;
-    }
-
-    private Connector createHTTPConnector() {
-        Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
-        //同时启用http（80）、https（443）两个端口
-        connector.setScheme("http");
-        connector.setSecure(false);
-        connector.setPort(httpPort);
-        connector.setRedirectPort(httpsPort);
-        return connector;
+        });
+        // 将http的8080端口重定向到https的8443端口上
+        factory.addDeploymentInfoCustomizers(deploymentInfo -> {
+            deploymentInfo.addSecurityConstraint(new SecurityConstraint()
+                    .addWebResourceCollection(new WebResourceCollection()
+                            .addUrlPattern("/*")).setTransportGuaranteeType(TransportGuaranteeType.CONFIDENTIAL)
+                    .setEmptyRoleSemantic(SecurityInfo.EmptyRoleSemantic.PERMIT))
+                    .setConfidentialPortManager(exchange -> httpsPort);
+        });
+        return factory;
     }
 
 }
