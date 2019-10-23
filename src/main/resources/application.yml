@@ -1,6 +1,6 @@
 blog:
   # 索引库存储路径
-  index-path: /home/chenjianlink/testEnviornment/lucene
+  index-path: /home/chenjian/testEnviornment/lucene
   # 前台分页显示每页总数
   rows: 10
   # 使用的加密算法
@@ -12,9 +12,9 @@ blog:
   # http端口号
   port: 8080
   # 静态资源绝对路径
-  staticPath: /home/chenjianlink/testEnviornment/static/
+  staticPath: /home/chenjian/testEnviornment/static/
   # 头像上传绝对路径
-  userImagesPath: /home/chenjianlink/testEnviornment/static/userImages/
+  userImagesPath: /home/chenjian/testEnviornment/static/userImages/
   # 接收邮件邮箱
   email: chenjianlink1998@gmail.com
   # 聚合数据的IP认证key
@@ -94,6 +94,16 @@ spring:
           enable: true  # 需要TLS认证 保证发送邮件安全验证
           required: true
 
+# 腾讯云对象存储
+tencentCloud:
+  secretId:
+  secretKey:
+  region:
+  bucketName:
+  path:
+  prefix:
+  tmpPath: /home/chenjian/testEnviornment/tmp/
+
 # mybatis配置
 mybatis:
   config-location: classpath:mybatis/mybatisConfig.xml
@@ -123,12 +133,12 @@ server:
   undertow:
     direct-buffers: true
     io-threads: 4
-    worker-threads: 20
+    worker-threads: 24
     buffer-size: 1024
 
 # 日志配置
 logging:
-  file: /home/chenjianlink/testEnviornment/log/blog.log
+  file: /home/chenjian/testEnviornment/log/blog.log
 
 # shiro配置
 shiro:

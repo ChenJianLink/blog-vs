@@ -167,7 +167,9 @@
             codeFold: true,
             dialogMaskOpacity: 0.4,      // 设置透明遮罩层的透明度，全局通用，默认值为0.1
             dialogMaskBgColor: "#000",   // 设置透明遮罩层的背景颜色，全局通用，默认为#fff
-            imageUpload: false,
+            imageUpload: true,           // 上传图片
+            imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL: "/admin/blogManage/uploadImage",
             onload: function () {
                 var blogId = [[${blogId}]];
                 if (blogId != null){
