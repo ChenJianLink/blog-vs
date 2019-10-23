@@ -5,7 +5,7 @@ html {
     overflow: hidden;
 }
 html body {
-    background: url("https://chenjianlink-1258070985.file.myqcloud.com/static/images/background/indexBackground.jpg") no-repeat fixed center;
+    background: url("https://cdn.chenjianlink.cn/static/images/background/indexBackground.jpg") no-repeat fixed center;
     font: 14px/21px Monaco, sans-serif;
     color: #999;
     font-smoothing: antialiased;
