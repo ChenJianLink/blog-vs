@@ -60,9 +60,9 @@
         }
 
         function checkPassword() {
-            var newPassword = $("#newPassword").val().replace(/\s+/g,"");;
-            var newPassword2 = $("#newPassword2").val().replace(/\s+/g,"");;
-            var oldPassword = $("#oldPassword2").val().replace(/\s+/g,"");;
+            var newPassword = $("#newPassword").val().replace(/\s+/g,"");
+            var newPasswordAgain = $("#newPasswordAgain").val().replace(/\s+/g,"");
+            var oldPassword = $("#oldPassword").val().replace(/\s+/g,"");
             if (!$(this).form("validate")) {
                 return false;
             }
@@ -74,11 +74,11 @@
                 $.messager.alert("系统提示", "请输入新密码！", "error");
                 return false;
             }
-            if (newPassword2 == null || newPassword2 == ""){
+            if (newPasswordAgain == null || newPasswordAgain == ""){
                 $.messager.alert("系统提示", "请输入确认密码！", "error");
                 return false;
             }
-            if (newPassword != newPassword2) {
+            if (newPassword != newPasswordAgain) {
                 $.messager.alert("系统提示", "确认密码输入错误！", "error");
                 return false;
             }
@@ -93,7 +93,7 @@
         function resetValue() {
             $("#oldPassword").val("");
             $("#newPassword").val("");
-            $("#newPassword2").val("");
+            $("#newPasswordAgain").val("");
         }
 
         function logout() {
@@ -271,7 +271,7 @@
             </tr>
             <tr>
                 <td>确认新密码：</td>
-                <td><input type="password" id="newPassword2" name="newPassword2" class="easyui-validatebox"
+                <td><input type="password" id="newPasswordAgain" name="newPasswordAgain" class="easyui-validatebox"
                            required="true" style="width: 200px"/></td>
             </tr>
         </table>

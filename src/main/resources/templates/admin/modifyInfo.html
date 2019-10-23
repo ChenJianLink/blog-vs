@@ -22,6 +22,7 @@
             var nickName = $("#nickName").val();
             var sign = $("#sign").val();
             var profile = UE.getEditor('profile').getContent();
+            var docObj = document.getElementById('imageFile');
 
             if (nickName == null || nickName == '') {
                 $.messager.alert("系统提示", "请输入昵称！", "warning");
@@ -31,31 +32,65 @@
                 $.messager.alert("系统提示", "请输入个性简介！", "warning");
             } else {
                 $("#pF").val(profile);
-                $.ajax(
-                    {
-                        url: '/admin/bloggerManage/blogger',
-                        type: 'PUT',
-                        cache: false,
-                        data: new FormData($('#form1')[0]),
-                        processData: false,
-                        contentType: false,
-                        success: function (result) {
-                            if (result.status != 500 && result.errorInfo != null) {
-                                $.messager.alert("系统提示", result.errorInfo);
-                            } else if (result.status == 500) {
+                if (docObj.files[0]){
+                    var data = new FormData();
+                    data.append("nickName", nickName);
+                    data.append("sign", sign);
+                    data.append("profile",profile);
+                    data.append("imageFile",docObj.files[0]);
+                    $.ajax(
+                        {
+                            url: '/admin/bloggerManage/blogger',
+                            type: 'PUT',
+                            cache: false,
+                            data: data,
+                            processData: false,
+                            contentType: false,
+                            success: function (result) {
+                                if (result.status != 500 && result.errorInfo != null) {
+                                    $.messager.alert("系统提示", result.errorInfo);
+                                } else if (result.status == 500) {
+                                    $.messager.alert("系统提示", "站长信息修改失败", "error");
+                                } else {
+                                    $.messager.alert("系统提示", "站长信息修改成功", "info", function () {
+                                        location.reload();
+                                    });
+                                }
+                                $("#imageFile").val("");
+                            },
+                            error: function () {
                                 $.messager.alert("系统提示", "站长信息修改失败", "error");
-                            } else {
-                                $.messager.alert("系统提示", "站长信息修改成功", "info", function () {
-                                    location.reload();
-                                });
+                                $("#imageFile").val("");
                             }
-                            $("#imageFile").val("");
-                        },
-                        error: function () {
-                            $.messager.alert("系统提示", "站长信息修改失败", "error");
-                            $("#imageFile").val("");
-                        }
-                    });
+                        });
+                } else {
+                    $.ajax(
+                        {
+                            url: '/admin/bloggerManage/blogger',
+                            type: 'PUT',
+                            data: {
+                                'nickName': nickName,
+                                'sign': sign,
+                                'profile': profile
+                            },
+                            success: function (result) {
+                                if (result.status != 500 && result.errorInfo != null) {
+                                    $.messager.alert("系统提示", result.errorInfo);
+                                } else if (result.status == 500) {
+                                    $.messager.alert("系统提示", "站长信息修改失败", "error");
+                                } else {
+                                    $.messager.alert("系统提示", "站长信息修改成功", "info", function () {
+                                        location.reload();
+                                    });
+                                }
+                                $("#imageFile").val("");
+                            },
+                            error: function () {
+                                $.messager.alert("系统提示", "站长信息修改失败", "error");
+                                $("#imageFile").val("");
+                            }
+                        });
+                }
             }
         }
 

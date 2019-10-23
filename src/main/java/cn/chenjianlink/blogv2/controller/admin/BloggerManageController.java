@@ -60,7 +60,7 @@ public class BloggerManageController {
     @PutMapping("/blogger")
     public BlogResult editBloggerInfo(Blogger blogger, @RequestParam(value = "imageFile", required = false) MultipartFile imageFile) throws BloggerException {
         //判断是否有图片上传
-        if (!imageFile.isEmpty()) {
+        if (imageFile != null && !imageFile.isEmpty()) {
             //原始文件名称
             String pictureName = imageFile.getOriginalFilename().toLowerCase();
             try {
