@@ -101,7 +101,8 @@ tencentCloud:
   region:
   bucketName:
   path:
-  prefix:
+  prefix: blog-images
+  # 临时文件夹
   tmpPath: /home/chenjian/testEnviornment/tmp/
 
 # mybatis配置
