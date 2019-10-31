@@ -6,13 +6,11 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.chenjianlink.cn/static/jquery-easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.chenjianlink.cn/static/jquery-easyui/themes/icon.css">
     <link rel="stylesheet" type="text/css" th:href="@{/css/eazyui-style.css}">
-    <link rel="stylesheet" th:unless="${isUeditor}" th:href="@{/editor.md/css/editormd.css}" />
+    <link rel="stylesheet" th:unless="${isUeditor}" th:href="@{/editor.md/css/editormd.css}"/>
     <script type="text/javascript" src="https://cdn.chenjianlink.cn/static/jquery-easyui/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.chenjianlink.cn/static/jquery-easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="https://cdn.chenjianlink.cn/static/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
-    <script type="text/javascript" charset="UTF-8" th:if="${isUeditor}" th:src="@{/ueditor/ueditor.config.js}"></script>
-    <script type="text/javascript" charset="UTF-8" th:if="${isUeditor}" th:src="@{/ueditor/ueditor.all.min.js}"></script>
-    <script type="text/javascript" charset="UTF-8" th:if="${isUeditor}" th:src="@{/ueditor/lang/zh-cn/zh-cn.js}"></script>
+    <script type="text/javascript" th:if="${isUeditor}" src="https://cdn.chenjianlink.cn/static/tinymce/tinymce.min.js"></script>
     <script type="text/javascript" th:unless="${isUeditor}" th:src="@{/editor.md/js/editormd.min.js}"></script>
 
     <script type="text/javascript">
@@ -29,22 +27,20 @@
             var mdContent = null;
             var summary;
             if (isUeditor) {
-                content = UE.getEditor('editor').getContent();
-                searchContent = UE.getEditor('editor').getContentTxt();
-                summary = searchContent.substr(0, 150);
+                content = tinyMCE.activeEditor.getContent();
             } else {
                 content = editorMd.getPreviewedHTML();
                 mdContent = editorMd.getMarkdown();
-                //去掉所有的html标记
-                searchContent = content.replace(/<[^>]+>/g,"");
-                summary = searchContent.substr(0, 150);
             }
+            //去掉所有的html标记
+            searchContent = content.replace(/<[^>]+>/g, "");
+            summary = searchContent.substr(0, 150);
             if (title == null || title == '') {
-                $.messager.alert("系统提示", "请输入标题！","warning");
+                $.messager.alert("系统提示", "请输入标题！", "warning");
             } else if (blogTypeId == null || blogTypeId == '') {
-                $.messager.alert("系统提示", "请选择日志类别！","warning");
+                $.messager.alert("系统提示", "请选择日志类别！", "warning");
             } else if (content == null || content == '') {
-                $.messager.alert("系统提示", "请输入内容！","warning");
+                $.messager.alert("系统提示", "请输入内容！", "warning");
             } else {
                 $.ajax(
                     {
@@ -64,17 +60,17 @@
                         success: function (result) {
                             if (result != null && result.status == 500) {
                                 if (state == 2) {
-                                    $.messager.alert("系统提示", "日志发布失败！","error");
+                                    $.messager.alert("系统提示", "日志发布失败！", "error");
                                 } else {
-                                    $.messager.alert("系统提示", "草稿保存失败！","error");
+                                    $.messager.alert("系统提示", "草稿保存失败！", "error");
                                 }
                             } else {
                                 if (state == 2) {
-                                    $.messager.alert("系统提示", "日志发布成功！","info",function () {
+                                    $.messager.alert("系统提示", "日志发布成功！", "info", function () {
                                         location.reload();
                                     });
                                 } else {
-                                    $.messager.alert("系统提示", "草稿保存成功！","info",function () {
+                                    $.messager.alert("系统提示", "草稿保存成功！", "info", function () {
                                         location.reload();
                                     });
                                 }
@@ -82,9 +78,9 @@
                         },
                         error: function () {
                             if (state == 2) {
-                                $.messager.alert("系统提示", "日志发布失败！","error");
+                                $.messager.alert("系统提示", "日志发布失败！", "error");
                             } else {
-                                $.messager.alert("系统提示", "草稿保存失败！","error");
+                                $.messager.alert("系统提示", "草稿保存失败！", "error");
                             }
                         }
                     });
@@ -113,7 +109,7 @@
         <tr>
             <td valign="top">日志内容：</td>
             <td th:if="${isUeditor}">
-                <script id="editor" type="text/plain" style="width:100%;height:500px;"></script>
+                <textarea name="editor" id="editor"></textarea>
             </td>
             <td th:unless="${isUeditor}">
                 <div id="editorMd">
@@ -123,8 +119,7 @@
         </tr>
         <tr>
             <td>关键字：</td>
-            <td><input type="text" id="keyWord" name="keyWord"
-                       style="width: 400px;background-color:rgba(250,250,250,0)"/>&nbsp;(多个关键字中间用","隔开)
+            <td><input type="text" id="keyWord" name="keyWord" style="width: 400px;background-color:rgba(250,250,250,0)"/>&nbsp;(多个关键字中间用","隔开)
             </td>
         </tr>
         <tr>
@@ -139,15 +134,42 @@
     </table>
 </div>
 
-<script type="text/javascript" th:if="${isUeditor}">
-    //实例化编辑器
-    //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-    var ue = UE.getEditor('editor');
+<script th:inline="javascript" th:if="${isUeditor}" th:fragment="tinymce">
+    tinymce.init({
+        selector: '#editor',
+        language: 'zh_CN', //调用放在langs文件夹内的语言包
+        skin: 'oxide-dark',
+        plugins: 'preview searchreplace autolink directionality visualblocks visualchars fullscreen image link media template code codesample table charmap hr pagebreak nonbreaking anchor insertdatetime advlist lists wordcount imagetools textpattern help paste emoticons autosave bdmap indent2em autoresize lineheight',
+        toolbar: 'code undo redo restoredraft | cut copy paste pastetext | forecolor backcolor bold italic underline strikethrough link anchor | alignleft aligncenter alignright alignjustify outdent indent | \
+                     styleselect formatselect fontselect fontsizeselect | bullist numlist | blockquote subscript superscript removeformat | \
+                     table image media charmap emoticons hr pagebreak insertdatetime print preview | fullscreen | bdmap indent2em lineheight formatpainter axupimgs',
+        min_height: 740, //编辑器高度
+        fontsize_formats: '12px 14px 16px 18px 24px 36px 48px 56px 72px',
+        font_formats: '微软雅黑=Microsoft YaHei,Helvetica Neue,PingFang SC,sans-serif;苹果苹方=PingFang SC,Microsoft YaHei,sans-serif;宋体=simsun,serif;仿宋体=FangSong,serif;黑体=SimHei,sans-serif;Arial=arial,helvetica,sans-serif;Arial Black=arial black,avant garde;Book Antiqua=book antiqua,palatino;Comic Sans MS=comic sans ms,sans-serif;Courier New=courier new,courier;Georgia=georgia,palatino;Helvetica=helvetica;Impact=impact,chicago;Symbol=symbol;Tahoma=tahoma,arial,helvetica,sans-serif;Terminal=terminal,monaco;Times New Roman=times new roman,times;Verdana=verdana,geneva;Webdings=webdings;Wingdings=wingdings,zapf dingbats;知乎配置=BlinkMacSystemFont, Helvetica Neue, PingFang SC, Microsoft YaHei, Source Han Sans SC, Noto Sans CJK SC, WenQuanYi Micro Hei, sans-serif;小米配置=Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif',
+        images_upload_url: '/admin/blogManage/uploadImageMCE'
+    });
+    window.onload = function () {
+        var blogId = [[${blogId}]];
+        if (blogId != null) {
+            $.ajax("/admin/blogManage/blog/" + blogId,
+                {
+                    method: "GET",
+                    async: false,
+                    success: function (result) {
+                        $("#title").val(result.title);
+                        $("#keyWord").val(result.keyWord);
+                        $("#blogTypeId").combobox("setValue", result.blogType.id);
+                        tinyMCE.activeEditor.setContent(result.content);
+                    }
+                });
+        }
+    }
+
 </script>
 
 <script th:inline="javascript" th:unless="${isUeditor}" th:fragment="editorMd">
 
-    $(function() {
+    $(function () {
         editorMd = editormd("editorMd", {
             width: "100%",
             height: 740,
@@ -155,9 +177,9 @@
             syncScrolling: "single",
             path: "/editor.md/lib/",
             emoji: true,
-            theme : "dark",
-            editorTheme : "pastel-on-dark",
-            previewTheme : "dark",
+            theme: "dark",
+            editorTheme: "pastel-on-dark",
+            previewTheme: "dark",
             searchReplace: true,
             taskList: true,
             tocm: true,                  // Using [TOCM]
@@ -172,7 +194,7 @@
             imageUploadURL: "/admin/blogManage/uploadImage",
             onload: function () {
                 var blogId = [[${blogId}]];
-                if (blogId != null){
+                if (blogId != null) {
                     $.ajax("/admin/blogManage/blog/" + blogId,
                         {
                             method: "GET",

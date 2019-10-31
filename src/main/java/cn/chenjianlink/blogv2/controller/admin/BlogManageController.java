@@ -27,6 +27,7 @@ public class BlogManageController {
     @Resource
     private TencentCloudCosUtils tencentCloudCosUtils;
 
+    private final long maxSize = 1024 * 1024 * 20;
 
     /**
      * 展示日志列表
@@ -108,7 +109,6 @@ public class BlogManageController {
     @PostMapping(value = "/uploadImage")
     public JSONObject uploadImage(@RequestParam(value = "editormd-image-file") MultipartFile imageFile) {
         JSONObject jsonObject = new JSONObject();
-        long maxSize = 1024 * 1024 * 20;
         // 判断图片是否为空
         if (imageFile == null) {
             jsonObject.put("success", 0);
@@ -131,6 +131,19 @@ public class BlogManageController {
             jsonObject.put("message", "图片上传成功");
         }
         jsonObject.put("url", url);
+        return jsonObject;
+    }
+
+    /**
+     * TinyMCE上传图片
+     *
+     * @return 上传结果
+     */
+    @PostMapping(value = "/uploadImageMCE")
+    public JSONObject uploadImageMce(@RequestParam(value = "file") MultipartFile imageFile) {
+        JSONObject jsonObject = new JSONObject();
+        String url = tencentCloudCosUtils.uploadFile(imageFile);
+        jsonObject.put("location", url);
         return jsonObject;
     }
 }

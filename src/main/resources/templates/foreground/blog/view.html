@@ -1,7 +1,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<script type="text/javascript" th:if="${blog.isUeditor}"
-        th:src="@{/ueditor/third-party/SyntaxHighlighter/shCore.js}"></script>
-<link rel="stylesheet" th:if="${blog.isUeditor}" th:href="@{/ueditor/third-party/SyntaxHighlighter/shCoreDefault.css}"/>
+<script type="text/javascript" th:if="${blog.isUeditor}" src="https://cdn.chenjianlink.cn/static/ueditor/SyntaxHighlighter/shCore.js"></script>
+<link rel="stylesheet" th:if="${blog.isUeditor}" href="https://cdn.chenjianlink.cn/static/ueditor/SyntaxHighlighter/shCoreDefault.css"/>
 <link rel="stylesheet" th:href="@{/css/emoji.css}"/>
 <link rel="stylesheet" th:href="@{/css/jquery.emoji.css}"/>
 <link rel="stylesheet" th:unless="${blog.isUeditor}" th:href="@{/editor.md/css/editormd.css}"/>

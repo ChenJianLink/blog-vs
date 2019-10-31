@@ -71,7 +71,7 @@ public class TencentCloudCosUtils {
     }
 
     /**
-     * editor.md上传图片接口,Ueditor上传文件接口,处理文件名称
+     * editor.md上传图片接口,富文本编辑器上传文件接口,处理文件名称
      *
      * @param file 要上传的文件
      * @return 上传后的路径
@@ -84,7 +84,7 @@ public class TencentCloudCosUtils {
 
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
+        int month = calendar.get(Calendar.MONTH) + 1;
         int day = calendar.get(Calendar.DATE);
         // 指定要上传到 COS 上对象键
         String key = "/" + prefix + "/" + year + "/" + month + "/" + day + "/" + newFileName;
