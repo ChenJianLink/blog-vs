@@ -4,20 +4,22 @@
         <img th:src="@{/images/list_icon.png}"/>
         最新日志
     </div>
+</div>
+<div class="data_list" th:each="blog:${blogList}">
     <div class="datas">
-        <ul th:each="blog:${blogList}">
+        <ul>
             <li style="margin-bottom: 30px">
                 <span class="date"><a th:href="@{/blog/articles/} + ${blog.id}"
                                       th:text="${#dates.format(blog.releaseDate,'yyyy年MM月dd日')}"></a></span>
                 <span class="title"><a th:href="@{/blog/articles/} + ${blog.id}">[[${blog.title }]]</a></span>
-                <span class="summary"><b>摘要:</b>[[${blog.summary }]]...</span>
+                <span class="summary"><b style="color: #000000">摘要:</b>[[${blog.summary }]]...</span>
                 <span class="img">
                     <a th:href="@{/blog/articles/} + ${blog.id}" th:each="image:${blog.imagesList }"><img
                             th:src="${image}" style="height: 90px; width: auto"/></a>&nbsp;&nbsp;
 				</span>
                 <span class="info">发表于 [[${#dates.format(blog.releaseDate,'yyyy-MM-dd HH:mm')}]] 阅读([[${blog.clickHit}]]) 评论([[${blog.replyHit}]]) </span>
             </li>
-            <hr style="height:5px;border:none;border-top:1px dashed gray;padding-bottom:  10px;"/>
+            <!--<hr style="height:5px;border:none;border-top:1px dashed gray;padding-bottom:  10px;"/>-->
         </ul>
     </div>
 </div>
