@@ -69,22 +69,18 @@
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1"
                              style="background-color: rgba(255,255,255,0)">
                             <ul class="nav navbar-nav">
-                                <li><a th:href="@{/blogger/aboutMe}"><font
-                                        color="black" size="3"><strong>关于Master</strong></font></a></li>
+                                <li><a th:href="@{/blogger/aboutMe}"><font color="black" size="3"><strong>关于Master</strong></font></a></li>
                             </ul>
                             <ul class="nav navbar-nav">
-                                <li><a th:href="@{/message/messagesboard}"><font
-                                        color="black" size="3"><strong>游客留言</strong></font></a></li>
+                                <li><a th:href="@{/message/messagesboard}"><font color="black" size="3"><strong>游客留言</strong></font></a></li>
                             </ul>
                             <ul class="nav navbar-nav">
-                                <li><a th:href="@{/show/visiterShow}"><font
-                                        color="black" size="3"><strong>访客记录</strong></font></a></li>
+                                <li><a th:href="@{/show/visiterShow}"><font color="black" size="3"><strong>访客记录</strong></font></a></li>
                             </ul>
                             <form th:action="@{/blog/query}" class="navbar-form navbar-right"
                                   role="search" method="get" onsubmit="return checkData()">
                                 <div class="form-group">
-                                    <input type="text" id="query" name="query" class="form-control"
-                                           placeholder="请输入要查询的关键字...">
+                                    <input type="text" id="query" name="query" class="form-control" placeholder="请输入要查询的关键字...">
                                 </div>
                                 <button type="submit" class="btn btn-default">搜索</button>
                             </form>
@@ -118,11 +114,11 @@
                     <div class="datas">
                         <ul th:each="blogTypeCount,status:${blogTypeCountList}">
                             <li th:if="${status.index} <10">
-                                <span><a style="color: #29afec;font-size: 15px;font-weight: 600;" th:href="@{/homepage(typeId=${blogTypeCount.id})}">[[${blogTypeCount.typeName}]] ([[${blogTypeCount.blogCount}]])</a></span>
+                                <span>&bull;<a style="color: #29afec;font-size: 15px;font-weight: 600;" th:href="@{/homepage(typeId=${blogTypeCount.id})}">[[${blogTypeCount.typeName}]] ([[${blogTypeCount.blogCount}]])</a></span>
                             </li>
                             <div th:if="${blogTypeCountList.size()>10}" style="display: none" class="othersType">
                                 <li th:unless="${status.index} <10">
-                                    <span><a style="color: #29afec;font-size: 15px;font-weight: 600;" th:href="@{/homepage(typeId=${blogTypeCount.id})}">[[${blogTypeCount.typeName}]] ([[${blogTypeCount.blogCount}]])</a></span>
+                                    <span>&bull;<a style="color:#29afec;font-size: 15px;font-weight: 600;" th:href="@{/homepage(typeId=${blogTypeCount.id})}">[[${blogTypeCount.typeName}]] ([[${blogTypeCount.blogCount}]])</a></span>
                                 </li>
                             </div>
                         </ul>
@@ -140,11 +136,11 @@
                     <div class="datas">
                         <ul th:each="blogCount,status:${blogCountList}">
                             <li th:if="${status.index} < 10">
-                                <span><a style="color: 	#DDA0DD;font-size: 15px;font-weight: 600;" th:href="@{/homepage(releaseDateStr=${blogCount.releaseDateStr})}">[[${blogCount.releaseDateStr}]] ([[${blogCount.blogCount}]]篇)</a></span>
+                                <span>&bull;<a style="color:#DDA0DD;font-size: 15px;font-weight: 600;" th:href="@{/homepage(releaseDateStr=${blogCount.releaseDateStr})}">[[${blogCount.releaseDateStr}]] ([[${blogCount.blogCount}]]篇)</a></span>
                             </li>
                             <div th:if="${blogCountList.size() > 10}" style="display: none" class="othersDate">
                                 <li th:unless="${status.index} < 10">
-                                    <span><a style="color: 	#DDA0DD;font-size: 15px;font-weight: 600;" th:href="@{/homepage(releaseDateStr=${blogCount.releaseDateStr})}">[[${blogCount.releaseDateStr}]] ([[${blogCount.blogCount}]]篇)</a></span>
+                                    <span>&bull;<a style="color:#DDA0DD;font-size: 15px;font-weight: 600;" th:href="@{/homepage(releaseDateStr=${blogCount.releaseDateStr})}">[[${blogCount.releaseDateStr}]] ([[${blogCount.blogCount}]]篇)</a></span>
                                 </li>
                             </div>
                         </ul>
@@ -161,7 +157,7 @@
                     </div>
                     <div class="datas">
                         <ul th:each="link:${linkList }">
-                            <li><span><a style="color: #20B2AA;font-size: 15px;font-weight: 600;" th:href="${link.linkUrl }" target="_blank" th:text="${link.linkName}"></a></span></li>
+                            <li><span><a style="color:#20B2AA;font-size: 15px;font-weight: 600;" th:href="${link.linkUrl }" target="_blank" th:text="${link.linkName}"></a></span></li>
                         </ul>
                     </div>
                 </div>
