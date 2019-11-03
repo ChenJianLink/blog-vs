@@ -114,11 +114,11 @@
                     <div class="datas">
                         <ul th:each="blogTypeCount,status:${blogTypeCountList}">
                             <li th:if="${status.index} <10">
-                                <span>&bull;<a style="color: #29afec;font-size: 15px;font-weight: 600;" th:href="@{/homepage(typeId=${blogTypeCount.id})}">[[${blogTypeCount.typeName}]] ([[${blogTypeCount.blogCount}]])</a></span>
+                                <span>&bull;<a style="color: #29afec;font-size: 15px;font-weight: 600;" th:href="@{/homepage(typeId=${blogTypeCount.id})}">[[${blogTypeCount.typeName}]]</a></span><span style="float: right !important">([[${blogTypeCount.blogCount}]]篇)</span>
                             </li>
                             <div th:if="${blogTypeCountList.size()>10}" style="display: none" class="othersType">
                                 <li th:unless="${status.index} <10">
-                                    <span>&bull;<a style="color:#29afec;font-size: 15px;font-weight: 600;" th:href="@{/homepage(typeId=${blogTypeCount.id})}">[[${blogTypeCount.typeName}]] ([[${blogTypeCount.blogCount}]])</a></span>
+                                    <span>&bull;<a style="color:#29afec;font-size: 15px;font-weight: 600;" th:href="@{/homepage(typeId=${blogTypeCount.id})}">[[${blogTypeCount.typeName}]]</a></span><span style="float: right !important">([[${blogTypeCount.blogCount}]]篇)</span>
                                 </li>
                             </div>
                         </ul>
@@ -136,11 +136,11 @@
                     <div class="datas">
                         <ul th:each="blogCount,status:${blogCountList}">
                             <li th:if="${status.index} < 10">
-                                <span>&bull;<a style="color:#DDA0DD;font-size: 15px;font-weight: 600;" th:href="@{/homepage(releaseDateStr=${blogCount.releaseDateStr})}">[[${blogCount.releaseDateStr}]] ([[${blogCount.blogCount}]]篇)</a></span>
+                                <span>&bull;<a style="color:#DDA0DD;font-size: 15px;font-weight: 600;" th:href="@{/homepage(releaseDateStr=${blogCount.releaseDateStr})}">[[${blogCount.releaseDateStr}]]</a></span><span style="float: right !important">([[${blogCount.blogCount}]]篇)</span>
                             </li>
                             <div th:if="${blogCountList.size() > 10}" style="display: none" class="othersDate">
                                 <li th:unless="${status.index} < 10">
-                                    <span>&bull;<a style="color:#DDA0DD;font-size: 15px;font-weight: 600;" th:href="@{/homepage(releaseDateStr=${blogCount.releaseDateStr})}">[[${blogCount.releaseDateStr}]] ([[${blogCount.blogCount}]]篇)</a></span>
+                                    <span>&bull;<a style="color:#DDA0DD;font-size: 15px;font-weight: 600;" th:href="@{/homepage(releaseDateStr=${blogCount.releaseDateStr})}">[[${blogCount.releaseDateStr}]]</a></span><span style="float: right !important">([[${blogCount.blogCount}]]篇)</span>
                                 </li>
                             </div>
                         </ul>
