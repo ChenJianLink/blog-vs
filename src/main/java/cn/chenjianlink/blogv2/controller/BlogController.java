@@ -7,7 +7,8 @@ import cn.chenjianlink.blogv2.pojo.Comment;
 import cn.chenjianlink.blogv2.utils.PageResult;
 import cn.chenjianlink.blogv2.service.BlogService;
 import cn.chenjianlink.blogv2.service.CommentService;
-import cn.chenjianlink.blogv2.utils.TimedLocalCache;
+import cn.chenjianlink.blogv2.utils.SessionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -36,7 +36,8 @@ public class BlogController {
 
     private static final int PUBLISH = 2;
 
-    private static final TimedLocalCache<String, String> SESSION = new TimedLocalCache<>(20);
+    @Autowired
+    private SessionUtils sessionUtils;
 
     /**
      * 搜索日志
@@ -100,9 +101,9 @@ public class BlogController {
          * 能防止刷新导致阅读量暴增
          */
         String ip = request.getRemoteAddr();
-        String ipSign = (String) SESSION.getCache(ip + blogId.toString());
+        String ipSign = (String) sessionUtils.get(ip + blogId.toString());
         if (ipSign == null || ipSign.isEmpty()) {
-            SESSION.putCache(ip + blogId.toString(), ip);
+            sessionUtils.put(ip + blogId.toString(), ip);
             blog.setClickHit(blog.getClickHit() + 1);
             blogService.updateClick(blog);
         }

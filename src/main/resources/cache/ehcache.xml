@@ -92,4 +92,15 @@
            diskExpiryThreadIntervalSeconds="300"
            memoryStoreEvictionPolicy="LRU"/>
 
+    <!--session-->
+    <cache name="session"
+           maxElementsInMemory="1000"
+           maxElementsOnDisk="1000"
+           eternal="false"
+           overflowToDisk="true"
+           timeToIdleSeconds="1200"
+           timeToLiveSeconds="1200"
+           diskExpiryThreadIntervalSeconds="300"
+           memoryStoreEvictionPolicy="LRU"/>
+
 </ehcache>
