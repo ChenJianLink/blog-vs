@@ -7,6 +7,7 @@ import cn.chenjianlink.blogv2.pojo.Comment;
 import cn.chenjianlink.blogv2.utils.PageResult;
 import cn.chenjianlink.blogv2.service.BlogService;
 import cn.chenjianlink.blogv2.service.CommentService;
+import cn.chenjianlink.blogv2.utils.TimedLocalCache;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +35,8 @@ public class BlogController {
     private ControllerMethod controllerMethod;
 
     private static final int PUBLISH = 2;
+
+    private static final TimedLocalCache<String, String> SESSION = new TimedLocalCache<>(20);
 
     /**
      * 搜索日志
@@ -94,15 +97,12 @@ public class BlogController {
         //查询所有评论
         List<Comment> commentList = commentService.findCommentListByBlogId(blogId);
         /*
-         * 将访客标识写入session，设置session的过期时间为20分钟，在过期时间内再次访问该日志不会增加阅读量
          * 能防止刷新导致阅读量暴增
          */
         String ip = request.getRemoteAddr();
-        HttpSession session = request.getSession();
-        String ipSign = (String) session.getAttribute(blogId.toString());
+        String ipSign = (String) SESSION.getCache(ip + blogId.toString());
         if (ipSign == null || ipSign.isEmpty()) {
-            session.setAttribute(blogId.toString(), blogId.toString() + ip);
-            session.setMaxInactiveInterval(20 * 60);
+            SESSION.putCache(ip + blogId.toString(), ip);
             blog.setClickHit(blog.getClickHit() + 1);
             blogService.updateClick(blog);
         }
