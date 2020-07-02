@@ -5,8 +5,6 @@
 &nbsp; 此项目继承原先的[个人日志系统](https://github.com/ChenJianLink/blog)   
 &nbsp; 一款简洁的个人日志系统，同时附有一个后台管理系统  
 &nbsp; 该项目基于SpringBoot和Thymeleaf开发，同时对原先的日志系统进行优化升级    
-&nbsp; 日志系统访问地址：[www.chenjianlink.cn](https://www.chenjianlink.cn)   
-&nbsp; (欢迎点击、评论或留言吐槽)
 
 > 运行环境
 
